@@ -1,14 +1,45 @@
 <!DOCTYPE html>
 <html lang="hu">
-   <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link rel="stylesheet" href="style.css" />
-      <link rel="stylesheet" href="bootstrap.min.css" />
-      <title>FoodGo</title>
-   </head>
-   <body>
-      <script src="script.js"></script>
-      <script src="bootstrap.min.js"></script>
-   </body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="bootstrap.min.css" />
+        <title>FoodGo</title>
+    </head>
+    <body>
+        <!-- FoodGo login page mobil és desktop reszponzív -->
+        <div class="container">
+            <div class="row justify-content-center align-items-center min-vh-100">
+                <div class="col-12 col-md-8 col-lg-6">
+                    <div class="card p-4 shadow">
+                        <h2>Bejelentkezés</h2>
+                        <h6 class="mb-3 miniSzoveg text-muted">Lépj be a fiókodba és rendelj pár koppintással.</h6>
+
+                        <form>
+                            <div class="mb-3">
+                                <label for="email" class="mb-1">Email cím</label>
+                                <input type="email" class="form-control" id="email" placeholder="példa@gmail.com" required />
+                                <p class="miniSzoveg text-muted">Használd a regisztált e-mail címed.</p>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <label for="jelszo">Jelszó</label>
+                                    <p><a href="regisztracio.html">Elfelejtetted a jelszavad?</a></p>
+                                </div>
+                                <input type="password" class="form-control" id="jelszo" placeholder="Jelszó" required />
+                            </div>
+                            <div>
+                                <button type="submit" class="w-100 btn bg-success text-light">Bejelentkezés</button>
+                            </div>
+
+                            <p class="mt-3 text-center">Még nincs fiókod? <a href="regisztracio.html">Regisztráció</a></p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="script.js"></script>
+        <script src="bootstrap.min.js"></script>
+    </body>
 </html>
