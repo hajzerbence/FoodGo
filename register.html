@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="hu">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="bootstrap.min.css" />
+        <title>FoodGo - Regisztráció</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <div class="container">
+            <div class="row justify-content-center mt-5">
+                <div class="col-12 col-md-8 col-lg-5">
+                    <div class="card">
+                        <h2>Regisztráció</h2>
+                        <p class="text-center text-muted mb-4 miniSzoveg">Hozz létre egy fiókot, és rendelj gyorsan, egyszerűen.</p>
+
+                        <form>
+                            <div class="mb-3">
+                                <label for="nev" class="form-label">Teljes név</label>
+                                <input type="text" class="form-control" id="nev" placeholder="Czeglédi Máté" required />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email cím</label>
+                                <input type="email" class="form-control" id="email" placeholder="pelda@gmail.com" required />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="jelszo" class="form-label">Jelszó</label>
+                                <input type="password" class="form-control" id="jelszo" placeholder="Jelszó" required />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="jelszo2" class="form-label">Jelszó megerősítése</label>
+                                <input type="password" class="form-control" id="jelszo2" placeholder="Jelszó újra" required />
+                            </div>
+
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="feltetelek" required />
+                                <label class="form-check-label miniSzoveg" for="feltetelek"> Elfogadom a <a href="#">felhasználási feltételeket</a>. </label>
+                            </div>
+
+                            <button type="submit" class="btn btn-success w-100 py-2">Regisztráció</button>
+
+                            <p class="text-center mt-3 miniSzoveg">
+                                Már van fiókod?
+                                <a href="login.html">Bejelentkezés</a>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="bootstrap.min.js"></script>
+    </body>
+</html>
