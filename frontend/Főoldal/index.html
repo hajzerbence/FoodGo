@@ -4,34 +4,143 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="../Bootstrap/bootstrap.min.css" />
-        <script src="../Bootstrap/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="style.css" />
+        <link src="../Bootstrap/bootstrap.min.js"></link>
         <title>Főoldal</title>
     </head>
     <body>
 
-        <!-- Navbár -->
-        <nav class="navbar navbar-expand-sm bg-light shadow fixed">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-sm bg-light shadow">
         <div class="container-fluid">
             <a class="navbar-brand ms-5" href="../Főoldal/index.html">FoodGo</a>
-                <form class="d-flex me-5">
+                <form class="d-flex me-5">  
                     <div class="collapse navbar-collapse">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="../Bejelentkezés/login.html">Amerikai</a>
+                            <a class="nav-link text-dark" href="../Bejelentkezés/login.html">Kínálatunk</a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="../Bejelentkezés/login.html">Rólunk</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="../Bejelentkezés/login.html">Ázsiai</a>
+                            <a class="nav-link text-dark" href="../Bejelentkezés/login.html">Kapcsolat</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="../Bejelentkezés/login.html">Török</a>
+                            <button class="nav-link text-dark fw-bold" id="kosarGomb" type="button">Kosár</button>
                         </li>
                     </ul>
                 </form>
         </div>
         </nav>
-        <!-- Navbár vége -->
+        <!-- Navbar vége -->
+        
+        
+        <!-- Hero-->
+        <div class="container-fluid">
+            <div class="p-5 text-center bg-light hero">
+                <h1 class="mb-3">Üdvözlünk a FoodGo-n!</h1>
+                <h4 class="mb-3">Rendelj gyorsan és egyszerűen kedvenc ételeidből!</h4>
+                <button type="button" id="rendelj" class="btn btn-success btn-lg">Rendelj most</button>
+            </div>
+        </div>
+        <!-- Hero vége -->
+
+         <!-- Szűrő -->
+        <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-12 col-md-3 col-lg-2 mb-3 d-none d-md-block">
+            <div class="bg-light p-3 rounded shadow-sm">
+                <h5 class="mb-3">Szűrők</h5>
+
+                <div class="d-grid gap-2">
+                <button class="btn btn-outline-success" type="button">Amerikai</button>
+                <button class="btn btn-outline-success" type="button">Ázsiai</button>
+                <button class="btn btn-outline-success" type="button">Török</button>
+                <button class="btn btn-success" type="button">Összes</button>
+                </div>
+
+            </div>
+            </div>
+        <!-- Szűrő vége -->
+
+        <!-- Többi tartalom -->
+        <div class="col-12 col-12 col-md-9 col-lg-10">
+        <!-- Kínálatunk szekció, kattintható card-ok -->
+        <div class="container p-4">
+            <h2 class="text-center mb-4">Kínálatunk</h2>
+            <div class="row">
+                <div class="col-md-4 p-3 ">
+                    <div class="card">
+                        <img src="../../Média/amerikai.png" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">Amerikai</h5>
+                            <p class="card-text">Laktató, karakteres fogások sok sajttal, füstös ízekkel és bőséges adagokkal. Klasszikusok: burger, BBQ és sült krumpli.</p>
+                            <button type="button" class="btn btn-success">Rendelés</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 p-3">
+                    <div class="card">
+                        <img src="../../Média/azsiai.png" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">Ázsiai</h5>
+                            <p class="card-text">Friss, aromás konyha, ahol a csípős, édes és sós ízek tökéletesen összeérnek. Kedvencek: wok ételek, ramen, sushi és curry-k.</p>
+                            <button type="button" class="btn btn-success">Rendelés</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 p-3">
+                    <div class="card">
+                        <img src="../../Média/torok.png" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">Török</h5>
+                            <p class="card-text">Gazdag fűszerezésű, grillezett és szaftos ételek, friss zöldségekkel és szószokkal. Népszerűek: kebab, dürüm, pide és baklava.</p>
+                            <button type="button" class="btn btn-success">Rendelés</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- Kínálatunk szekció vége -->
+
+                </div>
+            </div>
+        </div>
+        <!-- Többi tartalom vége -->
 
 
+        <!-- Lábjegyzék szekció -->
+        <footer>
+            <div class="container-fluid">
+                <div class="row bg-success p-4 text-center">
+                    <div class="col-md-4 p-3 text-white">
+                        <h3>FoodGo</h3>
+                        <h6 class="pt-3">Ízletes ételeket szállítunk házhoz 2025 óta</h6>
+                    </div>
+                    <div class="col-md-4 p-3 text-white">
+                        <h3>Gyorslinkek</h3>
+                        <ul class="list-unstyled">
+                            <li><a href="index.html" class="text-white text-decoration-none p-2">Kezdőlap</a></li>
+                            <li><a href="../Bejelentkezés/login.html" class="text-white text-decoration-none p-2">Kínálatunk</a></li>
+                            <li><a href="../Bejelentkezés/login.html" class="text-white text-decoration-none p-2">Rólunk</a></li>
+                            <li><a href="../Bejelentkezés/login.html" class="text-white text-decoration-none p-2">Kapcsolat</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4 p-3 text-white">
+                        <h3>Kapcsolat</h3>
+                        <ul class="list-unstyled">
+                            <li><strong>Székhely:</strong> 1055 Budapest, Minta utca 12.</li>
+                            <li><strong>Telefon:</strong> +36 20 123 1234</li>
+                            <li><strong>Email:</strong> info@foodgo.hu</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- Lábjegyzék szekció vége -->
 
         <script src="../Bootstrap/bootstrap.min.js"></script>
     </body>
