@@ -5,10 +5,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="../Bootstrap/bootstrap.min.css" />
         <link rel="stylesheet" href="style.css" />
-        <title>Kapcsolat</title>
+        <title>Főoldal</title>
     </head>
-
     <body>
+
+        <!-- Navbar -->
         <nav class="navbar navbar-expand-sm bg-light shadow">
         <div class="container-fluid">
             <a class="navbar-brand ms-5" href="../Főoldal/index.html"><img src="../../Média/FoodGo logo.png" class="img-fluid" id="logo" alt="FoodGo logo"></a>
@@ -16,7 +17,7 @@
                     <div class="collapse navbar-collapse">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="../Főoldal/index.html">Főoldal</a>
+                            <a class="nav-link text-dark active" href="../Főoldal/index.html">Főoldal</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" href="../Kínálat/index.html">Kínálatunk</a>
@@ -26,7 +27,7 @@
                             <a class="nav-link text-dark" href="../Rólunk/index.html">Rólunk</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark active" href="../Kapcsolat/index.html">Kapcsolat</a>
+                            <a class="nav-link text-dark" href="../Kapcsolat/index.html">Kapcsolat</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark fw-bold" href="../Kosár/index.html">Kosár</a>
@@ -35,32 +36,38 @@
                 </form>
         </div>
         </nav>
-
-        <div class="kontener">
-            <div class="card">
-                <h1>FoodGo - Kapcsolatfelvétel</h1>
-                <div class="kisszoveg">Kérdésed van? Vedd fel velünk a kapcsolatot!</div>
-
-                <input class="rounded border p-2 zoldBorder" type="text" name="nev" id="nevKapcsolat" placeholder="Név">
-                <input class="rounded border p-2 mt-3 zoldBorder" type="email" name="email" id="emailKapcsolat" placeholder="Email cím">
-                <textarea class="rounded border p-2 mt-3 zoldBorder" name="uzenet" id="uzenetKapcsolat" rows="5" placeholder="Írd ide az üzeneted..."></textarea>
-
-                <button class="btn btn-success mt-3 mb-3" type="submit" id="kuldesGombKapcsolat">Küldés</button>
-
-                <hr>
-                <h4 class="text-center">Vagy elérhetsz minket az alábbi módokon:</h4>
-                <br>
-                <div class="pontok text-center">
-                    <h2>Elérhetőségeink:</h2>
-                    <p><strong>Cím:</strong> 1055 Budapest, Minta utca 12.</p>
-                    <p><strong>Telefon:</strong> +36 20 123 1234</p>
-                    <p><strong>Email:</strong> info@foodgo.hu</p>
-                </div>
+        <!-- Navbar vége -->
+         
+        <!-- Kosár -->
+        <div class="container mt-4" id="kosarSzekcio">
+            <h2>Kosár tartalma</h2>
+            <div class="table-responsive">
+                <table class="table table-bordered mt-3">
+                    <thead>
+                        <tr>
+                            <th>Termék neve</th>
+                            <th>Mennyiség</th>
+                            <th>Ár</th>
+                        </tr>
+                    </thead>
+                    <tbody id="kosarTartalom">
+                            
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-flex justify-content-end">
+                <h4>Végösszeg: <span id="vegosszeg">0 Ft</span></h4>
+            </div>
+            <div class="d-flex justify-content-end mt-3">
+                <button class="btn btn-danger me-2" id="uresitKosar">Kosár ürítése</button>
+                <button class="btn btn-success" id="fizetesGomb">Fizetés</button>
             </div>
         </div>
 
+        <!-- Kosár vége -->
+
         <!-- Lábjegyzék szekció -->
-        <footer>
+        <footer class="mt-5">
             <div class="container-fluid">
                 <div class="row bg-success p-4 text-center">
                     <div class="col-md-4 p-3 text-white">
@@ -89,6 +96,7 @@
         </footer>
         <!-- Lábjegyzék szekció vége -->
 
+        <script src="script.js"></script>
         <script src="../Bootstrap/bootstrap.min.js"></script>
     </body>
 </html>

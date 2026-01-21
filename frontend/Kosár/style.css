@@ -1,0 +1,22 @@
+#logo {
+    height: 70px;
+    width: auto;
+    border: 0px;
+}
+
+/* Sticky footer megoldás: oldal teljes magassága és flexbox layout */
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Kosár szekció kitölti a maradék helyet */
+#kosarSzekcio {
+    flex: auto;
+}

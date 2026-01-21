@@ -7,3 +7,15 @@
 .nav-link.active {
     font-weight: bold;
 }
+
+.kartyaLink {
+    text-decoration: none;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s;
+    /* 0 - vízszintes eltolás, 4px - függőleges eltolás, 8px - elmosódás, rgba(0, 0, 0, 0.2) - 0,0,0 fekete szín - 0.2 20% átlátszósággal */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
