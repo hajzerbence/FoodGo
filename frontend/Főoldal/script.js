@@ -56,3 +56,23 @@ document.addEventListener('DOMContentLoaded', function () {
         mindentMutat();
     });
 });
+
+// Navbar átlátszóság kezelése görgetésre
+
+// NAVBAR ÉS OFFCANVAS ELEMEK ELÉRÉSE ID ALAPJÁN
+const navbar = document.getElementById('navbar'); // a navbar elem
+const hamburgerMenu = document.getElementById('hamburgerMenu'); // az offcanvas konténer
+// NAVBAR ÁLLAPOT FRISSÍTÉSE GÖRGETÉS ALAPJÁN
+function frissitNavbar() {
+    if (window.scrollY > 1) {
+        // 1px-nél nagyobb görgetés esetén
+        navbar.classList.add('navbarFeher'); // fehér navbar állapot bekapcsolása, megkapja a navbar a fehér osztályt
+    } else {
+        // a lap tetejéhez közel
+        navbar.classList.remove('navbarFeher'); // fehér navbar állapot kikapcsolása, eltávolítja a fehér osztályt -> átlátszó lesz (alapból az van beállítva)
+    }
+}
+
+// ESEMÉNYEK: görgetéskor és betöltéskor frissítés
+window.addEventListener('scroll', frissitNavbar); // görgetés figyelése
+window.addEventListener('load', frissitNavbar); // kezdeti állapot beállítása (amikor betölt az oldal)

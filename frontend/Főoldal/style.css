@@ -1,12 +1,108 @@
-#logo {
-    height: 70px;
-    width: auto;
-    border: 0px;
+/* NAVBAR */
+
+/* LOGÓ: alap méret (normál flow-ban marad, így a navbar vastagsága nem változik) */
+.logo {
+    height: 50px; /* logó magassága */
+    width: auto; /* aránytartás */
+    position: absolute; /* egymásra rétegezés */
+    left: 0;
+    top: 0;
 }
 
+/* AKTÍV MENÜPONT: vastag betű */
 .nav-link.active {
     font-weight: bold;
 }
+
+/* NAVBAR ÁTLÁTSZÓ ÁLLAPOT */
+.atlatszo {
+    background: transparent;
+    box-shadow: none;
+}
+
+/* NAVBAR FEHÉR ÁLLAPOT */
+.navbarFeher {
+    background: #fff;
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.08);
+}
+
+/* DESKTOP LINK SZÍNEK */
+@media (min-width: 1200px) {
+    #navbar.atlatszo .navbar-nav .nav-link {
+        color: #fff;
+    }
+
+    #navbar.navbarFeher .navbar-nav .nav-link {
+        color: #000000;
+    }
+}
+
+#hamburgerMenu .nav-link {
+    color: #000000;
+}
+
+/* HAMBURGER: átlátszó navbarnál fehér */
+.atlatszo .navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.8);
+}
+
+/* HAMBURGER: átlátszó navbarnál fehér */
+.atlatszo .navbar-toggler-icon {
+    filter: invert(1);
+}
+
+/* HAMBURGER: fehér navbarnál fekete */
+.navbarFeher .navbar-toggler {
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+/* HAMBURGER: fehér navbarnál alap (fekete) */
+.navbarFeher .navbar-toggler-icon {
+    filter: none;
+}
+
+/* LOGÓ VÁLTÁS: a két logó egymásra kerül, de a .logo nem lesz abszolút */
+.logok {
+    position: relative; /* a rétegezett logók ehhez igazodnak */
+}
+
+/* A .logok kapjon fix helyet a két abszolút logó miatt (különben összeesne) */
+.logok {
+    height: 50px; /* ugyanannyi, mint a logó magassága */
+    width: auto; /* ugyanannyi, mint a logó szélessége */
+}
+
+/* ÁTLÁTSZÓ NAVBAR: fehér logó látszik */
+.atlatszo .logoFeher {
+    opacity: 1;
+}
+.atlatszo .logoZold {
+    opacity: 0;
+}
+
+/* FEHÉR NAVBAR: zöld logó látszik */
+.navbarFeher .logoFeher {
+    opacity: 0;
+}
+.navbarFeher .logoZold {
+    opacity: 1;
+}
+
+/* Hamburger menü gombnál nincs fekete keret mikor rányomsz */
+.navbar-toggler:focus,
+.navbar-toggler:focus-visible {
+    outline: none;
+    box-shadow: none;
+}
+
+/* Hamburger menü bezárása gomb nem kék border, hanem zöld (brand színe) */
+.offcanvas .btn-close:focus,
+.offcanvas .btn-close:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.35);
+}
+
+/* NAVBAR vége */
 
 .kartyaLink {
     text-decoration: none;
@@ -18,4 +114,25 @@
     /* 0 - vízszintes eltolás, 4px - függőleges eltolás, 8px - elmosódás, rgba(0, 0, 0, 0.2) - 0,0,0 fekete szín - 0.2 20% átlátszósággal */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     cursor: pointer;
+}
+
+.hero {
+    width: auto;
+    min-height: 70vh; /* a képernyő 70%-a */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* függőlegesen középre */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url('../../Média/hero.png'); /*Fekete overlay*/
+    background-size: cover; /*Cover: a háttérkép úgy van méretezve, hogy teljesen lefedje a dobozt (a hero területét). Ilyenkor a kép arányait megtartja, viszont levághat a széleiből, ha más az arány, mint a hero.*/
+}
+
+@media (min-width: 768px) {
+    .rendeljMostGomb {
+        width: auto;
+    }
+}
+@media (min-width: 1200px) {
+    .rendeljMostGomb {
+        width: 25%;
+    }
 }

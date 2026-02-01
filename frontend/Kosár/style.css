@@ -1,7 +1,18 @@
 #logo {
-    height: 70px;
+    height: 50px;
     width: auto;
-    border: 0px;
+}
+
+.navbar-toggler:focus,
+.navbar-toggler:focus-visible {
+    outline: none;
+    box-shadow: none;
+}
+
+.offcanvas .btn-close:focus,
+.offcanvas .btn-close:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.35);
 }
 
 /* Sticky footer megoldás: oldal teljes magassága és flexbox layout */

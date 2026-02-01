@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="hu">
     <head>
         <meta charset="UTF-8" />
@@ -9,47 +9,61 @@
     </head>
 
     <body>
-        <nav class="navbar navbar-expand-sm bg-light shadow">
-        <div class="container-fluid">
-            <a class="navbar-brand ms-5" href="../Főoldal/index.html"><img src="../../Média/FoodGo logo.png" class="img-fluid" id="logo" alt="FoodGo logo"></a>
-                <form class="d-flex me-5">  
-                    <div class="collapse navbar-collapse">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="../Főoldal/index.html">Főoldal</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="../Kínálat/index.html">Kínálatunk</a>
-                        </li>
-                        
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="../Rólunk/index.html">Rólunk</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark active" href="../Kapcsolat/index.html">Kapcsolat</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark fw-bold" href="../Kosár/index.html">Kosár</a>
-                        </li>
-                    </ul>
-                </form>
-        </div>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg bg-light shadow sticky-top">
+            <div class="container-fluid">
+                <a class="navbar-brand ms-5 me-auto" href="../Főoldal/index.html">
+                    <img src="../../../Média/FoodGo logo.png" alt="FoodGo logo" id="logo" />
+                </a>
+
+                <button class="navbar-toggler me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#fomenu" aria-controls="fomenu" aria-label="Menü">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="fomenu" aria-labelledby="fomenuLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="fomenuLabel">Menü</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Bezárás"></button>
+                    </div>
+
+                    <div class="offcanvas-body">
+                        <ul class="navbar-nav ms-auto me-5">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" href="../Főoldal/index.html">Főoldal</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" href="../Kínálat/index.html">Kínálatunk</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" href="../Rólunk/index.html">Rólunk</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark active" href="../Kapcsolat/index.html">Kapcsolat</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark fw-bold" href="../Kosár/index.html">Kosár</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </nav>
+        <!-- Navbar vége -->
 
         <div class="kontener">
             <div class="card">
                 <h1>FoodGo - Kapcsolatfelvétel</h1>
                 <div class="kisszoveg">Kérdésed van? Vedd fel velünk a kapcsolatot!</div>
 
-                <input class="rounded border p-2 zoldBorder" type="text" name="nev" id="nevKapcsolat" placeholder="Név">
-                <input class="rounded border p-2 mt-3 zoldBorder" type="email" name="email" id="emailKapcsolat" placeholder="Email cím">
+                <input class="rounded border p-2 zoldBorder" type="text" name="nev" id="nevKapcsolat" placeholder="Név" />
+                <input class="rounded border p-2 mt-3 zoldBorder" type="email" name="email" id="emailKapcsolat" placeholder="Email cím" />
                 <textarea class="rounded border p-2 mt-3 zoldBorder" name="uzenet" id="uzenetKapcsolat" rows="5" placeholder="Írd ide az üzeneted..."></textarea>
 
                 <button class="btn btn-success mt-3 mb-3" type="submit" id="kuldesGombKapcsolat">Küldés</button>
 
-                <hr>
+                <hr />
                 <h4 class="text-center">Vagy elérhetsz minket az alábbi módokon:</h4>
-                <br>
+                <br />
                 <div class="pontok text-center">
                     <h2>Elérhetőségeink:</h2>
                     <p><strong>Cím:</strong> 1055 Budapest, Minta utca 12.</p>
