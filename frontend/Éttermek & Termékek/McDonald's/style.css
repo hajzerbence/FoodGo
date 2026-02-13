@@ -19,9 +19,12 @@
     box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.35);
 }
 
-#kfcLogo {
-    height: 100px;
+#mcDonaldsLogo {
+    height: 70px;
     width: auto;
+    margin-left: 10vh;
+    border: #db0007 6px solid;
+    border-radius: 10%;
 }
 
 .card:hover {
