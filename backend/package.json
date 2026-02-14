@@ -1,18 +1,23 @@
 {
-    "name": "backend",
+    "name": "nodejs-template-2025",
     "version": "1.0.0",
-    "description": "FoodGo Backend",
+    "description": "Template project",
     "main": "server.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node server.js"
+        "start": "node server.js",
+        "dev": "nodemon"
     },
-    "keywords": [],
-    "author": "Hajzer Bence & Czeglédi Máté",
+    "author": "Hajzer Bence és Czeglédi Máté",
     "license": "ISC",
-    "type": "commonjs",
+    "devDependencies": {
+        "nodemon": "^3.1.11"
+    },
     "dependencies": {
+        "cors": "^2.8.6",
         "express": "^5.1.0",
-        "mysql": "^2.18.1"
+        "express-session": "^1.18.2",
+        "multer": "^2.0.2",
+        "mysql2": "^3.15.2"
     }
 }

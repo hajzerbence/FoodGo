@@ -1,90 +1,94 @@
-const express = require('express');
+//!Module-ok importálása
+const express = require('express'); //?npm install express
+const session = require('express-session'); //?npm install express-session
 const path = require('path');
-const mysql = require('mysql');
 
+//!Beállítások
 const app = express();
+const router = express.Router();
+
+const ip = '127.0.0.1';
 const port = 3000;
 
-app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, '../frontend')));
+app.use(express.json()); //?Middleware JSON
+app.set('trust proxy', 1); //?Middleware Proxy
 
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'foodgo'
+//!Session beállítása:
+app.use(
+    session({
+        secret: 'titkos_kulcs', //?Ezt generálni kell a későbbiekben
+        resave: false,
+        saveUninitialized: true
+    })
+);
+
+//!Routing
+//?Bejelentkezés:
+router.get('/', (request, response) => {
+    response.sendFile(path.join(__dirname, '../frontend/Bejelentkezés/index.html'));
 });
 
-db.connect(function (err) {
-    if (err) {
-        console.log('Hiba a MySQL kapcsolódáskor:', err);
-    } else {
-        console.log('Sikeres MySQL kapcsolat.');
-    }
+//?Regisztráció:
+router.get('/regisztracio', (request, response) => {
+    response.sendFile(path.join(__dirname, '../frontend/Regisztráció/index.html'));
 });
 
-app.get('/', function (req, res) {
-    res.redirect('/Regisztráció/register.html');
+//?Főoldal:
+router.get('/fooldal', (request, response) => {
+    response.sendFile(path.join(__dirname, '../frontend/Főoldal/index.html'));
 });
 
-app.post('/register', function (req, res) {
-    const nev = req.body.nev;
-    const email = req.body.email;
-    const telefon = req.body.telefon;
-    const jelszo = req.body.jelszo;
-    const jelszo2 = req.body.jelszo2;
-
-    if (!nev || !email || !telefon || !jelszo || !jelszo2) {
-        return res.send('Hiányzó adat a regisztrációs űrlapon.');
-    }
-
-    if (jelszo !== jelszo2) {
-        return res.send('A két jelszó nem egyezik.');
-    }
-
-    const sql = 'INSERT INTO users (nev, email, telefon, jelszo) VALUES (?, ?, ?, ?)';
-
-    db.query(sql, [nev, email, telefon, jelszo], function (err, result) {
-        if (err) {
-            console.log('Hiba a beszúrásnál:', err);
-            if (err.code === 'ER_DUP_ENTRY') {
-                return res.send('Ezzel az email címmel már létezik felhasználó.');
-            }
-            return res.send('Hiba történt a regisztráció során.');
-        }
-
-        console.log('Új felhasználó ID:', result.insertId);
-        res.send("Sikeres regisztráció! <a href='/Bejelentkezés/login.html'>Bejelentkezés</a>");
-    });
+//?Kínálat:
+router.get('/kinalat', (request, response) => {
+    response.sendFile(path.join(__dirname, '../frontend/Kínálat/index.html'));
 });
 
-app.post('/login', function (req, res) {
-    const email = req.body.email;
-    const jelszo = req.body.jelszo;
-
-    if (!email || !jelszo) {
-        return res.send('Add meg az email címet és a jelszót.');
-    }
-
-    const sql = 'SELECT * FROM users WHERE email = ? AND jelszo = ?';
-
-    db.query(sql, [email, jelszo], function (err, results) {
-        if (err) {
-            console.log('Hiba a lekérdezésnél:', err);
-            return res.send('Hiba történt a bejelentkezés során.');
-        }
-
-        if (results.length === 0) {
-            return res.send('Hibás email vagy jelszó.');
-        }
-
-        const user = results[0];
-        console.log('Sikeres bejelentkezés:', user.email);
-
-        res.send('Sikeres bejelentkezés, ' + user.nev + '! (Itt majd átirányítunk a főoldalra.)');
-    });
+//?Kosár:
+router.get('/kosar', (request, response) => {
+    response.sendFile(path.join(__dirname, '../frontend/Kosár/index.html'));
 });
 
-app.listen(port, function () {
-    console.log('Szerver fut a http://localhost:' + port + ' címen');
+//?Rólunk:
+router.get('/rolunk', (request, response) => {
+    response.sendFile(path.join(__dirname, '../frontend/Rólunk/index.html'));
 });
+
+//?Kapcsolat:
+router.get('/kapcsolat', (request, response) => {
+    response.sendFile(path.join(__dirname, '../frontend/Kapcsolat/index.html'));
+});
+
+//?Általános szerződési feltételek:
+router.get('/altalanos-szerzodesi-feltetelek', (request, response) => {
+    response.sendFile(path.join(__dirname, '../frontend/Általános Szerződési Feltételek/index.html'));
+});
+
+//?Adatvédelmi tájékoztató:
+router.get('/adatvedelmi-tajekoztato', (request, response) => {
+    response.sendFile(path.join(__dirname, '../frontend/Adatvédelmi tájékoztató/index.html'));
+});
+
+//?KFC:
+router.get('/kfc', (request, response) => {
+    response.sendFile(path.join(__dirname, '../frontend/Éttermek&Termékek/KFC/index.html'));
+});
+
+//?McDonald's:
+router.get('/mcdonalds', (request, response) => {
+    response.sendFile(path.join(__dirname, '../frontend/Éttermek&Termékek/McDonalds/index.html'));
+});
+
+//!API endpoints
+app.use('/', router);
+const endpoints = require('./api/api.js');
+app.use('/api', endpoints);
+
+//!Szerver futtatása
+app.use(express.static(path.join(__dirname, '../frontend'))); //?frontend mappa tartalmának betöltése az oldal működéséhez
+app.listen(port, ip, () => {
+    console.log(`Szerver elérhetősége: http://${ip}:${port}`);
+});
+
+//?Szerver futtatása terminalból: npm run dev
+//?Szerver leállítása (MacBook és Windows): Control + C
+//?Terminal ablak tartalmának törlése (MacBook): Command + K

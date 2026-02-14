@@ -1,0 +1,9 @@
+POST http://127.0.0.1:3000/api/ujFelhasznalo
+Content-Type: application/json
+
+{
+    "nev" : "Teszt Elek",
+    "email" : "teszt@teszt.hu",
+    "telefonszam" : "06201231234",
+    "jelszo" : "Teszt.1243"
+}

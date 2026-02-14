@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="hu">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/Bootstrap/bootstrap.min.css" />
+        <link rel="stylesheet" href="/Bejelentkezés/style.css" />
+        <title>FoodGo - Bejelentkezés</title>
+        <link rel="icon" type="image/png" href="/Média/FoodGo favicon.png" />
+    </head>
+    <body>
+        <div class="container">
+            <div class="row justify-content-center align-items-center min-vh-100">
+                <div class="col-12 col-md-8 col-lg-5">
+                    <div class="card">
+                        <h2>Bejelentkezés</h2>
+                        <p class="text-center text-muted miniSzoveg">Lépj be a fiókodba és rendelj pár kattintással.</p>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email cím</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="pelda@gmail.com" required />
+                            <div class="form-text">Használd a regisztrált e-mail címed.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between">
+                                <label for="jelszo" class="form-label">Jelszó</label>
+                                <a href="/regisztracio" class="miniSzoveg">Elfelejtetted?</a>
+                            </div>
+                            <input type="password" class="form-control" id="jelszo" name="jelszo" placeholder="Jelszó" required />
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100 py-2">Bejelentkezés</button>
+
+                        <p class="text-center mt-3 miniSzoveg">
+                            Még nincs fiókod?
+                            <a href="/regisztracio">Regisztráció</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="/Bootstrap/bootstrap.min.js"></script>
+        <script src="/Bejelentkezés/script.js"></script>
+    </body>
+</html>

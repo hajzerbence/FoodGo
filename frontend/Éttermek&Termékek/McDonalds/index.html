@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="hu">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/Bootstrap/bootstrap.min.css" />
+        <link rel="stylesheet" href="/Éttermek&Termékek/McDonalds/style.css" />
+        <title>McDonald's</title>
+        <link rel="icon" type="image/png" href="/Média/FoodGo favicon.png" />
+    </head>
+    <body>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg bg-light shadow sticky-top">
+            <div class="container-fluid">
+                <a class="navbar-brand ms-5 me-auto" href="/fooldal">
+                    <img src="/Média/FoodGo logo.png" alt="FoodGo logo" id="logo" />
+                </a>
+
+                <button class="navbar-toggler me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#fomenu" aria-controls="fomenu" aria-label="Menü">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="fomenu" aria-labelledby="fomenuLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="fomenuLabel">Menü</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Bezárás"></button>
+                    </div>
+
+                    <div class="offcanvas-body">
+                        <ul class="navbar-nav ms-auto me-5">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" href="/fooldal">Főoldal</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" href="/kinalat">Kínálatunk</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" href="/rolunk">Rólunk</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" href="/kapcsolat">Kapcsolat</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark fw-bold" href="/kosar">Kosár</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <!-- Navbar vége -->
+
+        <!-- Többi tartalom -->
+        <h6 class="ps-5 pt-4"><a class="text-dark" href="/fooldal">Az éttermek listája</a> > McDonald's</h6>
+
+        <!--Fő információk-->
+        <div class="container-fluid d-flex">
+            <div class="col-lg-2 col-mg-2 col-sm-2">
+                <img src="/Média/Étterem logók/McDonald'sLogo2.png" alt="McDonald's logo" id="mcDonaldsLogo" class="mt-2" />
+            </div>
+            <div class="col-lg-10 col-mg-10 col-sm-10 ms-5">
+                <p>Amerikai • Hamburgerek • Gyorsétterem • Készpénzes fizetés</p>
+                <h2>McDonald's</h2>
+            </div>
+        </div>
+        <hr />
+
+        <!--Termékek -->
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <!--1. termék -->
+                <div class="col-lg-4 col-md-6 col-sm-10 p-5 pt-1">
+                    <div class="card termekKartya">
+                        <div class="row g-0 align-items-center">
+                            <div class="col-7">
+                                <div class="ps-4">
+                                    <h5 class="card-title pt-3">15 Strips Kosár</h5>
+                                    <p class="card-text mb-2">Ebédet két főre? 15 darab Strips csípős csirkemell csík két adag kis sültburgonyával.</p>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <img src="/Média/Termékek/15stripsKosar.png" class="img-fluid w-75 p-2 pb-0 float-end" alt="15 Strips Kosár" />
+                            </div>
+                            <div class="d-flex flex-wrap align-items-center justify-content-between px-4 pb-3 gap-2">
+                                <button type="button" class="btn btn-success">Hozzáadás a kosárhoz</button>
+                                <span class="fs-5 fw-bold">6 690 Ft</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--1. termék vége -->
+
+                <!--2. termék -->
+                <div class="col-lg-4 col-md-6 col-sm-10 p-5 pt-1">
+                    <div class="card termekKartya">
+                        <div class="row g-0 align-items-center">
+                            <div class="col-7">
+                                <div class="ps-4">
+                                    <h5 class="card-title pt-3">Qurrito Box</h5>
+                                    <p class="card-text mb-2">Qurrito, 5 Hot Wings csípős csirkeszárny és normál sült burgonya</p>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <img src="/Média/Termékek/qurritoBox.png" class="img-fluid w-75 p-2 pb-0 float-end" alt="Qurrito Box" />
+                            </div>
+                            <div class="d-flex flex-wrap align-items-center justify-content-between px-4 pb-3 gap-2">
+                                <button type="button" class="btn btn-success">Hozzáadás a kosárhoz</button>
+                                <span class="fs-5 fw-bold">4 090 Ft</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--2. termék vége -->
+
+                <!--3. termék -->
+                <div class="col-lg-4 col-md-6 col-sm-10 p-5 pt-1">
+                    <div class="card termekKartya">
+                        <div class="row g-0 align-items-center">
+                            <div class="col-7">
+                                <div class="ps-4">
+                                    <h5 class="card-title pt-3">Classic Egyszemélyes Kosár</h5>
+                                    <p class="card-text mb-2">1 db Kentucky csirkerész, 2 db Hot Wings csípős csirkeszárny, 2 db Strips pikáns csirkemell-csík, kis sült burgonya.</p>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <img src="/Média/Termékek/classicEgyszemelyesKosar.png" class="img-fluid w-75 p-2 pb-0 float-end" alt="Classic Egyszemélyes Kosár" />
+                            </div>
+                            <div class="d-flex flex-wrap align-items-center justify-content-between px-4 pb-3 gap-2">
+                                <button type="button" class="btn btn-success">Hozzáadás a kosárhoz</button>
+                                <span class="fs-5 fw-bold">1 990 Ft</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--3. termék vége -->
+
+                <!--4. termék -->
+                <div class="col-lg-4 col-md-6 col-sm-10 p-5 pt-1">
+                    <div class="card termekKartya">
+                        <div class="row g-0 align-items-center">
+                            <div class="col-7">
+                                <div class="ps-4">
+                                    <h5 class="card-title pt-3">Hot Wings Egyszemélyes Kosár</h5>
+                                    <p class="card-text mb-2">6 Hot Wings csípős csirkeszárny és egy kis adag aranybarna sült burgonya.</p>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <img src="/Média/Termékek/hotWingsEgyszemelyesKosar.png" class="img-fluid w-75 p-2 pb-0 float-end" alt="Hot Wings Egyszemélyes Kosár" />
+                            </div>
+                            <div class="d-flex flex-wrap align-items-center justify-content-between px-4 pb-3 gap-2">
+                                <button type="button" class="btn btn-success">Hozzáadás a kosárhoz</button>
+                                <span class="fs-5 fw-bold">1 990 Ft</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--4. termék vége -->
+
+                <!--5. termék -->
+                <div class="col-lg-4 col-md-6 col-sm-10 p-5 pt-1">
+                    <div class="card termekKartya">
+                        <div class="row g-0 align-items-center">
+                            <div class="col-7">
+                                <div class="ps-4">
+                                    <h5 class="card-title pt-3">Twister Classic</h5>
+                                    <p class="card-text mb-2">2 darab csípős Strips csirkemell csík, lédús paradicsom, jégsaláta és majonéz. Mindezt egy finom tortillában szolgáljuk fel.</p>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <img src="/Média/Termékek/twisterClassic.png" class="img-fluid w-75 p-2 pb-0 float-end" alt="Twister Classic" />
+                            </div>
+                            <div class="d-flex flex-wrap align-items-center justify-content-between px-4 pb-3 gap-2">
+                                <button type="button" class="btn btn-success">Hozzáadás a kosárhoz</button>
+                                <span class="fs-5 fw-bold">2 090 Ft</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--5. termék vége -->
+
+                <!--6. termék -->
+                <div class="col-lg-4 col-md-6 col-sm-10 p-5 pt-1">
+                    <div class="card termekKartya">
+                        <div class="row g-0 align-items-center">
+                            <div class="col-7">
+                                <div class="ps-4">
+                                    <h5 class="card-title pt-3">Grander Box</h5>
+                                    <p class="card-text mb-2">Grander, 5 darab Hot Wings csípős csirkeszárny és normál sült burgonya</p>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <img src="/Média/Termékek/granderBox.png" class="img-fluid w-75 p-2 pb-0 float-end" alt="Grander Box" />
+                            </div>
+                            <div class="d-flex flex-wrap align-items-center justify-content-between px-4 pb-3 gap-2">
+                                <button type="button" class="btn btn-success">Hozzáadás a kosárhoz</button>
+                                <span class="fs-5 fw-bold">6 690 Ft</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--6. termék vége -->
+            </div>
+        </div>
+        <!--Termékek vége -->
+
+        <!-- Többi tartalom vége -->
+
+        <!-- Lábjegyzék szekció -->
+        <footer>
+            <div class="container-fluid">
+                <div class="row bg-success p-4 text-center">
+                    <div class="col-md-4 p-3 text-white">
+                        <h3>FoodGo</h3>
+                        <h6 class="pt-3">Ízletes ételeket szállítunk házhoz 2025 óta</h6>
+                    </div>
+                    <div class="col-md-4 p-3 text-white">
+                        <h3>Gyorslinkek</h3>
+                        <ul class="list-unstyled">
+                            <li><a href="/fooldal" class="text-white text-decoration-none p-2">Kezdőlap</a></li>
+                            <li><a href="/kinalat" class="text-white text-decoration-none p-2">Kínálatunk</a></li>
+                            <li><a href="/rolunk" class="text-white text-decoration-none p-2">Rólunk</a></li>
+                            <li><a href="/kapcsolat" class="text-white text-decoration-none p-2">Kapcsolat</a></li>
+                            <li><a href="/altalanos-szerzodesi-feltetelek" class="text-white text-decoration-none p-2">ÁSZF</a></li>
+                            <li><a href="/adatvedelmi-tajekoztato" class="text-white text-decoration-none p-2">Adatvédelmi tájékoztató</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4 p-3 text-white">
+                        <h3>Kapcsolat</h3>
+                        <ul class="list-unstyled">
+                            <li class="text-white"><strong>Székhely:</strong> 1055 Budapest, Minta utca 12.</li>
+                            <li class="text-white"><strong>Telefon:</strong> +36 20 123 1234</li>
+                            <li class="text-white"><strong>Email:</strong> info@foodgo.hu</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- Lábjegyzék szekció vége -->
+
+        <script src="/Éttermek&Termékek/McDonalds/script.js"></script>
+        <script src="/Kosár/script.js"></script>
+        <script src="/Bootstrap/bootstrap.min.js"></script>
+    </body>
+</html>
