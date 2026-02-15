@@ -29,21 +29,13 @@
 
                     <div class="offcanvas-body">
                         <ul class="navbar-nav ms-auto me-5">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" href="fooldal">Főoldal</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" href="kinalat">Kínálatunk</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" href="rolunk">Rólunk</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark active" href="kapcsolat">Kapcsolat</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark fw-bold" href="kosar">Kosár</a>
-                            </li>
+                            <li class="nav-item"><a class="nav-link" id="adminFeluletGomb" href="/admin">Admin felület</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/fooldal">Főoldal</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/kinalat">Kínálatunk</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/rolunk">Rólunk</a></li>
+                            <li class="nav-item"><a class="nav-link active" href="/kapcsolat">Kapcsolat</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/kosar">Kosár</a></li>
+                            <li class="nav-item"><input type="button" class="nav-link fw-bold" value="Kijelentkezés" id="kijelentkezesGomb" /></li>
                         </ul>
                     </div>
                 </div>
@@ -106,6 +98,7 @@
         </footer>
         <!-- Lábjegyzék szekció vége -->
 
+        <script src="/Kapcsolat/script.js"></script>
         <script src="/Bootstrap/bootstrap.min.js"></script>
     </body>
 </html>

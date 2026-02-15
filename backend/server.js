@@ -1,6 +1,7 @@
 //!Module-ok importálása
 const express = require('express'); //?npm install express
 const session = require('express-session'); //?npm install express-session
+const adatbazis = require('./sql/database.js'); //? admin ellenőrzéshez kell
 const path = require('path');
 
 //!Beállítások
@@ -22,6 +23,38 @@ app.use(
     })
 );
 
+//! Middleware-k (oldal védelemhez):
+function bejelentkezesKotelezoOldalhoz(request, response, next) {
+    // HTML oldal védelem: be kell lépni
+    if (!request.session) {
+        // session hiány: konfigurációs hiba
+        return response.status(500).send('Session middleware hiba.'); // 500, itt nem JSON
+    }
+    if (!request.session.userId) {
+        // nincs belépve
+        return response.redirect('/'); // bejelentkezés oldal
+    }
+    next(); // a felhasználó be van jelentkezve, mehet tovább
+}
+
+async function adminKotelezoOldalhoz(request, response, next) {
+    // HTML oldal védelem: admin kell
+    if (!request.session) {
+        // session hiány: konfigurációs hiba
+        return response.status(500).send('Session middleware hiba.'); // 500, itt nem JSON
+    }
+    if (!request.session.userId) {
+        // nincs belépve
+        return response.redirect('/'); // bejelentkezés oldal
+    }
+    // Admin ellenőrzés a sessionben tárolt userId alapján
+    const admin = await adatbazis.adminE(request.session.userId); // true vagy false az adatbázisból
+    if (!admin) {
+        return response.redirect('/fooldal'); // belépve, de nem admin
+    }
+    next(); // a felhasználó admin, szóval mehet tovább
+}
+
 //!Routing
 //?Bejelentkezés:
 router.get('/', (request, response) => {
@@ -34,27 +67,32 @@ router.get('/regisztracio', (request, response) => {
 });
 
 //?Főoldal:
-router.get('/fooldal', (request, response) => {
+router.get('/fooldal', bejelentkezesKotelezoOldalhoz, (request, response) => {
     response.sendFile(path.join(__dirname, '../frontend/Főoldal/index.html'));
 });
 
+//?Admin felület:
+router.get('/admin', adminKotelezoOldalhoz, (request, response) => {
+    response.sendFile(path.join(__dirname, '../frontend/Admin/index.html'));
+});
+
 //?Kínálat:
-router.get('/kinalat', (request, response) => {
+router.get('/kinalat', bejelentkezesKotelezoOldalhoz, (request, response) => {
     response.sendFile(path.join(__dirname, '../frontend/Kínálat/index.html'));
 });
 
 //?Kosár:
-router.get('/kosar', (request, response) => {
+router.get('/kosar', bejelentkezesKotelezoOldalhoz, (request, response) => {
     response.sendFile(path.join(__dirname, '../frontend/Kosár/index.html'));
 });
 
 //?Rólunk:
-router.get('/rolunk', (request, response) => {
+router.get('/rolunk', bejelentkezesKotelezoOldalhoz, (request, response) => {
     response.sendFile(path.join(__dirname, '../frontend/Rólunk/index.html'));
 });
 
 //?Kapcsolat:
-router.get('/kapcsolat', (request, response) => {
+router.get('/kapcsolat', bejelentkezesKotelezoOldalhoz, (request, response) => {
     response.sendFile(path.join(__dirname, '../frontend/Kapcsolat/index.html'));
 });
 
@@ -69,16 +107,30 @@ router.get('/adatvedelmi-tajekoztato', (request, response) => {
 });
 
 //?KFC:
-router.get('/kfc', (request, response) => {
+router.get('/kfc', bejelentkezesKotelezoOldalhoz, (request, response) => {
     response.sendFile(path.join(__dirname, '../frontend/Éttermek&Termékek/KFC/index.html'));
 });
 
 //?McDonald's:
-router.get('/mcdonalds', (request, response) => {
+router.get('/mcdonalds', bejelentkezesKotelezoOldalhoz, (request, response) => {
     response.sendFile(path.join(__dirname, '../frontend/Éttermek&Termékek/McDonalds/index.html'));
 });
 
 //!API endpoints
+//? Direkt html elérések védelme
+app.use(async (request, response, next) => {
+    const kertUtvonal = request.path; // a böngésző által kért URL útvonal, pl. "/Főoldal/index.html"
+    if (!kertUtvonal.toLowerCase().endsWith('.html')) {
+        return next(); // nem html (css/js/kép), nem védjük itt
+    }
+    if (kertUtvonal === '/Bejelentkezés/index.html' || kertUtvonal === '/Regisztráció/index.html' || kertUtvonal === '/Általános Szerződési Feltételek/index.html' || kertUtvonal === '/Adatvédelmi tájékoztató/index.html') {
+        return next(); // nyilvános html-ek
+    }
+    if (kertUtvonal.startsWith('/Admin/')) {
+        return adminKotelezoOldalhoz(request, response, next); // admin html-ek
+    }
+    return bejelentkezesKotelezoOldalhoz(request, response, next); // minden más html csak belépve
+});
 app.use('/', router);
 const endpoints = require('./api/api.js');
 app.use('/api', endpoints);

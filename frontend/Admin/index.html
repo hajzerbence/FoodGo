@@ -4,8 +4,8 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="/Bootstrap/bootstrap.min.css" />
-        <link rel="stylesheet" href="/Kosár/style.css" />
-        <title>Kosár</title>
+        <link rel="stylesheet" href="/Admin/style.css" />
+        <title>Admin felület</title>
         <link rel="icon" type="image/png" href="/Média/FoodGo favicon.png" />
     </head>
     <body>
@@ -28,12 +28,12 @@
 
                     <div class="offcanvas-body">
                         <ul class="navbar-nav ms-auto me-5">
-                            <li class="nav-item"><a class="nav-link" id="adminFeluletGomb" href="/admin">Admin felület</a></li>
+                            <li class="nav-item"><a class="nav-link active" id="adminFeluletGomb" href="/admin">Admin felület</a></li>
                             <li class="nav-item"><a class="nav-link" href="/fooldal">Főoldal</a></li>
                             <li class="nav-item"><a class="nav-link" href="/kinalat">Kínálatunk</a></li>
                             <li class="nav-item"><a class="nav-link" href="/rolunk">Rólunk</a></li>
                             <li class="nav-item"><a class="nav-link" href="/kapcsolat">Kapcsolat</a></li>
-                            <li class="nav-item"><a class="nav-link active" href="/kosar">Kosár</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/kosar">Kosár</a></li>
                             <li class="nav-item"><input type="button" class="nav-link fw-bold" value="Kijelentkezés" id="kijelentkezesGomb" /></li>
                         </ul>
                     </div>
@@ -41,33 +41,42 @@
             </div>
         </nav>
         <!-- Navbar vége -->
-
-        <!-- Kosár -->
-        <div class="container mt-4" id="kosarSzekcio">
-            <h2>Kosár tartalma</h2>
-            <div class="table-responsive">
-                <table class="table table-bordered mt-3">
-                    <thead>
-                        <tr>
-                            <th>Termék neve</th>
-                            <th>Mennyiség</th>
-                            <th>Ár</th>
-                        </tr>
-                    </thead>
-                    <tbody id="kosarTartalom"></tbody>
-                </table>
+        <main class="container my-4">
+            <div>
+                <h1 class="mb-1">Admin felület</h1>
+                <div class="text-muted">Felhasználók kezelése</div>
             </div>
-            <div class="d-flex justify-content-end">
-                <h4>Végösszeg: <span id="vegosszeg">0 Ft</span></h4>
-            </div>
-            <div class="d-flex justify-content-end mt-3">
-                <button class="btn btn-danger me-2" id="uresitKosar">Kosár ürítése</button>
-                <button class="btn btn-success" id="fizetesGomb">Fizetés</button>
-            </div>
-        </div>
 
-        <!-- Kosár vége -->
+            <div class="kartyasResz mt-3">
+                <h3 class="mb-3">Felhasználók</h3>
 
+                <div class="table-responsive">
+                    <table class="table table-striped align-middle">
+                        <thead>
+                            <tr>
+                                <th id="felhasznaloID">ID</th>
+                                <th id="felhasznaloNev">Név</th>
+                                <th id="felhasznaloEmail">Email</th>
+                                <th id="felhasznaloTelefonszam">Telefonszám</th>
+                                <th id="felhasznaloAdmin">Admin</th>
+                                <th id="felhasznaloMuveletek">Műveletek</th>
+                            </tr>
+                        </thead>
+                        <tbody id="felhasznaloTabla"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="kartyasResz mt-4">
+                <h3 class="mb-2">Éttermek</h3>
+                <div class="text-muted">Még nincs adatbázisban. Később ide jön a lista és a kezelés.</div>
+            </div>
+
+            <div class="kartyasResz mt-4">
+                <h3 class="mb-2">Termékek</h3>
+                <div class="text-muted">Még nincs adatbázisban. Később ide jön a lista és a kezelés.</div>
+            </div>
+        </main>
         <!-- Lábjegyzék szekció -->
         <footer>
             <div class="container-fluid">
@@ -100,7 +109,7 @@
         </footer>
         <!-- Lábjegyzék szekció vége -->
 
-        <script src="/Kosár/script.js"></script>
+        <script src="/Admin/script.js"></script>
         <script src="/Bootstrap/bootstrap.min.js"></script>
     </body>
 </html>

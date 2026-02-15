@@ -1,5 +1,7 @@
 /* NAVBAR */
-
+#adminFeluletGomb {
+    display: none;
+}
 /* LOGÓ: alap méret (normál flow-ban marad, így a navbar vastagsága nem változik) */
 .logo {
     height: 50px; /* logó magassága */

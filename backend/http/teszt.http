@@ -7,3 +7,12 @@ Content-Type: application/json
     "telefonszam" : "06201231234",
     "jelszo" : "Teszt.1243"
 }
+
+###
+POST http://127.0.0.1:3000/api/bejelentkezes
+Content-Type: application/json
+
+{
+    "email" : "czegledimate06@gmail.com",
+    "jelszo" : "Admin1234"
+}

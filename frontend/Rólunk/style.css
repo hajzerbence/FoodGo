@@ -55,6 +55,10 @@ a {
     margin-bottom: 12px;
 }
 
+#adminFeluletGomb {
+    display: none;
+}
+
 #logo {
     height: 50px;
     width: auto;

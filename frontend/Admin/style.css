@@ -35,7 +35,39 @@ body {
     font-weight: bold;
 }
 
-/* Kosár szekció kitölti a maradék helyet */
-#kosarSzekcio {
-    flex: auto;
+.kartyasResz {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.muveletGombok {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+#felhasznaloID {
+    width: 70px;
+}
+
+#felhasznaloNev {
+    min-width: 180px;
+}
+
+#felhasznaloEmail {
+    min-width: 220px;
+}
+
+#felhasznaloTelefonszam {
+    min-width: 160px;
+}
+
+#felhasznaloAdmin {
+    width: 90px;
+}
+
+#felhasznaloMuveletek {
+    min-width: 320px;
 }
