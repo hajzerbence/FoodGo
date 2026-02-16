@@ -4,80 +4,78 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="/Bootstrap/bootstrap.min.css" />
-        <link rel="stylesheet" href="/Admin/style.css" />
-        <title>Admin felület</title>
+        <link rel="stylesheet" href="/Profil/style.css" />
+        <title>FoodGo - Profilom</title>
         <link rel="icon" type="image/png" href="/Média/FoodGo favicon.png" />
     </head>
     <body>
-        <!-- Navbar -->
         <nav class="navbar navbar-expand-lg bg-light shadow sticky-top">
             <div class="container-fluid">
                 <a class="navbar-brand ms-5 me-auto" href="/fooldal">
                     <img src="/Média/FoodGo logo.png" alt="FoodGo logo" id="logo" />
                 </a>
-
-                <button class="navbar-toggler me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#fomenu" aria-controls="fomenu" aria-label="Menü">
+                <button class="navbar-toggler me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#fomenu">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
-                <div class="offcanvas offcanvas-end" tabindex="-1" id="fomenu" aria-labelledby="fomenuLabel">
+                <div class="offcanvas offcanvas-end" id="fomenu">
                     <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="fomenuLabel">Menü</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Bezárás"></button>
+                        <h5 class="offcanvas-title">Menü</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
                     </div>
-
                     <div class="offcanvas-body">
                         <ul class="navbar-nav ms-auto me-5">
-                            <li class="nav-item"><a class="nav-link active" id="adminFeluletGomb" href="/admin">Admin felület</a></li>
+                            <li class="nav-item"><a class="nav-link" id="adminFeluletGomb" href="/admin">Admin felület</a></li>
                             <li class="nav-item"><a class="nav-link" href="/fooldal">Főoldal</a></li>
                             <li class="nav-item"><a class="nav-link" href="/kinalat">Kínálatunk</a></li>
                             <li class="nav-item"><a class="nav-link" href="/rolunk">Rólunk</a></li>
                             <li class="nav-item"><a class="nav-link" href="/kapcsolat">Kapcsolat</a></li>
                             <li class="nav-item"><a class="nav-link" href="/kosar">Kosár</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/profil">Profilom</a></li>
+                            <li class="nav-item"><a class="nav-link active" href="/profil">Profilom</a></li>
                             <li class="nav-item"><input type="button" class="nav-link fw-bold" value="Kijelentkezés" id="kijelentkezesGomb" /></li>
                         </ul>
                     </div>
                 </div>
             </div>
         </nav>
-        <!-- Navbar vége -->
-        <main class="container my-4">
-            <div>
-                <h1 class="mb-1">Admin felület</h1>
-                <div class="text-muted">Felhasználók kezelése</div>
-            </div>
 
-            <div class="kartyasResz mt-3">
-                <h3 class="mb-3">Felhasználók</h3>
+        <div class="kontener">
+            <h1 class="text-center mb-4">Saját adataim szerkesztése</h1>
 
-                <div class="table-responsive">
-                    <table class="table table-striped align-middle">
-                        <thead>
-                            <tr>
-                                <th id="felhasznaloID">ID</th>
-                                <th id="felhasznaloNev">Név</th>
-                                <th id="felhasznaloEmail">Email</th>
-                                <th id="felhasznaloTelefonszam">Telefonszám</th>
-                                <th id="felhasznaloAdmin">Admin</th>
-                                <th id="felhasznaloMuveletek">Műveletek</th>
-                            </tr>
-                        </thead>
-                        <tbody id="felhasznaloTabla"></tbody>
-                    </table>
+            <div class="card">
+                <h2>Alapadatok</h2>
+                <div class="mb-3">
+                    <label for="nev" class="form-label">Név</label>
+                    <input type="text" class="form-control" id="nev" />
                 </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email cím</label>
+                    <input type="email" class="form-control" id="email" />
+                </div>
+                <div class="mb-3">
+                    <label for="telefonszam" class="form-label">Telefonszám</label>
+                    <input type="text" class="form-control" id="telefonszam" />
+                </div>
+                <button class="btn btn-success" id="adatMentesBtn">Adatok mentése</button>
             </div>
 
-            <div class="kartyasResz mt-4">
-                <h3 class="mb-2">Éttermek</h3>
-                <div class="text-muted">Még nincs adatbázisban. Később ide jön a lista és a kezelés.</div>
+            <div class="card">
+                <h2>Jelszó módosítása</h2>
+                <div class="mb-3">
+                    <label for="regiJelszo" class="form-label">Jelenlegi jelszó</label>
+                    <input type="password" class="form-control" id="regiJelszo" />
+                </div>
+                <div class="mb-3">
+                    <label for="ujJelszo" class="form-label">Új jelszó</label>
+                    <input type="password" class="form-control" id="ujJelszo" />
+                </div>
+                <div class="mb-3">
+                    <label for="ujJelszoMegerosites" class="form-label">Új jelszó megerősítése</label>
+                    <input type="password" class="form-control" id="ujJelszoMegerosites" />
+                </div>
+                <button class="btn btn-warning" id="jelszoMentesBtn">Jelszó cseréje</button>
             </div>
+        </div>
 
-            <div class="kartyasResz mt-4">
-                <h3 class="mb-2">Termékek</h3>
-                <div class="text-muted">Még nincs adatbázisban. Később ide jön a lista és a kezelés.</div>
-            </div>
-        </main>
         <!-- Lábjegyzék szekció -->
         <footer>
             <div class="container-fluid">
@@ -110,7 +108,7 @@
         </footer>
         <!-- Lábjegyzék szekció vége -->
 
-        <script src="/Admin/script.js"></script>
+        <script src="/Profil/script.js"></script>
         <script src="/Bootstrap/bootstrap.min.js"></script>
     </body>
 </html>

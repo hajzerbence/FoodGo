@@ -67,6 +67,28 @@ async function felhasznaloTorlese(id) {
     return result.affectedRows; // 0 vagy 1
 }
 
+//* Profil - Felhasználó adatok lekérése
+async function sajatAdatok(id) {
+    // profil: saját adatok lekérése id alapján
+    const sql = 'SELECT id, nev, email, telefonszam FROM felhasznalo WHERE id = ? LIMIT 1'; // jelszó nélkül
+    const [rows] = await pool.execute(sql, [id]); // paraméterezett query
+    return rows[0] ?? null; // első találat vagy null
+}
+
+//* Profil - Jelszó ellenőrzés (cseréhez)
+async function JelszoEllenorzes(id) {
+    const sql = 'SELECT jelszo FROM felhasznalo WHERE id = ? LIMIT 1'; // csak jelszó kell
+    const [rows] = await pool.execute(sql, [id]); // paraméterezett query
+    return rows[0]?.jelszo ?? null; // jelszó vagy null
+}
+
+//* Profil - Új jelszó beállítása
+async function jelszoModositas(id, ujJelszo) {
+    const sql = 'UPDATE felhasznalo SET jelszo = ? WHERE id = ?';
+    const [result] = await pool.execute(sql, [ujJelszo, id]);
+    return result.affectedRows; // 0 vagy 1
+}
+
 async function selectall() {
     const query = 'SELECT * FROM felhasznalo;';
     const [rows] = await pool.execute(query);
@@ -82,5 +104,8 @@ module.exports = {
     felhasznalokListaja,
     felhasznaloModositasa,
     adminJogBeallitasa,
-    felhasznaloTorlese
+    felhasznaloTorlese,
+    sajatAdatok,
+    JelszoEllenorzes,
+    jelszoModositas
 };

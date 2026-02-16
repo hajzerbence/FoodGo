@@ -116,6 +116,11 @@ router.get('/mcdonalds', bejelentkezesKotelezoOldalhoz, (request, response) => {
     response.sendFile(path.join(__dirname, '../frontend/Éttermek&Termékek/McDonalds/index.html'));
 });
 
+//?Profil:
+router.get('/profil', bejelentkezesKotelezoOldalhoz, (request, response) => {
+    response.sendFile(path.join(__dirname, '../frontend/Profil/index.html'));
+});
+
 //!API endpoints
 //? Direkt html elérések védelme
 app.use(async (request, response, next) => {

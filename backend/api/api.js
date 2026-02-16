@@ -209,6 +209,52 @@ router.post('/kijelentkezes', bejelentkezesKotelezo, (request, response) => {
     });
 });
 
+//? GET /profil - Belépett felhasználó adatinak lekérése
+router.get('/profil', bejelentkezesKotelezo, async (request, response) => {
+    try {
+        const adatok = await database.sajatAdatok(request.session.userId); // saját adatok jelszó nélkül
+        response.status(200).json(adatok);
+    } catch (error) {
+        console.log(`GET hiba /profil ${error.message}`);
+        response.status(500).json({
+            message: 'Saját adatok lekérése sikertelen.'
+        });
+    }
+});
+
+//? POST /profil - Adatok vagy jelszó módosítása
+router.post('/profil', bejelentkezesKotelezo, async (request, response) => {
+    try {
+        const { muvelet } = request.body;
+        const userId = request.session.userId;
+
+        // 1. Adatok módosítása
+        if (muvelet === 'adatModositas') {
+            const { nev, email, telefonszam } = request.body;
+            await database.felhasznaloModositasa(userId, nev, email, telefonszam);
+            return response.status(200).json({ success: true, message: 'Adatok sikeresen mentve.' });
+        }
+
+        // 2. Jelszó modosítása
+        if (muvelet === 'jelszoModositas') {
+            const { regiJelszo, ujJelszo } = request.body;
+
+            const helyes = await database.JelszoEllenorzes(userId, regiJelszo);
+            if (!helyes) {
+                return response.status(401).json({ success: false, message: 'A jelenlegi jelszó hibás.' });
+            }
+
+            await database.jelszoModositas(userId, ujJelszo);
+            return response.status(200).json({ success: true, message: 'Jelszó sikeresen módosítva.' });
+        }
+
+        return response.status(400).json({ message: 'Ismeretlen művelet.' });
+    } catch (error) {
+        console.log(`POST hiba /profil ${error.message}`);
+        response.status(500).json({ success: false, message: 'Hiba a mentés során.' });
+    }
+});
+
 //?GET /api/test
 router.get('/test', (request, response) => {
     response.status(200).json({
