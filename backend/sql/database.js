@@ -89,6 +89,13 @@ async function jelszoModositas(id, ujJelszo) {
     return result.affectedRows; // 0 vagy 1
 }
 
+//* Termékek lekérése étterem szerint
+async function termekekLekerdezese(etteremAzonosito) {
+    const sql = 'SELECT * FROM termekek WHERE etterem_azonosito = ?';
+    const [rows] = await pool.execute(sql, [etteremAzonosito]);
+    return rows;
+}
+
 async function selectall() {
     const query = 'SELECT * FROM felhasznalo;';
     const [rows] = await pool.execute(query);
@@ -107,5 +114,6 @@ module.exports = {
     felhasznaloTorlese,
     sajatAdatok,
     JelszoEllenorzes,
-    jelszoModositas
+    jelszoModositas,
+    termekekLekerdezese
 };

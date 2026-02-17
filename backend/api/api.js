@@ -255,6 +255,22 @@ router.post('/profil', bejelentkezesKotelezo, async (request, response) => {
     }
 });
 
+//? GET /api/termekek/:etterem - Termékek lekérése étterem szerint
+router.get('/termekek/:etterem', bejelentkezesKotelezo, async (request, response) => {
+    try {
+        const etterem = request.params.etterem;
+        const termekek = await database.termekekLekerdezese(etterem);
+
+        response.status(200).json({
+            success: true,
+            termekek: termekek
+        });
+    } catch (error) {
+        console.log(`GET hiba /termekek ${error.message}`);
+        response.status(500).json({ message: 'Termékek betöltése sikertelen.' });
+    }
+});
+
 //?GET /api/test
 router.get('/test', (request, response) => {
     response.status(200).json({
