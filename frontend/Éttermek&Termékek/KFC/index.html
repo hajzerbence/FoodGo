@@ -43,31 +43,25 @@
         </nav>
         <!-- Navbar vége -->
 
-        <!-- Többi tartalom -->
-        <h6 class="ps-5 pt-4"><a class="text-dark" href="/fooldal">Az éttermek listája</a> > KFC</h6>
+        <main class="container py-4">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/fooldal" class="text-decoration-none text-success fw-bold">Az éttermek listája</a></li>
+                    <li class="breadcrumb-item active text-dark fw-bold" aria-current="page">KFC</li>
+                </ol>
+            </nav>
 
-        <!--Fő információk-->
-        <div class="container-fluid d-flex">
-            <div class="col-lg-2 col-mg-2 col-sm-2">
-                <img src="/Média/Étterem logók/KFClogo.png" alt="KFC logo" id="kfcLogo" class="ps-5" />
+            <div class="etterem-fejlec d-flex align-items-center p-4 mb-5 shadow-sm">
+                <div class="etterem-logo-doboz me-4">
+                    <img src="/Média/Étterem logók/KFClogo.png" alt="KFC logo" class="etterem-logo" />
+                </div>
+                <div>
+                    <h1 class="fw-bold mb-0 text-dark">KFC</h1>
+                </div>
             </div>
-            <div class="col-lg-10 col-mg-10 col-sm-10 ms-5">
-                <p>Amerikai • Hamburgerek • Gyorsétterem • Készpénzes fizetés</p>
-                <h2>KFC</h2>
-            </div>
-        </div>
-        <hr />
-        <!--Fő információk vége-->
 
-        <!--Termékek -->
-        <div class="container-fluid">
-            <div class="row justify-content-center" id="termekLista"></div>
-        </div>
-        <!--Termékek vége -->
-
-        <!-- Többi tartalom vége -->
-
-        <!-- Lábjegyzék szekció -->
+            <div class="row g-4 justify-content-center" id="termekLista"></div>
+        </main>
         <footer>
             <div class="container-fluid">
                 <div class="row bg-success p-4 text-center">

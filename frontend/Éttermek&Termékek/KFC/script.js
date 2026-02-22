@@ -70,67 +70,70 @@ async function termekekBetoltese() {
         for (let i = 0; i < termekek.length; i++) {
             const aktualisTermek = termekek[i];
 
+            // 1. Oszlop beállítása (Nagy képernyőn 2 db van egymás mellett)
             const oszlop = document.createElement('div');
-            oszlop.className = 'col-lg-4 col-md-6 col-sm-10 p-5 pt-1';
+            oszlop.className = 'col-xl-6 col-lg-6 col-md-12';
 
+            // 2. Kártya konténer
             const kartya = document.createElement('div');
-            kartya.className = 'card termekKartya h-100';
+            kartya.className = 'card termekKartya h-100 d-flex flex-row';
 
-            const sor = document.createElement('div');
-            sor.className = 'row g-0 align-items-center h-100';
+            // --- BAL OLDAL: Szöveg, leírás, gomb ---
+            // A w-60 kb 60%-ot foglal el. flex-column: fentről lefelé rendezi az elemeket.
+            const balOldal = document.createElement('div');
+            balOldal.className = 'w-60 p-4 d-flex flex-column justify-content-between';
 
-            const szovegOszlop = document.createElement('div');
-            szovegOszlop.className = 'col-7';
-
-            const szovegDoboz = document.createElement('div');
-            szovegDoboz.className = 'ps-4';
+            const szovegResz = document.createElement('div');
 
             const cim = document.createElement('h5');
-            cim.className = 'card-title pt-3';
+            cim.className = 'termekCim mb-2';
             cim.innerText = aktualisTermek.nev;
 
             const leiras = document.createElement('p');
-            leiras.className = 'card-text mb-2';
+            leiras.className = 'termekLeiras mb-3';
             leiras.innerText = aktualisTermek.leiras;
 
-            szovegDoboz.appendChild(cim);
-            szovegDoboz.appendChild(leiras);
-            szovegOszlop.appendChild(szovegDoboz);
+            szovegResz.appendChild(cim);
+            szovegResz.appendChild(leiras);
 
-            const kepOszlop = document.createElement('div');
-            kepOszlop.className = 'col-5';
+            // Alsó sor: Ár és Gomb
+            const alsoSor = document.createElement('div');
+            alsoSor.className = 'd-flex align-items-center gap-3'; // gap-3 ad egy kis helyet az ár és a gomb közé
 
-            const kep = document.createElement('img');
-            kep.className = 'img-fluid w-75 p-2 pb-0 float-end';
-            kep.src = aktualisTermek.kep_utvonal;
-            kep.alt = aktualisTermek.nev;
-
-            kepOszlop.appendChild(kep);
-
-            const alsoResz = document.createElement('div');
-            alsoResz.className = 'd-flex flex-wrap align-items-center justify-content-between px-4 pb-3 gap-2 w-100 mt-auto';
+            const arSzoveg = document.createElement('span');
+            arSzoveg.className = 'fs-5 fw-bold text-success mb-0';
+            arSzoveg.innerText = aktualisTermek.ar + ' Ft';
 
             const gomb = document.createElement('button');
-            gomb.className = 'btn btn-success';
+            gomb.className = 'btn btn-success btn-sm rounded-pill px-3 fw-bold shadow-sm';
             gomb.type = 'button';
-            gomb.innerText = 'Hozzáadás a kosárhoz';
+            gomb.innerText = '+ Kosárba';
 
             gomb.addEventListener('click', function () {
                 kosarbaRak(aktualisTermek.nev, aktualisTermek.ar);
             });
 
-            const arSzoveg = document.createElement('span');
-            arSzoveg.className = 'fs-5 fw-bold';
-            arSzoveg.innerText = aktualisTermek.ar + ' Ft';
+            alsoSor.appendChild(gomb);
+            alsoSor.appendChild(arSzoveg);
 
-            alsoResz.appendChild(gomb);
-            alsoResz.appendChild(arSzoveg);
+            balOldal.appendChild(szovegResz);
+            balOldal.appendChild(alsoSor);
 
-            sor.appendChild(szovegOszlop);
-            sor.appendChild(kepOszlop);
-            sor.appendChild(alsoResz);
+            // --- JOBB OLDAL: Csak a lebegő PNG kép ---
+            // A w-40 kb 40%-ot foglal. p-3: kap egy kis margót.
+            const jobbOldal = document.createElement('div');
+            jobbOldal.className = 'w-40 p-3 d-flex align-items-center justify-content-center';
 
-            kartya.appendChild(sor);
+            const kep = document.createElement('img');
+            kep.className = 'termekKep';
+            kep.src = aktualisTermek.kep_utvonal;
+            kep.alt = aktualisTermek.nev;
+
+            jobbOldal.appendChild(kep);
+
+            // --- Összefűzés ---
+            kartya.appendChild(balOldal);
+            kartya.appendChild(jobbOldal);
             oszlop.appendChild(kartya);
 
             termekLista.appendChild(oszlop);
