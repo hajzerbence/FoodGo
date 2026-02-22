@@ -27,7 +27,7 @@
     height: 70px;
     width: auto;
     margin-left: 10vh;
-    border: #db0007 6px solid;
+    border: #ffffff 6px solid;
     border-radius: 10%;
 }
 
@@ -61,4 +61,80 @@
     object-fit: contain;
     padding: 6px;
     display: block;
+}
+
+/* --- PRÉMIUM TERMÉKKÁRTYA --- */
+.termekKartya {
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.04) !important;
+    border-radius: 20px !important; /* Nagy, barátságos lekerekítés */
+    transition: all 0.3s ease;
+    overflow: hidden;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.03);
+}
+
+/* Finom emelkedés és árnyék rámutatáskor */
+.termekKartya:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* A kép formázása - hagyjuk érvényesülni a PNG-t! */
+.termekKep {
+    max-width: 100%;
+    max-height: 140px; /* Ne legyen túl magas */
+    object-fit: contain;
+    transition: transform 0.3s ease;
+    /* Mivel PNG, ez a filter körbe árnyékolja magát a csirkét/burgert, zseniális hatás! */
+    filter: drop-shadow(0 10px 10px rgba(0, 0, 0, 0.15));
+}
+
+/* Rámutatáskor a kártyára, a kép is picit megnő (prémium érzet) */
+.termekKartya:hover .termekKep {
+    transform: scale(1.08);
+}
+
+/* Szövegek formázása */
+.termekCim {
+    font-weight: 700;
+    color: #1a1a1a;
+    font-size: 1.15rem;
+}
+
+.termekLeiras {
+    font-size: 0.9rem;
+    color: #757575;
+    /* CSS trükk: Ha 2 sornál hosszabb a szöveg, a végére ...-ot tesz! Sosem torzul el a kártya. */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* --- ÉTTEREM FEJLÉC ÉS LOGÓ --- */
+.etterem-fejlec {
+    background-color: #ffffff;
+    border-radius: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.etterem-logo-doboz {
+    width: 100px !important; /* Szigorúan 100px széles */
+    height: 100px !important; /* Szigorúan 100px magas */
+    flex-shrink: 0; /* Nem engedi, hogy összenyomódjon! */
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.etterem-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* A kép arányosan kitölti a 100x100-as helyet */
+    padding: 8px; /* Egy pici belső margó, hogy szellős legyen */
 }
