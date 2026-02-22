@@ -116,6 +116,11 @@ router.get('/mcdonalds', bejelentkezesKotelezoOldalhoz, (request, response) => {
     response.sendFile(path.join(__dirname, '../frontend/Éttermek&Termékek/McDonalds/index.html'));
 });
 
+//?Buddha Original:
+router.get('/buddhaoriginal', bejelentkezesKotelezoOldalhoz, (request, response) => {
+    response.sendFile(path.join(__dirname, '../frontend/Éttermek&Termékek/BuddhaOriginal/index.html'));
+});
+
 //?Profil:
 router.get('/profil', bejelentkezesKotelezoOldalhoz, (request, response) => {
     response.sendFile(path.join(__dirname, '../frontend/Profil/index.html'));
