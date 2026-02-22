@@ -1,7 +1,7 @@
 // Globális változók
 const kijelentkezesGomb = document.getElementById('kijelentkezesGomb');
 const adminFeluletGomb = document.getElementById('adminFeluletGomb');
-let aktualisUserId = null; // ITT TÁROLJUK, KI VAN BELÉPVE
+let aktualisUserId = null;
 
 //!PostMethodFetch
 const PostMethodFetch = async function (url, value) {
@@ -44,7 +44,7 @@ const adminFeluletGombFrissitese = async function () {
         const data = await getMethodFetch('/api/bejelentkezettFelhasznalo');
 
         if (data && data.userId) {
-            aktualisUserId = data.userId; // ELMENTJÜK AZ ID-T!
+            aktualisUserId = data.userId;
         }
 
         if (data && data.admine === true) {
@@ -63,7 +63,7 @@ async function termekekBetoltese() {
     termekLista.innerHTML = '';
 
     try {
-        const valasz = await getMethodFetch('/api/termekek/mcdonalds');
+        const valasz = await getMethodFetch('/api/termekek/buddhaoriginal');
         const termekek = valasz.termekek;
 
         for (let i = 0; i < termekek.length; i++) {
@@ -143,7 +143,7 @@ async function termekekBetoltese() {
     }
 }
 
-// JAVÍTOTT KOSÁRBA RAKÁS (ID ALAPJÁN)
+// KOSÁRBA RAKÁS (ID ALAPJÁN)
 function kosarbaRak(nev, ar) {
     if (!aktualisUserId) {
         alert('Kérlek várj egy picit, vagy jelentkezz be újra!');
@@ -183,7 +183,6 @@ function kosarbaRak(nev, ar) {
 }
 
 document.addEventListener('DOMContentLoaded', async function () {
-    // Megvárjuk, amíg lekéri az ID-t, utána töltjük be a McDonald's termékeket
     await adminFeluletGombFrissitese();
     termekekBetoltese();
 
