@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="hu">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/Bootstrap/bootstrap.min.css" />
+        <link rel="stylesheet" href="/Éttermek&Termékek/StarKebab/style.css" />
+        <title>Star kebab</title>
+        <link rel="icon" type="image/png" href="/Média/FoodGo favicon.png" />
+    </head>
+    <body>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg bg-light shadow sticky-top">
+            <div class="container-fluid">
+                <a class="navbar-brand ms-5 me-auto" href="/fooldal">
+                    <img src="/Média/FoodGo logo.png" alt="FoodGo logo" id="logo" />
+                </a>
+
+                <button class="navbar-toggler me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#fomenu" aria-controls="fomenu" aria-label="Menü">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="fomenu" aria-labelledby="fomenuLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="fomenuLabel">Menü</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Bezárás"></button>
+                    </div>
+
+                    <div class="offcanvas-body">
+                        <ul class="navbar-nav ms-auto me-5">
+                            <li class="nav-item"><a class="nav-link" id="adminFeluletGomb" href="/admin">Admin felület</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/fooldal">Főoldal</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/kinalat">Kínálatunk</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/rolunk">Rólunk</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/kapcsolat">Kapcsolat</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/kosar">Kosár</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/profil">Profilom</a></li>
+                            <li class="nav-item"><input type="button" class="nav-link fw-bold" value="Kijelentkezés" id="kijelentkezesGomb" /></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <!-- Navbar vége -->
+        <main class="container py-4">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/fooldal" class="text-decoration-none text-success fw-bold">Az éttermek listája</a></li>
+                    <li class="breadcrumb-item active text-dark fw-bold" aria-current="page">Star kebab</li>
+                </ol>
+            </nav>
+
+            <div class="etterem-fejlec d-flex align-items-center p-4 mb-5 shadow-sm">
+                <div class="etterem-logo-doboz me-4">
+                    <img src="/Média/Étterem logók/starkebab.png" alt="Star Kebab logo" class="etterem-logo" />
+                </div>
+                <div>
+                    <h1 class="fw-bold mb-0 text-dark">Star kebab</h1>
+                </div>
+            </div>
+
+            <div class="row g-4 justify-content-center" id="termekLista"></div>
+        </main>
+
+        <!-- Lábjegyzék szekció -->
+        <footer>
+            <div class="container-fluid">
+                <div class="row bg-success p-4 text-center">
+                    <div class="col-md-4 p-3 text-white">
+                        <h3>FoodGo</h3>
+                        <h6 class="pt-3">Ízletes ételeket szállítunk házhoz 2025 óta</h6>
+                    </div>
+                    <div class="col-md-4 p-3 text-white">
+                        <h3>Gyorslinkek</h3>
+                        <ul class="list-unstyled">
+                            <li><a href="/fooldal" class="text-white text-decoration-none p-2">Kezdőlap</a></li>
+                            <li><a href="/kinalat" class="text-white text-decoration-none p-2">Kínálatunk</a></li>
+                            <li><a href="/rolunk" class="text-white text-decoration-none p-2">Rólunk</a></li>
+                            <li><a href="/kapcsolat" class="text-white text-decoration-none p-2">Kapcsolat</a></li>
+                            <li><a href="/altalanos-szerzodesi-feltetelek" class="text-white text-decoration-none p-2">ÁSZF</a></li>
+                            <li><a href="/adatvedelmi-tajekoztato" class="text-white text-decoration-none p-2">Adatvédelmi tájékoztató</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4 p-3 text-white">
+                        <h3>Kapcsolat</h3>
+                        <ul class="list-unstyled">
+                            <li class="text-white"><strong>Székhely:</strong> 1055 Budapest, Minta utca 12.</li>
+                            <li class="text-white"><strong>Telefon:</strong> +36 20 123 1234</li>
+                            <li class="text-white"><strong>Email:</strong> info@foodgo.hu</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- Lábjegyzék szekció vége -->
+
+        <script src="/Éttermek&Termékek/StarKebab/script.js"></script>
+        <script src="/Kosár/script.js"></script>
+        <script src="/Bootstrap/bootstrap.min.js"></script>
+    </body>
+</html>

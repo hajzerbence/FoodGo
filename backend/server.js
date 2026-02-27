@@ -121,6 +121,36 @@ router.get('/buddhaoriginal', bejelentkezesKotelezoOldalhoz, (request, response)
     response.sendFile(path.join(__dirname, '../frontend/Éttermek&Termékek/BuddhaOriginal/index.html'));
 });
 
+//?Ibrahim Török Büfé:
+router.get('/ibrahimtorokbufe', bejelentkezesKotelezoOldalhoz, (request, response) => {
+    response.sendFile(path.join(__dirname, '../frontend/Éttermek&Termékek/IbrahimTorokBufe/index.html'));
+});
+
+//?Wok'nGo:
+router.get('/wokngo', bejelentkezesKotelezoOldalhoz, (request, response) => {
+    response.sendFile(path.join(__dirname, '../frontend/Éttermek&Termékek/wokngo/index.html'));
+});
+
+//?Star kebab:
+router.get('/starkebab', bejelentkezesKotelezoOldalhoz, (request, response) => {
+    response.sendFile(path.join(__dirname, '../frontend/Éttermek&Termékek/StarKebab/index.html'));
+});
+
+//?Sofra étterem:
+router.get('/sofraetterem', bejelentkezesKotelezoOldalhoz, (request, response) => {
+    response.sendFile(path.join(__dirname, '../frontend/Éttermek&Termékek/SofraEtterem/index.html'));
+});
+
+//?Kinai Nagyfal Büfé:
+router.get('/kinainagyfalbufe', bejelentkezesKotelezoOldalhoz, (request, response) => {
+    response.sendFile(path.join(__dirname, '../frontend/Éttermek&Termékek/KinaiNagyfalBufe/index.html'));
+});
+
+//?Simon's Burger:
+router.get('/simonsburger', bejelentkezesKotelezoOldalhoz, (request, response) => {
+    response.sendFile(path.join(__dirname, '../frontend/Éttermek&Termékek/SimonsBurger/index.html'));
+});
+
 //?Profil:
 router.get('/profil', bejelentkezesKotelezoOldalhoz, (request, response) => {
     response.sendFile(path.join(__dirname, '../frontend/Profil/index.html'));
