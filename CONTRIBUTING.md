@@ -1,44 +1,44 @@
-````markdown
-# Contributing to FoodGo
 
-Thank you for considering contributing to **FoodGo**! 🎉  
-We welcome contributions of all kinds including bug fixes, new features, documentation improvements, and suggestions.
+# Hozzájárulás a FoodGo projekthez
 
-## Table of Contents
+Köszönjük, hogy fontolóra vetted a **FoodGo** projekthez való hozzájárulást! 🎉  
+Szívesen fogadunk mindenféle hozzájárulást, például hibajavításokat, új funkciókat, dokumentáció fejlesztést vagy javaslatokat.
 
-- Code of Conduct
-- Getting Started
-- Development Workflow
-- Commit Guidelines
-- Pull Request Process
-- Reporting Issues
-- Coding Standards
+## Tartalomjegyzék
 
----
-
-## Code of Conduct
-
-Please be respectful and constructive when interacting with other contributors.  
-We aim to maintain a welcoming and inclusive community.
+- Magatartási kódex
+- Első lépések
+- Fejlesztési folyamat
+- Commit irányelvek
+- Pull Request folyamat
+- Hibák jelentése
+- Kódolási irányelvek
 
 ---
 
-## Getting Started
+## Magatartási kódex
 
-1. Fork the repository
-2. Clone your fork locally
+Kérjük, hogy a többi közreműködővel való kommunikáció során legyél tiszteletteljes és konstruktív.  
+Célunk egy barátságos, befogadó és támogató közösség fenntartása.
+
+---
+
+## Első lépések
+
+1. Forkold a repository-t
+2. Klónozd a saját forkodat lokálisan
 
 ```bash
 git clone https://github.com/YOUR_USERNAME/FoodGo.git
 ````
 
-3. Navigate to the project
+3. Lépj be a projekt mappájába
 
 ```bash
 cd FoodGo
 ```
 
-4. Add the original repository as upstream
+4. Add hozzá az eredeti repository-t upstreamként
 
 ```bash
 git remote add upstream https://github.com/hajzerbence/FoodGo.git
@@ -46,115 +46,110 @@ git remote add upstream https://github.com/hajzerbence/FoodGo.git
 
 ---
 
-## Development Workflow
+## Fejlesztési folyamat
 
-1. Create a new branch for your feature or fix:
+1. Hozz létre egy új branchet a funkcióhoz vagy hibajavításhoz:
 
 ```bash
 git checkout -b feature/your-feature-name
 ```
 
-or
+vagy
 
 ```bash
 git checkout -b fix/bug-description
 ```
 
-2. Make your changes.
+2. Végezze el a szükséges módosításokat.
 
-3. Commit your changes:
+3. Commitold a változtatásokat:
 
 ```bash
-git commit -m "Add: short description of the change"
+git commit -m "Add: rövid leírás a változtatásról"
 ```
 
-4. Push to your fork:
+4. Pushold a saját forkodba:
 
 ```bash
 git push origin feature/your-feature-name
 ```
 
-5. Open a Pull Request.
+5. Nyiss egy Pull Requestet.
 
 ---
 
-## Commit Guidelines
+## Commit irányelvek
 
-Please write clear and descriptive commit messages.
+Kérjük, írj egyértelmű és beszédes commit üzeneteket.
 
-Recommended prefixes:
-
-```
-feat: new feature
-fix: bug fix
-docs: documentation update
-refactor: code refactoring
-style: formatting changes
-test: adding or updating tests
-chore: maintenance tasks
-```
-
-Example:
+Ajánlott prefixek:
 
 ```
-feat: add restaurant filtering by category
+feat: új funkció
+fix: hibajavítás
+docs: dokumentáció frissítés
+refactor: kód átszervezése
+style: formázási változtatások
+test: tesztek hozzáadása vagy frissítése
+chore: karbantartási feladatok
 ```
 
----
-
-## Pull Request Process
-
-When submitting a Pull Request:
-
-1. Ensure your branch is up to date with `main`.
-2. Provide a clear description of what your PR does.
-3. Reference any related issues.
-4. Ensure the project builds successfully.
-5. Keep PRs focused and small if possible.
-
-Example PR title:
+Példa:
 
 ```
-feat: add user authentication
+feat: éttermek szűrése kategória szerint
 ```
 
 ---
 
-## Reporting Issues
+## Pull Request folyamat
 
-If you find a bug or want to suggest a feature:
+Pull Request benyújtásakor:
 
-1. Check existing issues first.
-2. Open a new issue with a clear title and description.
+1. Győződj meg róla, hogy a branched naprakész a `main` branchhez képest.
+2. Adj egyértelmű leírást arról, hogy mit csinál a PR.
+3. Hivatkozz a kapcsolódó issue-kra.
+4. Ellenőrizd, hogy a projekt sikeresen buildel.
+5. Ha lehet, a PR legyen kisebb és egy konkrét változtatásra fókuszáljon.
 
-Include:
-
-* Steps to reproduce
-* Expected behavior
-* Actual behavior
-* Screenshots (if applicable)
-
----
-
-## Coding Standards
-
-Please follow these general guidelines:
-
-* Write clean and readable code
-* Use meaningful variable names
-* Keep functions small and focused
-* Comment complex logic
-* Follow the existing project structure
-
----
-
-## Questions
-
-If you have any questions, feel free to open an issue or start a discussion.
-
-Thank you for contributing to **FoodGo**! 🚀
+Példa PR cím:
 
 ```
+feat: felhasználói autentikáció hozzáadása
+```
 
+---
 
-[1]: https://github.com/abdullahnettoor/food-delivery-eCommerce?utm_source=chatgpt.com "GitHub - abdullahnettoor/food-delivery-ecommerce: A comprehensive food ordering platform built with Go, featuring multi-user roles, secure authentication, and real-time order management."
+## Hibák jelentése
+
+Ha hibát találsz vagy új funkciót szeretnél javasolni:
+
+1. Először ellenőrizd a meglévő issue-kat.
+2. Nyiss egy új issue-t egyértelmű címmel és leírással.
+
+Lehetőleg tartalmazza:
+
+* A hiba reprodukálásának lépéseit
+* Az elvárt működést
+* A tényleges működést
+* Képernyőképeket (ha releváns)
+
+---
+
+## Kódolási irányelvek
+
+Kérjük, kövesd az alábbi általános irányelveket:
+
+* Írj tiszta és jól olvasható kódot
+* Használj beszédes változóneveket
+* Tartsd a függvényeket röviden és egyértelmű céllal
+* Kommentáld az összetettebb logikát
+* Kövesd a projekt meglévő struktúráját
+
+---
+
+## Kérdések
+
+Ha bármilyen kérdésed van, nyugodtan nyiss egy issue-t vagy indíts egy discussiont.
+
+Köszönjük, hogy hozzájárulsz a **FoodGo** projekthez! 🚀
