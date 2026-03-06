@@ -1,9 +1,9 @@
 // Globális változók
 const kijelentkezesGomb = document.getElementById('kijelentkezesGomb');
 const adminFeluletGomb = document.getElementById('adminFeluletGomb');
-let aktualisUserId = null; // ITT TÁROLJUK, KI VAN BELÉPVE
+let aktualisUserId = null; // A bejelentkezett felhasználó ID-ja
 
-//!PostMethodFetch
+//! POST kérés segédfüggvény
 const PostMethodFetch = async function (url, value) {
     try {
         const data = await fetch(url, {
@@ -20,65 +20,91 @@ const PostMethodFetch = async function (url, value) {
     }
 };
 
-//! getMethodFetch
+//! GET kérés segédfüggvény
 const getMethodFetch = async function (url) {
     try {
         const data = await fetch(url, {
             method: 'GET',
             headers: { 'Content-type': 'application/json' }
         });
-
         if (!data.ok) {
             throw new Error(`GET hiba: ${data.status} ${data.statusText}`);
         }
-
         return await data.json();
     } catch (error) {
         throw new Error(error.message);
     }
 };
 
-//Admin felület gomb és FELHASZNÁLÓ AZONOSÍTÁS
+//! Admin gomb + userId lekérése
 const adminFeluletGombFrissitese = async function () {
     try {
         const data = await getMethodFetch('/api/bejelentkezettFelhasznalo');
-
         if (data && data.userId) {
-            aktualisUserId = data.userId; // ELMENTJÜK AZ ID-T!
+            aktualisUserId = data.userId;
         }
-
         if (data && data.admine === true) {
             adminFeluletGomb.style.display = 'block';
         } else {
             adminFeluletGomb.style.display = 'none';
         }
     } catch (error) {
-        console.error('Hiba történt: ', error);
+        console.error('Hiba az admin gomb frissítésekor:', error);
         adminFeluletGomb.style.display = 'none';
     }
 };
 
-async function termekekBetoltese() {
+//! Az URL-ből kinyeri az étterem azonosítóját
+// Pl. "/etterem/kfc" -> "kfc"
+function getEtteremAzonosito() {
+    const urlReszek = window.location.pathname.split('/'); // ['', 'etterem', 'kfc']
+    return urlReszek[urlReszek.length - 1]; // az utolsó rész: 'kfc'
+}
+
+//! Étterem adatainak betöltése és megjelenítése
+async function etteremBetoltese(azonosito) {
+    try {
+        const valasz = await getMethodFetch('/api/ettermek/' + azonosito);
+        const etterem = valasz.etterem;
+
+        // Oldal title frissítése
+        document.title = etterem.nev + ' – FoodGo';
+
+        // Breadcrumb frissítése
+        document.getElementById('breadcrumbNev').innerText = etterem.nev;
+
+        // Logo és név frissítése
+        document.getElementById('etteremLogo').src = etterem.logo_utvonal;
+        document.getElementById('etteremLogo').alt = etterem.nev + ' logo';
+        document.getElementById('etteremNev').innerText = etterem.nev;
+        document.getElementById('etteremLeiras').innerText = etterem.leiras;
+    } catch (error) {
+        console.error('Hiba az étterem betöltésekor:', error);
+        document.getElementById('etteremNev').innerText = 'Étterem nem található.';
+    }
+}
+
+//! Termékek betöltése és kártyák felépítése
+async function termekekBetoltese(azonosito) {
     const termekLista = document.getElementById('termekLista');
     termekLista.innerHTML = '';
 
     try {
-        const valasz = await getMethodFetch('/api/termekek/mcdonalds');
+        const valasz = await getMethodFetch('/api/termekek/' + azonosito);
         const termekek = valasz.termekek;
 
         for (let i = 0; i < termekek.length; i++) {
             const aktualisTermek = termekek[i];
 
-            // 1. Oszlop beállítása (Nagy képernyőn 2 db van egymás mellett)
+            // Oszlop
             const oszlop = document.createElement('div');
             oszlop.className = 'col-xl-6 col-lg-6 col-md-12';
 
-            // 2. Kártya konténer
+            // Kártya konténer
             const kartya = document.createElement('div');
             kartya.className = 'card termekKartya h-100 d-flex flex-row';
 
-            // --- BAL OLDAL: Szöveg, leírás, gomb ---
-            // A w-60 kb 60%-ot foglal el. flex-column: fentről lefelé rendezi az elemeket.
+            // --- BAL OLDAL: szöveg, ár, gomb ---
             const balOldal = document.createElement('div');
             balOldal.className = 'w-60 p-4 d-flex flex-column justify-content-between';
 
@@ -95,13 +121,9 @@ async function termekekBetoltese() {
             szovegResz.appendChild(cim);
             szovegResz.appendChild(leiras);
 
-            // Alsó sor: Ár és Gomb
+            // Alsó sor: gomb + ár
             const alsoSor = document.createElement('div');
-            alsoSor.className = 'd-flex align-items-center gap-3'; // gap-3 ad egy kis helyet az ár és a gomb közé
-
-            const arSzoveg = document.createElement('span');
-            arSzoveg.className = 'fs-5 fw-bold text-success mb-0';
-            arSzoveg.innerText = aktualisTermek.ar + ' Ft';
+            alsoSor.className = 'd-flex align-items-center gap-3';
 
             const gomb = document.createElement('button');
             gomb.className = 'btn btn-success btn-sm rounded-pill px-3 fw-bold shadow-sm';
@@ -112,14 +134,17 @@ async function termekekBetoltese() {
                 kosarbaRak(aktualisTermek.nev, aktualisTermek.ar);
             });
 
+            const arSzoveg = document.createElement('span');
+            arSzoveg.className = 'fs-5 fw-bold text-success mb-0';
+            arSzoveg.innerText = aktualisTermek.ar + ' Ft';
+
             alsoSor.appendChild(gomb);
             alsoSor.appendChild(arSzoveg);
 
             balOldal.appendChild(szovegResz);
             balOldal.appendChild(alsoSor);
 
-            // --- JOBB OLDAL: Csak a lebegő PNG kép ---
-            // A w-40 kb 40%-ot foglal. p-3: kap egy kis margót.
+            // --- JOBB OLDAL: termék kép ---
             const jobbOldal = document.createElement('div');
             jobbOldal.className = 'w-40 p-3 d-flex align-items-center justify-content-center';
 
@@ -130,20 +155,19 @@ async function termekekBetoltese() {
 
             jobbOldal.appendChild(kep);
 
-            // --- Összefűzés ---
+            // Összefűzés
             kartya.appendChild(balOldal);
             kartya.appendChild(jobbOldal);
             oszlop.appendChild(kartya);
-
             termekLista.appendChild(oszlop);
         }
     } catch (error) {
-        console.error(error);
-        termekLista.innerText = 'Hiba történt a betöltéskor.';
+        console.error('Hiba a termékek betöltésekor:', error);
+        termekLista.innerHTML = '<p class="text-danger">Hiba történt a termékek betöltésekor.</p>';
     }
 }
 
-// JAVÍTOTT KOSÁRBA RAKÁS (ID ALAPJÁN)
+//! Kosárba rakás (localStorage, userId alapján)
 function kosarbaRak(nev, ar) {
     if (!aktualisUserId) {
         alert('Kérlek várj egy picit, vagy jelentkezz be újra!');
@@ -152,8 +176,8 @@ function kosarbaRak(nev, ar) {
 
     const taroloKulcs = 'foodgo_kosar_' + aktualisUserId;
 
-    let eddigiKosar = localStorage.getItem(taroloKulcs);
     let kosarLista = [];
+    const eddigiKosar = localStorage.getItem(taroloKulcs);
 
     if (eddigiKosar) {
         kosarLista = JSON.parse(eddigiKosar);
@@ -170,11 +194,7 @@ function kosarbaRak(nev, ar) {
     }
 
     if (benneVan === false) {
-        const ujTermek = {
-            nev: nev,
-            ar: ar,
-            db: 1
-        };
+        const ujTermek = { nev: nev, ar: ar, db: 1 };
         kosarLista.push(ujTermek);
     }
 
@@ -182,11 +202,19 @@ function kosarbaRak(nev, ar) {
     alert(nev + ' bekerült a kosárba!');
 }
 
+//! Oldal betöltésekor fut le
 document.addEventListener('DOMContentLoaded', async function () {
-    // Megvárjuk, amíg lekéri az ID-t, utána töltjük be a McDonald's termékeket
+    // 1. Lekérjük a bejelentkezett user ID-ját
     await adminFeluletGombFrissitese();
-    termekekBetoltese();
 
+    // 2. Kinyerjük az URL-ből az étterem azonosítóját
+    const azonosito = getEtteremAzonosito();
+
+    // 3. Betöltjük az étterem adatait és a termékeit egyszerre
+    await etteremBetoltese(azonosito);
+    await termekekBetoltese(azonosito);
+
+    // 4. Kijelentkezés gomb
     if (kijelentkezesGomb) {
         kijelentkezesGomb.addEventListener('click', async () => {
             try {

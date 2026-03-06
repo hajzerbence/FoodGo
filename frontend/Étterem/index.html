@@ -4,8 +4,8 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="/Bootstrap/bootstrap.min.css" />
-        <link rel="stylesheet" href="/Éttermek&Termékek/McDonalds/style.css" />
-        <title>McDonald's</title>
+        <link rel="stylesheet" href="/Étterem/style.css" />
+        <title>Étterem</title>
         <link rel="icon" type="image/png" href="/Média/FoodGo favicon.png" />
     </head>
     <body>
@@ -41,25 +41,35 @@
                 </div>
             </div>
         </nav>
+        <!-- Navbar vége -->
+
         <main class="container py-4">
+            <!-- Breadcrumb (morzsamenü) -->
             <nav aria-label="breadcrumb" class="mb-4">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/fooldal" class="text-decoration-none text-success fw-bold">Az éttermek listája</a></li>
-                    <li class="breadcrumb-item active text-dark fw-bold" aria-current="page">McDonald's</li>
+                    <li class="breadcrumb-item active text-dark fw-bold" aria-current="page" id="breadcrumbNev">Betöltés...</li>
                 </ol>
             </nav>
 
-            <div class="etterem-fejlec d-flex align-items-center p-4 mb-5 shadow-sm">
+            <!-- Étterem fejléc (logo + név) -->
+            <div class="etterem-fejlec d-flex align-items-center p-4 mb-5 shadow-sm" id="etteremFejlec">
                 <div class="etterem-logo-doboz me-4">
-                    <img src="/Média/Étterem logók/McDonaldsLogo.png" alt="McDonald's logo" class="etterem-logo" />
+                    <img src="" alt="Étterem logó" class="etterem-logo" id="etteremLogo" />
                 </div>
                 <div>
-                    <h1 class="fw-bold mb-0 text-dark">McDonald's</h1>
+                    <h1 class="fw-bold mb-1 text-dark" id="etteremNev">Betöltés...</h1>
+                    <p class="text-muted mb-0" id="etteremLeiras"></p>
                 </div>
             </div>
 
-            <div class="row g-4 justify-content-center" id="termekLista"></div>
+            <!-- Termékek listája -->
+            <div class="row g-4 justify-content-center" id="termekLista">
+                <!-- JS tölti fel -->
+            </div>
         </main>
+
+        <!-- Lábjegyzék -->
         <footer>
             <div class="container-fluid">
                 <div class="row bg-success p-4 text-center">
@@ -89,10 +99,9 @@
                 </div>
             </div>
         </footer>
-        <!-- Lábjegyzék szekció vége -->
+        <!-- Lábjegyzék vége -->
 
-        <script src="/Éttermek&Termékek/McDonalds/script.js"></script>
-        <script src="/Kosár/script.js"></script>
+        <script src="/Étterem/script.js"></script>
         <script src="/Bootstrap/bootstrap.min.js"></script>
     </body>
 </html>

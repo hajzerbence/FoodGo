@@ -156,6 +156,11 @@ router.get('/profil', bejelentkezesKotelezoOldalhoz, (request, response) => {
     response.sendFile(path.join(__dirname, '../frontend/Profil/index.html'));
 });
 
+//?Étterem oldal (dinamikus - egy oldal minden étteremhez):
+router.get('/etterem/:azonosito', bejelentkezesKotelezoOldalhoz, (request, response) => {
+    response.sendFile(path.join(__dirname, '../frontend/Étterem/index.html'));
+});
+
 //!API endpoints
 //? Direkt html elérések védelme
 app.use(async (request, response, next) => {

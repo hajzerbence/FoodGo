@@ -96,6 +96,20 @@ async function termekekLekerdezese(etteremAzonosito) {
     return rows;
 }
 
+//* Összes étterem lekérése
+async function ettermekLekerdezese() {
+    const sql = 'SELECT * FROM ettermek ORDER BY id';
+    const [rows] = await pool.execute(sql);
+    return rows;
+}
+
+//* Egy étterem lekérése azonosító alapján
+async function etteremAzonositoAlapjan(azonosito) {
+    const sql = 'SELECT * FROM ettermek WHERE azonosito = ? LIMIT 1';
+    const [rows] = await pool.execute(sql, [azonosito]);
+    return rows[0] ?? null;
+}
+
 async function selectall() {
     const query = 'SELECT * FROM felhasznalo;';
     const [rows] = await pool.execute(query);
@@ -115,5 +129,7 @@ module.exports = {
     sajatAdatok,
     JelszoEllenorzes,
     jelszoModositas,
-    termekekLekerdezese
+    termekekLekerdezese,
+    ettermekLekerdezese,
+    etteremAzonositoAlapjan
 };
