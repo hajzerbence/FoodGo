@@ -271,6 +271,40 @@ router.get('/termekek/:etterem', bejelentkezesKotelezo, async (request, response
     }
 });
 
+//? GET /api/ettermek - Összes étterem lekérése
+router.get('/ettermek', bejelentkezesKotelezo, async (request, response) => {
+    try {
+        const ettermek = await database.ettermekLekerdezese();
+        response.status(200).json({
+            success: true,
+            ettermek: ettermek
+        });
+    } catch (error) {
+        console.log(`GET hiba /ettermek ${error.message}`);
+        response.status(500).json({ message: 'Éttermek betöltése sikertelen.' });
+    }
+});
+
+//? GET /api/ettermek/:azonosito - Egy étterem lekérése
+router.get('/ettermek/:azonosito', bejelentkezesKotelezo, async (request, response) => {
+    try {
+        const azonosito = request.params.azonosito;
+        const etterem = await database.etteremAzonositoAlapjan(azonosito);
+
+        if (!etterem) {
+            return response.status(404).json({ success: false, message: 'Étterem nem található.' });
+        }
+
+        response.status(200).json({
+            success: true,
+            etterem: etterem
+        });
+    } catch (error) {
+        console.log(`GET hiba /ettermek/:azonosito ${error.message}`);
+        response.status(500).json({ message: 'Étterem betöltése sikertelen.' });
+    }
+});
+
 //?GET /api/test
 router.get('/test', (request, response) => {
     response.status(200).json({
