@@ -1,17 +1,11 @@
-CREATE DATABASE foodgo
-DEFAULT CHARACTER SET utf8
-COLLATE utf8_hungarian_ci;
-
-USE foodgo;
-
 CREATE TABLE felhasznalo(
-	id int AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     nev VARCHAR(120) NOT NULL,
     email VARCHAR(120) NOT NULL UNIQUE,
     telefonszam VARCHAR(20) NOT NULL,
     jelszo VARCHAR(255) NOT NULL,
     admine BOOLEAN NOT NULL DEFAULT FALSE
-)
+);
 
 INSERT INTO felhasznalo (nev, email, telefonszam, jelszo, admine) VALUES
 ('Admin',
@@ -103,7 +97,30 @@ INSERT INTO termekek (nev, leiras, ar, kep_utvonal, etterem_azonosito, kategoria
 ('Mini Tavaszi tekercs (6db)', 'Tavaszi tekercs', 1000, '/Média/Termékek/miniTavasziTekercs.png', 'kinainagyfalbufe', 'tavaszitekercs'),
 ('Tojásos rizs', 'Puha, szaftos és ízletes. Próbáld ki te is ezt a könnyű köretet!', 1290, '/Média/Termékek/tojasosRizs.png', 'kinainagyfalbufe', 'rizs');
 
--- Simon's Burger Termékek feltöltése --! Nincs kész
+-- Éttermek tábla
+CREATE TABLE ettermek (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    azonosito VARCHAR(50) NOT NULL UNIQUE, -- pl. 'kfc', 'mcdonalds'
+    nev VARCHAR(100) NOT NULL,
+    leiras TEXT,
+    kategoria VARCHAR(50) NOT NULL, -- 'amerikai', 'azsiai', 'torok'
+    logo_utvonal VARCHAR(255) NOT NULL,
+    boritokep_utvonal VARCHAR(255) NOT NULL
+);
+
+-- Éttermek feltöltése
+INSERT INTO ettermek (azonosito, nev, leiras, kategoria, logo_utvonal, boritokep_utvonal) VALUES
+('kfc', 'KFC', 'Ropogós, fűszeres csirke minden mennyiségben, mellé krémes szószok és bőséges köretek. Kedvencek: csirkeszárnyak, csirkecsíkok, sült krumpli és sajtos falatok.', 'amerikai', '/Média/Étterem logók/KFClogo.png', '/Média/Amerikai/kfc.png'),
+('mcdonalds', 'McDonald''s', 'Gyors, ismerős ízek nagy választékkal, mindig hozza a klasszikus mekis hangulatot. Kedvencek: Big Mac jellegű burgerek, nuggets, sült krumpli és shake, desszertnek pedig fagyi.', 'amerikai', '/Média/Étterem logók/McDonaldsLogo.png', '/Média/Amerikai/mcdonalds.png'),
+('simonsburger', 'Simon''s Burger', 'Laktató, karakteres burgerélmény szaftos húspogácsával és rengeteg feltéttel, igazi comfort food. Kedvencek: signature burgerek, cheddarban úszó opciók, ropogós sült krumpli és házi szószok.', 'amerikai', '/Média/Étterem logók/simonsburger.png', '/Média/Amerikai/simonsburger.png'),
+('buddhaoriginal', 'Buddha Original', 'Friss, illatos fogások sok zöldséggel, aromás fűszerekkel és könnyed, mégis tartalmas ízekkel. Kedvencek: wok tálak, pho vagy ramen jellegű levesek, rizses ételek és csípős szószos variációk.', 'azsiai', '/Média/Étterem logók/BuddhaOriginal.png', '/Média/Ázsiai/buddhaOriginal.png'),
+('wokngo', 'Wok''n Go', 'Pörgős, frissen dobott wok ételek, ahol te állítod össze a kedvenc kombinációdat. Kedvencek: pirított tészták, csirkés vagy zöldséges wok tálak, teriyaki jellegű szószok és csípős ráadások.', 'azsiai', '/Média/Étterem logók/wokngo.png', '/Média/Ázsiai/wok''nGo.png'),
+('kinainagyfalbufe', 'Kínai Nagyfal Büfé', 'Klasszikus kínai büfés kedvencek bőséges adagokkal, gyorsan tálalva és erős, sós édes fűszerezéssel. Kedvencek: édes savanyú csirke, pirított tészta, sült rizs és ropogós tavaszi tekercs.', 'azsiai', '/Média/Étterem logók/KinaiNagyfalBufe.png', '/Média/Ázsiai/kinaiNagyFalBufe.png'),
+('ibrahimtorokbufe', 'Ibrahim Török Büfé', 'Szaftos, fűszeres húsok és friss zöldségek, a gyors török büfé hangulata igazi laktató választásokkal. Kedvencek: kebab tál, dürüm, pitában kért húsok és fokhagymás csípős szószok.', 'torok', '/Média/Étterem logók/ibrahimTorokBufe.png', '/Média/Török/ibrahimtorokbufe.png'),
+('starkebab', 'Star Kebab', 'Klasszikus kebabos ízek nagy adagban, gyorsan és tele friss salátával. Kedvencek: dürüm, kebab tál, ropogós sült krumpli és extra szószos, csípős változatok.', 'torok', '/Média/Étterem logók/starkebab.png', '/Média/Török/starkebab.png'),
+('sofraetterem', 'Sofra Étterem', 'Gazdag török konyha grillezett fogásokkal, illatos fűszerekkel és többféle friss körettel. Kedvencek: adana jellegű grill, kebabok, pide és desszertnek baklava, mellé ayran vagy tea.', 'torok', '/Média/Étterem logók/sofraetterem.png', '/Média/Török/sofraetterem.png');
+
+-- Simon's Burger Termékek feltöltése
 INSERT INTO termekek (nev, leiras, ar, kep_utvonal, etterem_azonosito, kategoria) VALUES
 ('Cheeseburger', 'Sosem fagyasztott, 100% természetes dupla smashed marhahúspogácsából készítjük. Az Oklahoma stílusban sütött húsunkat mindig friss hagymával készítjük dupla sajttal. A Simon’s szószunk 17 különleges összetevőt tartalmaz. Az alap burger Simon’s szószt, paradicsomot, hagymát, uborkát és salátát tartalmaz.', 3690, '/Média/Termékek/cheeseburger.png', 'simonsburger', 'hamburger'),
 ('Simons special burger', 'Simon kedvenc hamburgere: friss, fagyasztásmentes 100% természetes dupla smashed marhahúspogácsából, áfonya lekvárral, cheddar sajttal és a titkos szósszal. A titkos szószunk 17 összetevőt tartalmaz.', 3390, '/Média/Termékek/simonsSpecialBurger.png', 'simonsburger', 'hamburger'),
