@@ -1,21 +1,43 @@
-# Security Policy
+# Biztonsági szabályzat
 
-## Supported Versions
+## Támogatott verziók
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
+Ebben a részben jelezzük, hogy a projekt mely verziói kapnak
+biztonsági frissítéseket.
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 5.0.x   | :x:                |
-| 4.0.x   | :white_check_mark: |
-| < 4.0   | :x:                |
+| Verzió | Támogatott |
+|-------|------------|
+| main (legfrissebb) | ✅ |
+| régebbi verziók | ❌ |
 
-## Reporting a Vulnerability
+Általános szabályként csak a **legfrissebb verzió** kap biztonsági
+frissítéseket.
 
-Use this section to tell people how to report a vulnerability.
+---
 
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+## Biztonsági sérülékenység jelentése
+
+Ha biztonsági hibát vagy sérülékenységet találsz a projektben,
+kérjük **ne hozz létre nyilvános GitHub issue-t**, mert ezzel
+másokat is veszélybe sodorhatsz.
+
+Ehelyett kérjük, hogy privát módon jelezd a problémát.
+
+A jelentés tartalmazza lehetőleg:
+
+- a hiba leírását
+- a reprodukálás lépéseit
+- az érintett fájlokat vagy funkciókat
+- ha lehetséges, javasolt megoldást
+
+A bejelentéseket igyekszünk **minél hamarabb átvizsgálni** és
+szükség esetén javítást kiadni.
+
+Ha a sérülékenységet elfogadjuk:
+- dolgozunk a javításon
+- kiadunk egy biztonsági frissítést
+
+Ha a jelentett probléma nem biztonsági hiba:
+- visszajelzünk és szükség esetén issue-ként kezeljük.
+
+Köszönjük, hogy segítesz biztonságosabbá tenni a **FoodGo** projektet.
