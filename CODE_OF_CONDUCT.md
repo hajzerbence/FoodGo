@@ -1,128 +1,140 @@
-# Contributor Covenant Code of Conduct
+# Contributor Covenant Magatartási Kódex
 
-## Our Pledge
+## Vállalásunk
 
-We as members, contributors, and leaders pledge to make participation in our
-community a harassment-free experience for everyone, regardless of age, body
-size, visible or invisible disability, ethnicity, sex characteristics, gender
-identity and expression, level of experience, education, socio-economic status,
-nationality, personal appearance, race, religion, or sexual identity
-and orientation.
+Mi, mint a közösség tagjai, hozzájárulói és vezetői vállaljuk, hogy
+közösségünkben a részvétel mindenki számára zaklatásmentes élmény legyen,
+függetlenül az életkortól, testalkattól, látható vagy nem látható
+fogyatékosságtól, etnikai hovatartozástól, nemi jellemzőktől,
+nemi identitástól és kifejezésmódtól, tapasztalati szinttől,
+iskolai végzettségtől, társadalmi-gazdasági státusztól,
+nemzetiségtől, személyes megjelenéstől, faji hovatartozástól,
+vallástól vagy szexuális identitástól és orientációtól.
 
-We pledge to act and interact in ways that contribute to an open, welcoming,
-diverse, inclusive, and healthy community.
+Vállaljuk, hogy úgy cselekszünk és kommunikálunk, hogy az egy nyitott,
+befogadó, sokszínű, barátságos és egészséges közösség kialakulását segítse.
 
-## Our Standards
+## Elvárásaink
 
-Examples of behavior that contributes to a positive environment for our
-community include:
+Az alábbi viselkedések hozzájárulnak egy pozitív közösségi környezethez:
 
-* Demonstrating empathy and kindness toward other people
-* Being respectful of differing opinions, viewpoints, and experiences
-* Giving and gracefully accepting constructive feedback
-* Accepting responsibility and apologizing to those affected by our mistakes,
-  and learning from the experience
-* Focusing on what is best not just for us as individuals, but for the
-  overall community
+* Empátia és kedvesség tanúsítása mások iránt
+* A különböző vélemények, nézőpontok és tapasztalatok tiszteletben tartása
+* Építő jellegű visszajelzés adása és annak elfogadása
+* Felelősség vállalása a hibáinkért, bocsánatkérés az érintettektől, és tanulás a tapasztalatból
+* Nemcsak a saját, hanem a teljes közösség érdekeinek szem előtt tartása
 
-Examples of unacceptable behavior include:
+Az alábbi viselkedések elfogadhatatlanok:
 
-* The use of sexualized language or imagery, and sexual attention or
-  advances of any kind
-* Trolling, insulting or derogatory comments, and personal or political attacks
-* Public or private harassment
-* Publishing others' private information, such as a physical or email
-  address, without their explicit permission
-* Other conduct which could reasonably be considered inappropriate in a
-  professional setting
+* Szexuális tartalmú nyelvezet vagy képi megjelenítés, illetve bármilyen
+  jellegű szexuális közeledés
+* Trollkodás, sértő vagy lealacsonyító megjegyzések, illetve személyes vagy politikai támadások
+* Nyilvános vagy privát zaklatás
+* Mások személyes adatainak (például lakcím vagy e-mail cím) közzététele
+  kifejezett engedélyük nélkül
+* Egyéb olyan viselkedés, amely szakmai környezetben
+  ésszerűen nem megfelelőnek tekinthető
 
-## Enforcement Responsibilities
+## Érvényesítésért való felelősség
 
-Community leaders are responsible for clarifying and enforcing our standards of
-acceptable behavior and will take appropriate and fair corrective action in
-response to any behavior that they deem inappropriate, threatening, offensive,
-or harmful.
+A közösség vezetőinek feladata az elfogadható viselkedés szabályainak
+tisztázása és betartatása. Amennyiben olyan viselkedést észlelnek,
+amelyet nem megfelelőnek, fenyegetőnek, sértőnek vagy károsnak ítélnek,
+megfelelő és igazságos intézkedéseket hoznak.
 
-Community leaders have the right and responsibility to remove, edit, or reject
-comments, commits, code, wiki edits, issues, and other contributions that are
-not aligned to this Code of Conduct, and will communicate reasons for moderation
-decisions when appropriate.
+A közösség vezetőinek joguk és kötelességük eltávolítani,
+szerkeszteni vagy elutasítani olyan hozzászólásokat, commitokat,
+kódot, wiki módosításokat, issue-kat és egyéb hozzájárulásokat,
+amelyek nem felelnek meg ennek a Magatartási Kódexnek.
+Amennyiben szükséges, a moderációs döntések indoklását is kommunikálják.
 
-## Scope
+## Hatókör
 
-This Code of Conduct applies within all community spaces, and also applies when
-an individual is officially representing the community in public spaces.
-Examples of representing our community include using an official e-mail address,
-posting via an official social media account, or acting as an appointed
-representative at an online or offline event.
+Ez a Magatartási Kódex minden közösségi felületen érvényes,
+valamint akkor is, amikor valaki hivatalosan képviseli a közösséget
+nyilvános térben.
 
-## Enforcement
+A közösség képviseletének példái:
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported to the community leaders responsible for enforcement at
+* hivatalos e-mail cím használata
+* hivatalos közösségi média fiók használata
+* a közösség kijelölt képviselőjeként való részvétel online vagy offline eseményeken
+
+## Érvényesítés
+
+A visszaélésszerű, zaklató vagy egyéb módon elfogadhatatlan viselkedést
+jelenteni lehet a szabályok betartásáért felelős közösségi vezetőknek a
+következő címen:
+
 .
-All complaints will be reviewed and investigated promptly and fairly.
 
-All community leaders are obligated to respect the privacy and security of the
-reporter of any incident.
+Minden bejelentést gyorsan és pártatlanul kivizsgálunk.
 
-## Enforcement Guidelines
+A közösség vezetői kötelesek tiszteletben tartani az incidens
+bejelentőjének magánéletét és biztonságát.
 
-Community leaders will follow these Community Impact Guidelines in determining
-the consequences for any action they deem in violation of this Code of Conduct:
+## Szankcionálási irányelvek
 
-### 1. Correction
+A közösség vezetői az alábbi irányelveket követik annak meghatározásakor,
+hogy milyen következményekkel járjon egy szabálysértés.
 
-**Community Impact**: Use of inappropriate language or other behavior deemed
-unprofessional or unwelcome in the community.
+### 1. Javítás
 
-**Consequence**: A private, written warning from community leaders, providing
-clarity around the nature of the violation and an explanation of why the
-behavior was inappropriate. A public apology may be requested.
+**Közösségi hatás**: Nem megfelelő nyelvezet vagy más,
+nem professzionálisnak vagy nem kívánatosnak minősített viselkedés.
 
-### 2. Warning
+**Következmény**: Privát, írásos figyelmeztetés a közösség vezetőitől,
+amely tisztázza a szabálysértés jellegét és azt, miért volt a viselkedés
+nem megfelelő. Nyilvános bocsánatkérés kérhető.
 
-**Community Impact**: A violation through a single incident or series
-of actions.
+### 2. Figyelmeztetés
 
-**Consequence**: A warning with consequences for continued behavior. No
-interaction with the people involved, including unsolicited interaction with
-those enforcing the Code of Conduct, for a specified period of time. This
-includes avoiding interactions in community spaces as well as external channels
-like social media. Violating these terms may lead to a temporary or
-permanent ban.
+**Közösségi hatás**: Szabálysértés egyetlen esemény vagy
+több cselekedet során.
 
-### 3. Temporary Ban
+**Következmény**: Figyelmeztetés, amely további következményeket
+helyez kilátásba a viselkedés folytatása esetén.
+Az érintett személy meghatározott ideig nem léphet kapcsolatba
+az érintettekkel, beleértve a Magatartási Kódex betartását felügyelő
+személyeket sem. Ez vonatkozik a közösségi felületekre és külső
+csatornákra (például közösségi média) is.
+A feltételek megsértése ideiglenes vagy végleges kitiltást eredményezhet.
 
-**Community Impact**: A serious violation of community standards, including
-sustained inappropriate behavior.
+### 3. Ideiglenes kitiltás
 
-**Consequence**: A temporary ban from any sort of interaction or public
-communication with the community for a specified period of time. No public or
-private interaction with the people involved, including unsolicited interaction
-with those enforcing the Code of Conduct, is allowed during this period.
-Violating these terms may lead to a permanent ban.
+**Közösségi hatás**: A közösségi szabályok súlyos megsértése,
+beleértve a tartósan nem megfelelő viselkedést.
 
-### 4. Permanent Ban
+**Következmény**: Ideiglenes kitiltás a közösséggel való bármilyen
+interakcióból vagy nyilvános kommunikációból meghatározott időre.
+Ebben az időszakban sem nyilvános, sem privát kapcsolatfelvétel nem
+engedélyezett az érintett személyekkel, beleértve a Magatartási Kódex
+betartását felügyelő személyeket sem.
+A feltételek megsértése végleges kitiltáshoz vezethet.
 
-**Community Impact**: Demonstrating a pattern of violation of community
-standards, including sustained inappropriate behavior,  harassment of an
-individual, or aggression toward or disparagement of classes of individuals.
+### 4. Végleges kitiltás
 
-**Consequence**: A permanent ban from any sort of public interaction within
-the community.
+**Közösségi hatás**: A közösségi szabályok ismétlődő megsértése,
+tartósan nem megfelelő viselkedés, egyének zaklatása,
+vagy személycsoportokkal szembeni agresszió vagy lealacsonyítás.
 
-## Attribution
+**Következmény**: Végleges kitiltás a közösségen belüli minden
+nyilvános interakcióból.
 
-This Code of Conduct is adapted from the [Contributor Covenant][homepage],
-version 2.0, available at
-https://www.contributor-covenant.org/version/2/0/code_of_conduct.html.
+## Forrásmegjelölés
 
-Community Impact Guidelines were inspired by [Mozilla's code of conduct
-enforcement ladder](https://github.com/mozilla/diversity).
+Ez a Magatartási Kódex a [Contributor Covenant][homepage] 2.0-ás
+verzióján alapul, amely elérhető itt:
+https://www.contributor-covenant.org/version/2/0/code_of_conduct.html
+
+A közösségi hatás irányelveit a
+[Mozilla magatartási kódexének szankcionálási rendszere](https://github.com/mozilla/diversity)
+inspirálta.
 
 [homepage]: https://www.contributor-covenant.org
 
-For answers to common questions about this code of conduct, see the FAQ at
-https://www.contributor-covenant.org/faq. Translations are available at
-https://www.contributor-covenant.org/translations.
+A Magatartási Kódexszel kapcsolatos gyakori kérdésekre a válaszok itt találhatók:
+https://www.contributor-covenant.org/faq
+
+További fordítások:
+https://www.contributor-covenant.org/translations
