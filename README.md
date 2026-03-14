@@ -38,9 +38,9 @@ A **FoodGo** egy teljes értékű, Wolt/Foodora stílusú webes ételrendelő al
 
 - **Regisztráció** - Név, e-mail, telefonszám és jelszó megadásával
 - **Bejelentkezés / Kijelentkezés** - Session alapú autentikáció
-- **Profilkezelés** - Személyes adatok és jelszó módosítása
-- **Éttermek böngészése** - 9 különböző étterem és kínálatuk megtekintése
-- **Kosárkezelés** - Termékek hozzáadása, eltávolítása, mennyiség módosítása
+- **Profilkezelés és Rendeléstörténet** - Személyes adatok és korábbi rendelések, illetve vásárolt tételek részletes listázása
+- **Éttermek böngészése** - Dinamikus oldal alapján különböző éttermek megtekintése
+- **Kosár és Pénztár** - Termékek kiválasztása, majd szállítási adatok kalibrálásával a rendelés feladása
 - **Kínálat oldal** - Összes étterem áttekintése kategóriák szerint
 
 ### 🔐 Hozzáférés-védelem
@@ -51,10 +51,11 @@ A **FoodGo** egy teljes értékű, Wolt/Foodora stílusú webes ételrendelő al
 
 ### 🛠️ Admin funkciók
 
-- Felhasználók listázása (jelszó nélkül)
-- Felhasználói adatok módosítása
-- Admin jogosultság ki-/bekapcsolása
-- Felhasználók törlése
+- Felhasználók listázása (jelszó nélkül) és adatok módosítása
+- Admin jogosultság ki-/bekapcsolása és felhasználók törlése
+- Beérkező rendelések valós idejű listája (dátummal, összeggel, és pontos cím/megjegyzés adatokkal)
+- Rendelés státuszok módosítása (Kiszállítva, Törölve)
+- Rendelt tételek lenyitása és részletes megtekintése
 
 ---
 
@@ -109,23 +110,15 @@ FoodGo-main/
     ├── Regisztráció/        # Regisztrációs oldal
     ├── Főoldal/             # Főoldal (bejelentkezés szükséges)
     ├── Kínálat/             # Éttermek áttekintője
+    ├── Étterem/             # Dinamikus étterem oldal
     ├── Kosár/               # Kosár oldal
-    ├── Profil/              # Profilkezelés
+    ├── Pénztár/             # Pénztár és rendelés leadása
+    ├── Profil/              # Profilkezelés és korábbi rendelések
     ├── Admin/               # Adminisztrátori felület
     ├── Kapcsolat/           # Kapcsolat oldal
     ├── Rólunk/              # Rólunk oldal
     ├── Adatvédelmi tájékoztató/
     ├── Általános Szerződési Feltételek/
-    ├── Éttermek&Termékek/   # Éttermi oldalak
-    │   ├── KFC/
-    │   ├── McDonalds/
-    │   ├── BuddhaOriginal/
-    │   ├── IbrahimTorokBufe/
-    │   ├── wokngo/
-    │   ├── StarKebab/
-    │   ├── SofraEtterem/
-    │   ├── KinaiNagyfalBufe/
-    │   └── SimonsBurger/
     ├── Bootstrap/           # Bootstrap CSS/JS
     └── Média/               # Képek, logók, termékfotók
 ```
@@ -243,13 +236,18 @@ Az összes API végpont a `/api` prefix alatt érhető el.
 | `GET`   | `/api/profil`                    | Saját profiladatok lekérése                             |
 | `POST`  | `/api/profil`                    | Profil módosítása (`adatModositas` / `jelszoModositas`) |
 | `GET`   | `/api/termekek/:etterem`         | Termékek lekérése étterem azonosító szerint             |
+| `POST`  | `/api/rendeles_leadasa`          | Vásárlás és rendelés feladása                           |
+| `GET`   | `/api/sajat_rendelesek`          | Felhasználó korábbi rendeléseinek lekérése              |
+| `GET`   | `/api/rendeles_tetelek/:id`      | Konkrét rendelés tételeinek (termékeinek) lekérése      |
 
 ### 🛡️ Admin jogosultság szükséges
 
-| Metódus | Végpont      | Leírás                                                                                   |
-| ------- | ------------ | ---------------------------------------------------------------------------------------- |
-| `GET`   | `/api/admin` | Felhasználók listázása                                                                   |
-| `POST`  | `/api/admin` | Admin műveletek (`felhasznaloTorles`, `felhasznaloAdminAllitas`, `felhasznaloModositas`) |
+| Metódus | Végpont                 | Leírás                                                                                   |
+| ------- | ----------------------- | ---------------------------------------------------------------------------------------- |
+| `GET`   | `/api/admin`            | Felhasználók listázása                                                                   |
+| `POST`  | `/api/admin`            | Admin műveletek (`felhasznaloTorles`, `felhasznaloAdminAllitas`, `felhasznaloModositas`) |
+| `GET`   | `/api/rendelesek`       | Összes rendelés listázása adminisztrátorok számára                                       |
+| `POST`  | `/api/rendeles_statusz` | Rendelés státuszának módosítása (pl. Kiszállítva, Törölve)                               |
 
 ---
 
@@ -267,15 +265,8 @@ Az összes API végpont a `/api` prefix alatt érhető el.
 | `/profil`                          | Profil                  | 🔐 Bejelentkezés |
 | `/rolunk`                          | Rólunk                  | 🔐 Bejelentkezés |
 | `/kapcsolat`                       | Kapcsolat               | 🔐 Bejelentkezés |
-| `/kfc`                             | KFC étterem             | 🔐 Bejelentkezés |
-| `/mcdonalds`                       | McDonald's étterem      | 🔐 Bejelentkezés |
-| `/buddhaoriginal`                  | Buddha Original         | 🔐 Bejelentkezés |
-| `/ibrahimtorokbufe`                | Ibrahim Török Büfé      | 🔐 Bejelentkezés |
-| `/wokngo`                          | Wok'n Go                | 🔐 Bejelentkezés |
-| `/starkebab`                       | Star Kebab              | 🔐 Bejelentkezés |
-| `/sofraetterem`                    | Sofra Étterem           | 🔐 Bejelentkezés |
-| `/kinainagyfalbufe`                | Kínai Nagyfal Büfé      | 🔐 Bejelentkezés |
-| `/simonsburger`                    | Simon's Burger          | 🔐 Bejelentkezés |
+| `/etterem/:azonosito`              | Dinamikus étterem oldal | 🔐 Bejelentkezés |
+| `/penztar`                         | Pénztár                 | 🔐 Bejelentkezés |
 | `/admin`                           | Admin felület           | 🛡️ Admin         |
 
 ---
