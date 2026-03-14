@@ -169,11 +169,148 @@ const felhasznalokKirajzolasa = async function () {
             sor.appendChild(muveletTd);
             tabla.appendChild(sor);
         }
+
+        const rendelesTabla = document.getElementById('rendelesTabla');
+        rendelesTabla.innerHTML = ''; // Előző adatokat töröljük, mielőtt újat rajzolunk
+        const rendelesek = valasz.rendelesek;
+
+        if (rendelesek && rendelesek.length > 0) {
+            for (let i = 0; i < rendelesek.length; i++) {
+                const rendel = rendelesek[i];
+
+                const tr = document.createElement('tr');
+                const tDatum = new Date(rendel.datum).toLocaleString('hu-HU');
+
+                // Még a megjegyzést is belerakjuk a cím alá
+                let cimExtra = rendel.szallitasi_cim;
+                if (rendel.megjegyzes && rendel.megjegyzes !== '') {
+                    // Egyszerű szétszedés a '|' mentén, ahogy a pénztár elküldi
+                    const reszek = rendel.megjegyzes.split(' | ');
+
+                    if (reszek.length >= 2) {
+                        // Név + Telefon és a Fizetésmód, ez tiszta adat:
+                        cimExtra += `<br><small class="text-muted">${reszek[0]}<br>${reszek[1]}</small>`;
+
+                        // Ha írt igazi megjegyzést is, az a 3. elemben van
+                        if (reszek[2] && reszek[2].trim() !== '') {
+                            cimExtra += `<br><br><small class="text-danger">A vásárló megjegyzése: ${reszek[2]}</small>`;
+                        }
+                    } else {
+                        // Ha valamiért mégis régi fajta vagy sima szöveg lenne
+                        cimExtra += `<br><small class="text-danger">A vásárló megjegyzése: ${rendel.megjegyzes}</small>`;
+                    }
+                }
+
+                // Gombok a státusz módosításhoz (attól függően, hogy áll a rendelés)
+                let gombokHTML = '';
+                if (rendel.statusz !== 'Kiszállítva' && rendel.statusz !== 'Törölve') {
+                    gombokHTML = `
+                        <button class="btn btn-sm btn-success me-1 szallitvaGomb" data-id="${rendel.id}">✓ Kiszállítva</button>
+                        <button class="btn btn-sm btn-danger torolveGomb" data-id="${rendel.id}">X Törlés</button>
+                    `;
+                }
+
+                tr.innerHTML = `
+                    <td>#${rendel.id}</td>
+                    <td>${tDatum}</td>
+                    <td class="fw-bold">${rendel.megrendelo_neve}</td>
+                    <td>${cimExtra}</td>
+                    <td>${rendel.teljes_osszeg} Ft</td>
+                    <td><span class="badge ${rendel.statusz === 'Feldolgozás alatt' ? 'bg-warning text-dark' : 'bg-success'}">${rendel.statusz}</span></td>
+                    <td>${gombokHTML}</td>
+                    <td><button class="btn btn-sm btn-info" id="adminMutatGomb_${rendel.id}">Mutat</button></td>
+                `;
+
+                rendelesTabla.appendChild(tr);
+
+                // Készítünk egy rejtett sort a részleteknek rögtön a normál sor alá
+                const reszletSor = document.createElement('tr');
+                reszletSor.id = 'adminReszletSor_' + rendel.id;
+                reszletSor.style.display = 'none'; // Alapból rejtett
+                reszletSor.className = 'table-light';
+
+                // 8 oszlop van összesen
+                reszletSor.innerHTML = `<td colspan="8" id="adminReszletTartalom_${rendel.id}">Betöltés...</td>`;
+                rendelesTabla.appendChild(reszletSor);
+
+                // Gomb eseménykezelő az egyszerű amatőr szinttel
+                const mutatGomb = document.getElementById('adminMutatGomb_' + rendel.id);
+                mutatGomb.onclick = async function () {
+                    const jelenlegiSzoveg = mutatGomb.innerText;
+
+                    if (jelenlegiSzoveg === 'Elrejt') {
+                        // Ha épp látszik, akkor rejtse el
+                        reszletSor.style.display = 'none';
+                        mutatGomb.innerText = 'Mutat';
+                    } else {
+                        // Ha nem látszik, jelenítse meg
+                        reszletSor.style.display = 'table-row';
+                        mutatGomb.innerText = 'Betöltés...';
+
+                        try {
+                            const response = await getMethodFetch('/api/rendeles_tetelek/' + rendel.id);
+
+                            // Itt jön egy kis for ciklus az elemek kiválogatására
+                            let htmlSzoveg = '<strong>Rendelt tételek:</strong><ul>';
+                            for (let j = 0; j < response.tetelek.length; j++) {
+                                const t = response.tetelek[j];
+                                htmlSzoveg += '<li>' + t.termek_nev + ' - ' + t.darab + ' db - ' + t.egyseg_ar + ' Ft/db</li>';
+                            }
+                            htmlSzoveg += '</ul>';
+
+                            document.getElementById('adminReszletTartalom_' + rendel.id).innerHTML = htmlSzoveg;
+                            mutatGomb.innerText = 'Elrejt';
+                        } catch (err) {
+                            document.getElementById('adminReszletTartalom_' + rendel.id).innerHTML = 'Hiba történt a letöltéskor.';
+                            mutatGomb.innerText = 'Hiba';
+                        }
+                    }
+                };
+            }
+
+            // Az összes 'Kiszállítva' és 'Törlés' gombnak eseményfigyelőt adunk
+            const szallitvaGombok = document.getElementsByClassName('szallitvaGomb');
+            const torolveGombok = document.getElementsByClassName('torolveGomb');
+
+            for (let i = 0; i < szallitvaGombok.length; i++) {
+                szallitvaGombok[i].onclick = function () {
+                    const id = this.getAttribute('data-id');
+                    statuszModositasa(id, 'Kiszállítva');
+                };
+            }
+
+            for (let i = 0; i < torolveGombok.length; i++) {
+                torolveGombok[i].onclick = function () {
+                    const id = this.getAttribute('data-id');
+                    statuszModositasa(id, 'Törölve');
+                };
+            }
+        } else {
+            rendelesTabla.innerHTML = '<tr><td colspan="8" class="text-center">Nincs még egy rendelés sem a rendszerben.</td></tr>';
+        }
     } catch (error) {
         console.error('Hiba történt: ', error);
-        alert('Nem sikerült betölteni a felhasználókat.');
+        alert('Nem sikerült betölteni az adatokat.');
     }
 };
+
+// Segéd függvény ami az API felé kommunikál a státusz cseréről
+async function statuszModositasa(rendelesId, ujStatusz) {
+    if (!confirm(`Biztosan átállítod a #${rendelesId} rendelést '${ujStatusz}' státuszra?`)) return;
+
+    try {
+        await PostMethodFetch('/api/admin', {
+            muvelet: 'rendelesStatuszValtas',
+            id: rendelesId,
+            ujStatusz: ujStatusz
+        });
+
+        // Frissítjük újra az oldalt (felhasználók + rendelések újra kigenerálódnak)
+        await felhasznalokKirajzolasa();
+    } catch (error) {
+        alert(error.message);
+    }
+}
 
 const adminOldalInditasa = async function () {
     try {

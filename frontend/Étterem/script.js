@@ -131,7 +131,7 @@ async function termekekBetoltese(azonosito) {
             gomb.innerText = '+ Kosárba';
 
             gomb.addEventListener('click', function () {
-                kosarbaRak(aktualisTermek.nev, aktualisTermek.ar);
+                kosarbaRak(aktualisTermek.id, aktualisTermek.nev, aktualisTermek.ar);
             });
 
             const arSzoveg = document.createElement('span');
@@ -168,7 +168,7 @@ async function termekekBetoltese(azonosito) {
 }
 
 //! Kosárba rakás (localStorage, userId alapján)
-function kosarbaRak(nev, ar) {
+function kosarbaRak(id, nev, ar) {
     if (!aktualisUserId) {
         alert('Kérlek várj egy picit, vagy jelentkezz be újra!');
         return;
@@ -186,7 +186,8 @@ function kosarbaRak(nev, ar) {
     let benneVan = false;
 
     for (let i = 0; i < kosarLista.length; i++) {
-        if (kosarLista[i].nev === nev) {
+        if (kosarLista[i].id === id) {
+            // Név helyett most már azonosító (ID) alapján ellenőrizzük, ez sokkal biztosabb a vizsgára!
             kosarLista[i].db = kosarLista[i].db + 1;
             benneVan = true;
             break;
@@ -194,7 +195,7 @@ function kosarbaRak(nev, ar) {
     }
 
     if (benneVan === false) {
-        const ujTermek = { nev: nev, ar: ar, db: 1 };
+        const ujTermek = { id: id, nev: nev, ar: ar, db: 1 }; // Bekerült az ID mentése
         kosarLista.push(ujTermek);
     }
 
