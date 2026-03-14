@@ -129,7 +129,8 @@ function fizetesInditasa() {
         return;
     }
 
-    alert('Rendelés leadása folyamatban... (Hamarosan)');
+    // Átirányítjuk a felhasználót a Pénztár oldalra (Checkout)!
+    window.location.href = '/penztar';
 }
 
 document.addEventListener('DOMContentLoaded', async function () {

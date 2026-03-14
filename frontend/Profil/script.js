@@ -121,6 +121,100 @@ const adminFeluletGombFrissitese = async function () {
     }
 };
 
+// Korábbi rendelések betöltése (Junior szinten)
+async function rendelesekBetoltese() {
+    try {
+        // Elkérjük a backend-től a JSON adatokat
+        const valasz = await getMethodFetch('/api/sajat_rendelesek');
+
+        const tabla = document.getElementById('rendelesekTartalom');
+        const nincsRendelesUzenet = document.getElementById('nincsRendelesUzenet');
+
+        // Ha van legalább 1 rendelés
+        if (valasz.success && valasz.rendelesek.length > 0) {
+            nincsRendelesUzenet.style.display = 'none'; // Elrejtjük az "üres" üzenetet
+            tabla.innerHTML = ''; // Biztos ami tuti kitöröljük
+
+            // Végigmegyünk egy for ciklussal a rendeléseken
+            for (let i = 0; i < valasz.rendelesek.length; i++) {
+                const rendel = valasz.rendelesek[i];
+
+                const sor = document.createElement('tr');
+
+                // Dátum formázása szebbre
+                const tisztitottDatum = new Date(rendel.datum).toLocaleString('hu-HU');
+
+                let sJelzo = 'bg-success';
+                if (rendel.statusz === 'Feldolgozás alatt') {
+                    sJelzo = 'bg-warning text-dark';
+                }
+
+                sor.innerHTML = `
+                    <td>${tisztitottDatum}</td>
+                    <td class="fw-bold">${rendel.teljes_osszeg} Ft</td>
+                    <td>${rendel.szallitasi_cim}</td>
+                    <td>
+                        <span class="badge ${sJelzo}">
+                            ${rendel.statusz}
+                        </span>
+                    </td>
+                    <td><button class="btn btn-sm btn-info" id="mutatGomb_${rendel.id}">Mutat</button></td>
+                `;
+
+                tabla.appendChild(sor); // Hozzáadjuk a sorokat a táblához
+
+                // Készítünk egy rejtett sort a részleteknek rögtön a normál sor alá
+                const reszletSor = document.createElement('tr');
+                reszletSor.id = 'reszletSor_' + rendel.id;
+                reszletSor.style.display = 'none'; // Alapból rejtett
+                reszletSor.className = 'table-light';
+
+                reszletSor.innerHTML = `<td colspan="5" id="reszletTartalom_${rendel.id}">Betöltés...</td>`;
+                tabla.appendChild(reszletSor);
+
+                // Gomb eseménykezelő az egyszerű amatőr szinttel
+                const gomb = document.getElementById('mutatGomb_' + rendel.id);
+                gomb.onclick = async function () {
+                    const jelenlegiSzoveg = gomb.innerText;
+
+                    if (jelenlegiSzoveg === 'Elrejt') {
+                        // Ha épp látszik, akkor rejtse el
+                        reszletSor.style.display = 'none';
+                        gomb.innerText = 'Mutat';
+                    } else {
+                        // Ha nem látszik, jelenítse meg
+                        reszletSor.style.display = 'table-row';
+                        gomb.innerText = 'Betöltés...';
+
+                        try {
+                            const response = await getMethodFetch('/api/rendeles_tetelek/' + rendel.id);
+
+                            // Itt jön egy kis for ciklus az elemek kiválogatására
+                            let htmlSzoveg = '<strong>Rendelt tételek:</strong><ul>';
+                            for (let j = 0; j < response.tetelek.length; j++) {
+                                const t = response.tetelek[j];
+                                htmlSzoveg += '<li>' + t.termek_nev + ' - ' + t.darab + ' db - ' + t.egyseg_ar + ' Ft/db</li>';
+                            }
+                            htmlSzoveg += '</ul>';
+
+                            document.getElementById('reszletTartalom_' + rendel.id).innerHTML = htmlSzoveg;
+                            gomb.innerText = 'Elrejt';
+                        } catch (err) {
+                            document.getElementById('reszletTartalom_' + rendel.id).innerHTML = 'Hiba történt a letöltéskor.';
+                            gomb.innerText = 'Hiba';
+                        }
+                    }
+                };
+            }
+        } else {
+            // Ha még nincs rendelés
+            nincsRendelesUzenet.style.display = 'block';
+        }
+    } catch (error) {
+        console.error('Hiba a rendelések lekérésekor:', error);
+    }
+}
+
 // Függvények meghívása a megfelelő gombok kattintására
 document.addEventListener('DOMContentLoaded', function () {
     adminFeluletGombFrissitese();
@@ -139,4 +233,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('adatMentesBtn').addEventListener('click', adatokMentese);
     document.getElementById('jelszoMentesBtn').addEventListener('click', jelszoMentese);
+
+    // A rendeléseket is meghívjuk, hogy betöltse
+    rendelesekBetoltese();
 });

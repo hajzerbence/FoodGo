@@ -3,6 +3,9 @@ const router = express.Router();
 const database = require('../sql/database.js');
 const fs = require('fs/promises');
 
+//!Bcrypt a jelszavak titkosításához
+const bcrypt = require('bcrypt'); //? npm install bcrypt a backend mappában!
+
 //!Multer
 const multer = require('multer'); //?npm install multer
 const path = require('path');
@@ -56,7 +59,12 @@ async function adminKotelezo(request, response, next) {
 router.post('/ujFelhasznalo', async (request, response) => {
     try {
         const ujFelhasznalo = request.body;
-        const adat = await database.ujFelhasznalo(ujFelhasznalo.nev, ujFelhasznalo.email, ujFelhasznalo.telefonszam, ujFelhasznalo.jelszo);
+
+        // Jelszó titkosítása bcrypt segítségével (10-es salt round a junior/normál biztonsági szinthez tökéletes)
+        const titkositottJelszo = await bcrypt.hash(ujFelhasznalo.jelszo, 10);
+
+        // A titkosított jelszót adjuk át az adatbázisnak a sima helyett
+        const adat = await database.ujFelhasznalo(ujFelhasznalo.nev, ujFelhasznalo.email, ujFelhasznalo.telefonszam, titkositottJelszo);
         response.status(201).json({
             message: 'Felhasználó sikeresen regisztrálva.',
             result: adat
@@ -80,13 +88,26 @@ router.post('/bejelentkezes', async (request, response) => {
             });
         } // 400
         const felhasznalo = await database.felhasznaloEmailAlapjan(email); // user
-        if (!felhasznalo || felhasznalo.jelszo !== jelszo) {
-            // rossz adat
+
+        // 1. Megnézzük, létezik-e a felhasználó az adatbázisban
+        if (!felhasznalo) {
+            return response.status(401).json({
+                success: false,
+                message: 'Hibás email vagy jelszó.'
+            });
+        }
+
+        // 2. Ha létezik, összehasonlítjuk a beírt nyers jelszót a lementett titkosított jelszóval
+        const jelszoHelyes = await bcrypt.compare(jelszo, felhasznalo.jelszo);
+
+        if (!jelszoHelyes) {
+            // rossz jelszó
             return response.status(401).json({
                 success: false,
                 message: 'Hibás email vagy jelszó.'
             }); // 401 hiba
         }
+
         request.session.userId = felhasznalo.id; // session csak id
         return response.status(200).json({
             success: true,
@@ -116,9 +137,12 @@ router.get('/bejelentkezettFelhasznalo', bejelentkezesKotelezo, async (request, 
 router.get('/admin', adminKotelezo, async (request, response) => {
     try {
         const felhasznalok = await database.felhasznalokListaja(); // jelszó nélkül listáz
+        const rendelesek = await database.osszesRendelesAdminnak(); // Az új függvényünk: lehívja az összes rendelést
+
         return response.status(200).json({
             success: true,
-            felhasznalok
+            felhasznalok: felhasznalok,
+            rendelesek: rendelesek // Ezt is visszaküldjük a frontendnek
         });
     } catch (error) {
         console.log(`GET hiba /admin ${error.message}`);
@@ -180,6 +204,19 @@ router.post('/admin', adminKotelezo, async (request, response) => {
                 message: 'Felhasználó módosítva.'
             });
         }
+
+        // ---- ÚJ: Rendelés státusz módosítása Adminban ---- //
+        if (muvelet === 'rendelesStatuszValtas') {
+            const { id, ujStatusz } = request.body;
+
+            const erintett = await database.rendelesStatuszModositas(Number(id), ujStatusz);
+
+            if (!erintett) {
+                return response.status(404).json({ success: false, message: 'Nincs ilyen rendelés.' });
+            }
+            return response.status(200).json({ success: true, message: 'Rendelés státusza sikeresen módosítva.' });
+        }
+
         return response.status(400).json({
             success: false,
             message: 'Ismeretlen művelet.'
@@ -239,12 +276,22 @@ router.post('/profil', bejelentkezesKotelezo, async (request, response) => {
         if (muvelet === 'jelszoModositas') {
             const { regiJelszo, ujJelszo } = request.body;
 
-            const helyes = await database.JelszoEllenorzes(userId, regiJelszo);
+            // Lekérjük a régi (titkosított) jelszót az adatbázisból
+            const regiJelszoHash = await database.JelszoEllenorzes(userId);
+
+            // Összehasonlítjuk a most beírt régi jelszót a hash formájúval
+            // Fontos: a database.JelszoEllenorzes-ből kivettem a regiJelszo átadását, mert az oda nem kell
+            const helyes = await bcrypt.compare(regiJelszo, regiJelszoHash);
+
             if (!helyes) {
                 return response.status(401).json({ success: false, message: 'A jelenlegi jelszó hibás.' });
             }
 
-            await database.jelszoModositas(userId, ujJelszo);
+            // Ha jó volt a régi jelszó, titkosítjuk az újat
+            const titkositottUjJelszo = await bcrypt.hash(ujJelszo, 10);
+
+            // A biztonságos jelszót lementjük
+            await database.jelszoModositas(userId, titkositottUjJelszo);
             return response.status(200).json({ success: true, message: 'Jelszó sikeresen módosítva.' });
         }
 
@@ -324,6 +371,62 @@ router.get('/testsql', async (request, response) => {
         response.status(500).json({
             message: 'Ez a végpont nem működik.'
         });
+    }
+});
+
+//? POST /rendeles_leadasa - A kosár tartalmának és a rendelésnek a mentése
+router.post('/rendeles_leadasa', bejelentkezesKotelezo, async (request, response) => {
+    try {
+        const felhasznaloId = request.session.userId;
+        const { teljesOsszeg, szallitasiCim, megjegyzes, kosarTetelek } = request.body;
+
+        // Ellenőrizzük, hogy van-e egyáltalán kosár
+        if (!kosarTetelek || kosarTetelek.length === 0) {
+            return response.status(400).json({ success: false, message: 'Üres a kosár, nincs mit leadni!' });
+        }
+
+        // 1. Lementjük a FŐ rendelést az adatbázisba
+        // Ennek a visszatérési értéke az új szám (pl. 5-ös rendelés), amit fel fogunk használni.
+        const ujRendelesId = await database.ujRendeles(felhasznaloId, teljesOsszeg, szallitasiCim, megjegyzes);
+
+        // 2. Mentjük a termékeket (tételeket) egyenként a kosárból
+        // Itt bejárjuk a frontendes kosárból kapott termékeket
+        for (let i = 0; i < kosarTetelek.length; i++) {
+            const tetel = kosarTetelek[i];
+
+            // Lementjük mindet egyesével, felhasználva az új rendelés számát!
+            await database.ujRendelesTetel(ujRendelesId, tetel.termekId, tetel.mennyiseg, tetel.egysegAr);
+        }
+
+        return response.status(201).json({ success: true, message: 'Rendelés sikeresen leadva!' });
+    } catch (error) {
+        console.log(`POST hiba /rendeles_leadasa ${error.message}`);
+        return response.status(500).json({ success: false, message: 'Valami hiba történt a rendelés elküldésekor.' });
+    }
+});
+
+//? GET /sajat_rendelesek - A profilhoz lekéri, hogy miket rendeltél
+router.get('/sajat_rendelesek', bejelentkezesKotelezo, async (request, response) => {
+    try {
+        const felhasznaloId = request.session.userId;
+        const rendelesek = await database.sajatRendelesekLekerdezese(felhasznaloId);
+
+        return response.status(200).json({ success: true, rendelesek: rendelesek });
+    } catch (error) {
+        console.log(`GET hiba /sajat_rendelesek ${error.message}`);
+        return response.status(500).json({ success: false, message: 'Nem sikerült betölteni a rendeléseket.' });
+    }
+});
+
+// --- Rendelés Részletek (Admin + Profil) --- //
+router.get('/rendeles_tetelek/:id', bejelentkezesKotelezo, async (req, res) => {
+    try {
+        const id = req.params.id;
+        const tetelek = await database.rendelesTetelekLekerdezese(id);
+        res.json({ tetelek });
+    } catch (error) {
+        console.error('Hiba rendeles_tetelek:', error);
+        res.status(500).json({ message: 'Szerverhiba' });
     }
 });
 
