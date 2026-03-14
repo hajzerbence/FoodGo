@@ -11,7 +11,7 @@ INSERT INTO felhasznalo (nev, email, telefonszam, jelszo, admine) VALUES
 ('Admin',
 'czegledimate06@gmail.com',
 '06203735053',
-'Admin1234', 
+'$2b$10$JiTIQWDKi/BpFzAeAQbP9uWBGMYsaMGhdmJ/Qb5bf/bfHprYIsbPa', /* A titkosított 'Admin1234' */
 TRUE);
 
 CREATE TABLE termekek (
@@ -128,3 +128,22 @@ INSERT INTO termekek (nev, leiras, ar, kep_utvonal, etterem_azonosito, kategoria
 ('Normál sült burgonya', 'A sült krumplival sosem lehet melléfogni!', 890, '/Média/Termékek/normalSultburgonya.png', 'simonsburger', 'burgonya'),
 ('Simons cheese fries', 'sült krumpli, Simons secret szósz, sajtszósz, karamellizált hagyma', 1550, '/Média/Termékek/simonsCheeseFries.png', 'simonsburger', 'burgonya'),
 ('Hamburger', 'Sosem fagyasztott, 100% természetes dupla smashed marhahúspogácsából készítjük. Az Oklahoma stílusban sütött húsunkat mindig friss hagymával készítjük. A Simon’s szószunk 17 különleges összetevőt tartalmaz. Az alap burger Simon’s szószt, paradicsomot, hagymát, uborkát és salátát tartalmaz.', 3490, '/Média/Termékek/hamburger.png', 'simonsburger', 'hamburger');
+
+
+CREATE TABLE rendelesek (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    felhasznalo_id INT NOT NULL,
+    datum DATETIME DEFAULT CURRENT_TIMESTAMP, 
+    teljes_osszeg INT NOT NULL, 
+    statusz VARCHAR(50) DEFAULT 'Feldolgozás alatt', 
+    szallitasi_cim VARCHAR(255) NOT NULL, 
+    megjegyzes TEXT 
+);
+
+CREATE TABLE rendeles_tetelek (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    rendeles_id INT NOT NULL,
+    termek_id INT NOT NULL,
+    mennyiseg INT NOT NULL, 
+    egyseg_ar INT NOT NULL 
+);

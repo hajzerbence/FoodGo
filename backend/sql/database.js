@@ -110,9 +110,71 @@ async function etteremAzonositoAlapjan(azonosito) {
     return rows[0] ?? null;
 }
 
+//* Új rendelés leadása (Beleírunk a 'rendelesek' táblába)
+async function ujRendeles(felhasznaloId, teljesOsszeg, szallitasiCim, megjegyzes) {
+    const sql = 'INSERT INTO rendelesek(felhasznalo_id, teljes_osszeg, szallitasi_cim, megjegyzes) VALUES (?,?,?,?)';
+    const [result] = await pool.execute(sql, [felhasznaloId, teljesOsszeg, szallitasiCim, megjegyzes]);
+    return result.insertId;
+}
+
+//* Rendelés tételeinek elmentése (Beleírunk a 'rendeles_tetelek' táblába)
+async function ujRendelesTetel(rendelesId, termekId, mennyiseg, egysegAr) {
+    const sql = 'INSERT INTO rendeles_tetelek(rendeles_id, termek_id, mennyiseg, egyseg_ar) VALUES (?,?,?,?)';
+    await pool.execute(sql, [rendelesId, termekId, mennyiseg, egysegAr]);
+}
+
+//* Egy felhasználó saját rendeléseinek lekérdezése
+async function sajatRendelesekLekerdezese(felhasznaloId) {
+    // Itt csak a fő rendelési infókat kérjük le
+    const sql = 'SELECT id, datum, teljes_osszeg, statusz, szallitasi_cim FROM rendelesek WHERE felhasznalo_id = ? ORDER BY datum DESC';
+    const [rows] = await pool.execute(sql, [felhasznaloId]);
+    return rows;
+}
+
+// ============== ADMIN RENDELÉS KEZELÉS =================
+
+//* Az összes rendelés lekérése az adatbázisból (Adminnak)
+async function osszesRendelesAdminnak() {
+    // A JOIN összeköti a rendeléseket a felhasználó táblával, hogy a nevet is ki tudjuk írni
+    const sql = `
+        SELECT 
+            rendelesek.id, 
+            rendelesek.datum, 
+            rendelesek.teljes_osszeg, 
+            rendelesek.statusz, 
+            rendelesek.szallitasi_cim, 
+            rendelesek.megjegyzes,
+            felhasznalo.nev AS megrendelo_neve
+        FROM rendelesek
+        JOIN felhasznalo ON rendelesek.felhasznalo_id = felhasznalo.id
+        ORDER BY rendelesek.datum DESC
+    `;
+    const [rows] = await pool.execute(sql);
+    return rows;
+}
+
+//* Egy rendelés státuszának frissítése
+async function rendelesStatuszModositas(rendelesId, ujStatusz) {
+    const sql = 'UPDATE rendelesek SET statusz = ? WHERE id = ?';
+    const [result] = await pool.execute(sql, [ujStatusz, rendelesId]);
+    return result.affectedRows; // Visszaadja, hogy sikeres volt-e (1) vagy sem (0)
+}
+
 async function selectall() {
     const query = 'SELECT * FROM felhasznalo;';
     const [rows] = await pool.execute(query);
+    return rows;
+}
+
+// Rendelés tételeinek lekérdezése
+async function rendelesTetelekLekerdezese(rendelesId) {
+    const sql = `
+        SELECT rt.mennyiseg AS darab, rt.egyseg_ar, t.nev AS termek_nev
+        FROM rendeles_tetelek rt
+        JOIN termekek t ON rt.termek_id = t.id
+        WHERE rt.rendeles_id = ?
+    `;
+    const [rows] = await pool.execute(sql, [rendelesId]);
     return rows;
 }
 
@@ -131,5 +193,11 @@ module.exports = {
     jelszoModositas,
     termekekLekerdezese,
     ettermekLekerdezese,
-    etteremAzonositoAlapjan
+    etteremAzonositoAlapjan,
+    ujRendeles,
+    ujRendelesTetel,
+    sajatRendelesekLekerdezese,
+    osszesRendelesAdminnak,
+    rendelesStatuszModositas,
+    rendelesTetelekLekerdezese
 };

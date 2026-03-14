@@ -86,6 +86,11 @@ router.get('/kosar', bejelentkezesKotelezoOldalhoz, (request, response) => {
     response.sendFile(path.join(__dirname, '../frontend/Kosár/index.html'));
 });
 
+//?Pénztár (Checkout):
+router.get('/penztar', bejelentkezesKotelezoOldalhoz, (request, response) => {
+    response.sendFile(path.join(__dirname, '../frontend/Pénztár/index.html'));
+});
+
 //?Rólunk:
 router.get('/rolunk', bejelentkezesKotelezoOldalhoz, (request, response) => {
     response.sendFile(path.join(__dirname, '../frontend/Rólunk/index.html'));

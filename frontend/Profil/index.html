@@ -74,6 +74,27 @@
                 </div>
                 <button class="btn btn-warning" id="jelszoMentesBtn">Jelszó cseréje</button>
             </div>
+
+            <div class="card bg-light mt-4">
+                <h2 class="text-center">Korábbi rendeléseim</h2>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover mt-3 bg-white">
+                        <thead class="table-success">
+                            <tr>
+                                <th>Dátum</th>
+                                <th>Összeg</th>
+                                <th>Szállítási cím</th>
+                                <th>Státusz</th>
+                                <th>Részletek</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rendelesekTartalom">
+                            <!-- Ide jönnek majd a rendelések JavaScriptből -->
+                        </tbody>
+                    </table>
+                </div>
+                <p id="nincsRendelesUzenet" class="text-center text-muted" style="display: none">Még nem adtál le rendelést!</p>
+            </div>
         </div>
 
         <!-- Lábjegyzék szekció -->
