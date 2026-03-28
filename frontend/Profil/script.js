@@ -124,90 +124,114 @@ const adminFeluletGombFrissitese = async function () {
 // Korábbi rendelések betöltése (Junior szinten)
 async function rendelesekBetoltese() {
     try {
-        // Elkérjük a backend-től a JSON adatokat
         const valasz = await getMethodFetch('/api/sajat_rendelesek');
 
         const tabla = document.getElementById('rendelesekTartalom');
         const nincsRendelesUzenet = document.getElementById('nincsRendelesUzenet');
 
-        // Ha van legalább 1 rendelés
-        if (valasz.success && valasz.rendelesek.length > 0) {
-            nincsRendelesUzenet.style.display = 'none'; // Elrejtjük az "üres" üzenetet
-            tabla.innerHTML = ''; // Biztos ami tuti kitöröljük
+        tabla.innerHTML = '';
 
-            // Végigmegyünk egy for ciklussal a rendeléseken
+        if (valasz.success && valasz.rendelesek.length > 0) {
+            nincsRendelesUzenet.style.display = 'none';
+
             for (let i = 0; i < valasz.rendelesek.length; i++) {
                 const rendel = valasz.rendelesek[i];
 
                 const sor = document.createElement('tr');
 
-                // Dátum formázása szebbre
-                const tisztitottDatum = new Date(rendel.datum).toLocaleString('hu-HU');
+                const idTd = document.createElement('td');
+                idTd.textContent = '#' + rendel.id;
 
-                let sJelzo = 'bg-success';
+                const datumTd = document.createElement('td');
+                datumTd.textContent = new Date(rendel.datum).toLocaleString('hu-HU');
+
+                const cimTd = document.createElement('td');
+                cimTd.textContent = rendel.szallitasi_cim;
+
+                const osszegTd = document.createElement('td');
+                osszegTd.textContent = rendel.teljes_osszeg + ' Ft';
+                osszegTd.classList.add('fw-bold');
+
+                const statuszTd = document.createElement('td');
+                const statuszSpan = document.createElement('span');
+
+                statuszSpan.classList.add('badge');
+
                 if (rendel.statusz === 'Feldolgozás alatt') {
-                    sJelzo = 'bg-warning text-dark';
+                    statuszSpan.classList.add('bg-warning', 'text-dark');
+                } else if (rendel.statusz === 'Törölve') {
+                    statuszSpan.classList.add('bg-danger');
+                } else {
+                    statuszSpan.classList.add('bg-success');
                 }
 
-                sor.innerHTML = `
-                    <td>${tisztitottDatum}</td>
-                    <td class="fw-bold">${rendel.teljes_osszeg} Ft</td>
-                    <td>${rendel.szallitasi_cim}</td>
-                    <td>
-                        <span class="badge ${sJelzo}">
-                            ${rendel.statusz}
-                        </span>
-                    </td>
-                    <td><button class="btn btn-sm btn-info" id="mutatGomb_${rendel.id}">Mutat</button></td>
-                `;
+                statuszSpan.textContent = rendel.statusz;
+                statuszTd.appendChild(statuszSpan);
 
-                tabla.appendChild(sor); // Hozzáadjuk a sorokat a táblához
+                const reszletekTd = document.createElement('td');
+                const mutatGomb = document.createElement('button');
+                mutatGomb.type = 'button';
+                mutatGomb.classList.add('btn', 'btn-sm', 'btn-info');
+                mutatGomb.textContent = 'Mutat';
+                reszletekTd.appendChild(mutatGomb);
 
-                // Készítünk egy rejtett sort a részleteknek rögtön a normál sor alá
+                sor.appendChild(idTd);
+                sor.appendChild(datumTd);
+                sor.appendChild(cimTd);
+                sor.appendChild(osszegTd);
+                sor.appendChild(statuszTd);
+                sor.appendChild(reszletekTd);
+
+                tabla.appendChild(sor);
+
                 const reszletSor = document.createElement('tr');
-                reszletSor.id = 'reszletSor_' + rendel.id;
-                reszletSor.style.display = 'none'; // Alapból rejtett
-                reszletSor.className = 'table-light';
+                reszletSor.style.display = 'none';
+                reszletSor.classList.add('table-light');
 
-                reszletSor.innerHTML = `<td colspan="5" id="reszletTartalom_${rendel.id}">Betöltés...</td>`;
+                const reszletTd = document.createElement('td');
+                reszletTd.colSpan = 6;
+                reszletTd.textContent = 'Betöltés...';
+
+                reszletSor.appendChild(reszletTd);
                 tabla.appendChild(reszletSor);
 
-                // Gomb eseménykezelő az egyszerű amatőr szinttel
-                const gomb = document.getElementById('mutatGomb_' + rendel.id);
-                gomb.onclick = async function () {
-                    const jelenlegiSzoveg = gomb.innerText;
-
-                    if (jelenlegiSzoveg === 'Elrejt') {
-                        // Ha épp látszik, akkor rejtse el
+                mutatGomb.addEventListener('click', async function () {
+                    if (reszletSor.style.display === 'table-row') {
                         reszletSor.style.display = 'none';
-                        gomb.innerText = 'Mutat';
-                    } else {
-                        // Ha nem látszik, jelenítse meg
-                        reszletSor.style.display = 'table-row';
-                        gomb.innerText = 'Betöltés...';
-
-                        try {
-                            const response = await getMethodFetch('/api/rendeles_tetelek/' + rendel.id);
-
-                            // Itt jön egy kis for ciklus az elemek kiválogatására
-                            let htmlSzoveg = '<strong>Rendelt tételek:</strong><ul>';
-                            for (let j = 0; j < response.tetelek.length; j++) {
-                                const t = response.tetelek[j];
-                                htmlSzoveg += '<li>' + t.termek_nev + ' - ' + t.darab + ' db - ' + t.egyseg_ar + ' Ft/db</li>';
-                            }
-                            htmlSzoveg += '</ul>';
-
-                            document.getElementById('reszletTartalom_' + rendel.id).innerHTML = htmlSzoveg;
-                            gomb.innerText = 'Elrejt';
-                        } catch (err) {
-                            document.getElementById('reszletTartalom_' + rendel.id).innerHTML = 'Hiba történt a letöltéskor.';
-                            gomb.innerText = 'Hiba';
-                        }
+                        mutatGomb.textContent = 'Mutat';
+                        return;
                     }
-                };
+
+                    reszletSor.style.display = 'table-row';
+                    mutatGomb.textContent = 'Betöltés...';
+
+                    try {
+                        const response = await getMethodFetch('/api/rendeles_tetelek/' + rendel.id);
+
+                        reszletTd.textContent = '';
+
+                        const erosSzoveg = document.createElement('strong');
+                        erosSzoveg.textContent = 'Rendelt tételek:';
+                        reszletTd.appendChild(erosSzoveg);
+
+                        const lista = document.createElement('ul');
+
+                        for (let j = 0; j < response.tetelek.length; j++) {
+                            const tetel = response.tetelek[j];
+                            const listaElem = document.createElement('li');
+                            listaElem.textContent = tetel.termek_nev + ' - ' + tetel.darab + ' db - ' + tetel.egyseg_ar + ' Ft/db';
+                            lista.appendChild(listaElem);
+                        }
+
+                        reszletTd.appendChild(lista);
+                        mutatGomb.textContent = 'Elrejt';
+                    } catch (error) {
+                        reszletTd.textContent = 'Hiba történt a betöltéskor.';
+                        mutatGomb.textContent = 'Mutat';
+                    }
+                });
             }
         } else {
-            // Ha még nincs rendelés
             nincsRendelesUzenet.style.display = 'block';
         }
     } catch (error) {

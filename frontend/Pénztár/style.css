@@ -1,51 +1,39 @@
-body {
-    background-color: #f8f9fa;
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-main {
-    flex: 1;
-}
-
-#logo {
-    width: 50px;
-    height: 50px;
-}
-
-.osszefoglalo-doboz {
-    background-color: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.urlap-doboz {
-    background-color: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-#logo {
-    width: 15vh;
-}
-
 #adminFeluletGomb {
     display: none;
-    color: red;
+}
+
+#logo {
+    height: 50px;
+    width: auto;
+}
+
+.navbar-toggler:focus,
+.navbar-toggler:focus-visible {
+    outline: none;
+    box-shadow: none;
+}
+
+.offcanvas .btn-close:focus,
+.offcanvas .btn-close:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.35);
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-link.active {
     font-weight: bold;
 }
 
-.termek-sor {
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid #ddd;
-    padding: 10px 0;
-}
-
-.termek-sor:last-child {
-    border-bottom: none;
+#penztarSzekcio {
+    flex: auto;
 }

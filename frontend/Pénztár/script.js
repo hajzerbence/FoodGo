@@ -1,141 +1,192 @@
-document.addEventListener('DOMContentLoaded', async () => {
-    // 1. Jogosultság ellenőrzése
-    let userId = null;
+const kijelentkezesGomb = document.getElementById('kijelentkezesGomb');
+const adminFeluletGomb = document.getElementById('adminFeluletGomb');
+let aktualisUserId = null;
+
+//!PostMethodFetch
+const PostMethodFetch = async function (url, value) {
     try {
-        const jogosultsagResponse = await fetch('/api/bejelentkezettFelhasznalo');
-        if (!jogosultsagResponse.ok) {
-            window.location.href = '/';
-            return;
+        const data = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-type': 'application/json' },
+            body: JSON.stringify(value)
+        });
+        if (!data.ok) {
+            throw new Error(`POST hiba: ${data.status} ${data.statusText}`);
+        }
+        return await data.json();
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
+
+//! getMethodFetch
+const getMethodFetch = async function (url) {
+    try {
+        const data = await fetch(url, {
+            method: 'GET',
+            headers: { 'Content-type': 'application/json' }
+        });
+
+        if (!data.ok) {
+            throw new Error(`GET hiba: ${data.status} ${data.statusText}`);
         }
 
-        const adatok = await jogosultsagResponse.json();
-        if (!adatok || !adatok.userId) {
-            window.location.href = '/';
-            return;
+        return await data.json();
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
+
+//Admin felület gomb és ID LEKÉRÉS
+const adminFeluletGombFrissitese = async function () {
+    try {
+        const data = await getMethodFetch('/api/bejelentkezettFelhasznalo');
+
+        if (data && data.userId) {
+            aktualisUserId = data.userId;
         }
 
-        userId = adatok.userId;
-
-        const adminGomb = document.getElementById('adminFeluletGomb');
-        if (adminGomb) {
-            if (adatok.admine === true) {
-                adminGomb.style.display = 'block';
-            } else {
-                adminGomb.style.display = 'none';
-            }
+        if (data && data.admine === true) {
+            adminFeluletGomb.style.display = 'block';
+        } else {
+            adminFeluletGomb.style.display = 'none';
         }
-    } catch (hiba) {
-        console.error('Hiba az ellenőrzésnél:', hiba);
-        window.location.href = '/';
+    } catch (error) {
+        console.error('Hiba történt: ', error);
+        adminFeluletGomb.style.display = 'none';
+    }
+};
+
+function rendelesOsszesitoMegjelenites() {
+    const tabla = document.getElementById('rendelesOsszesito');
+    const vegosszegKiiras = document.getElementById('vegosszeg');
+
+    if (!aktualisUserId) {
         return;
     }
 
-    // Kijelentkezés
-    document.getElementById('kijelentkezesGomb').addEventListener('click', async () => {
-        try {
-            const response = await fetch('/api/kijelentkezes', { method: 'POST' });
-            if (response.ok) {
-                window.location.href = '/';
-            } else {
-                alert('Sikertelen kijelentkezés.');
-            }
-        } catch (error) {
-            console.error('Kijelentkezés hiba:', error);
-            alert('Hálózati hiba történt a kijelentkezés során.');
-        }
-    });
+    const taroloKulcs = 'foodgo_kosar_' + aktualisUserId;
 
-    // 2. Kosár betöltése
-    const kosarKulcs = `foodgo_kosar_${userId}`;
-    const kosarStatusz = localStorage.getItem(kosarKulcs);
-    const kosarTetelekLista = document.getElementById('kosarTetelekLista');
-    const vegosszegKiiras = document.getElementById('vegosszegKiiras');
-    const penztarSzekcio = document.getElementById('penztarSzekcio');
-    const uresKosarHiba = document.getElementById('uresKosarHiba');
+    let kosar = [];
+    const mentettAdat = localStorage.getItem(taroloKulcs);
 
-    if (!kosarStatusz || JSON.parse(kosarStatusz).length === 0) {
-        penztarSzekcio.style.display = 'none';
-        uresKosarHiba.style.display = 'block';
+    if (mentettAdat) {
+        kosar = JSON.parse(mentettAdat);
+    }
+
+    tabla.innerHTML = '';
+    let vegosszeg = 0;
+
+    for (let i = 0; i < kosar.length; i++) {
+        const sor = document.createElement('tr');
+
+        const nevCella = document.createElement('td');
+        nevCella.innerText = kosar[i].nev;
+
+        const dbCella = document.createElement('td');
+        dbCella.innerText = kosar[i].db + ' db';
+
+        const arCella = document.createElement('td');
+        const tetelAra = kosar[i].ar * kosar[i].db;
+        arCella.innerText = tetelAra + ' Ft';
+
+        sor.appendChild(nevCella);
+        sor.appendChild(dbCella);
+        sor.appendChild(arCella);
+
+        tabla.appendChild(sor);
+
+        vegosszeg = vegosszeg + tetelAra;
+    }
+
+    vegosszegKiiras.innerText = vegosszeg + ' Ft';
+}
+
+async function rendelesLeadasa() {
+    if (!aktualisUserId) {
         return;
     }
 
-    const termekLista = JSON.parse(kosarStatusz);
+    const szallitasiCim = document.getElementById('szallitasiCim').value;
+    const megjegyzes = document.getElementById('megjegyzes').value;
+
+    if (!szallitasiCim) {
+        alert('Kérlek add meg a szállítási címet!');
+        return;
+    }
+
+    const taroloKulcs = 'foodgo_kosar_' + aktualisUserId;
+
+    let kosar = [];
+    const mentettAdat = localStorage.getItem(taroloKulcs);
+
+    if (mentettAdat) {
+        kosar = JSON.parse(mentettAdat);
+    }
+
+    if (kosar.length === 0) {
+        alert('A kosár üres!');
+        return;
+    }
+
     let teljesOsszeg = 0;
+    let kosarTetelek = [];
 
-    for (let i = 0; i < termekLista.length; i++) {
-        const termek = termekLista[i];
+    for (let i = 0; i < kosar.length; i++) {
+        teljesOsszeg = teljesOsszeg + kosar[i].ar * kosar[i].db;
 
-        const egysegAr = parseInt(termek.ar);
-        const darabSzam = parseInt(termek.db);
-
-        teljesOsszeg += egysegAr * darabSzam;
-
-        kosarTetelekLista.innerHTML += `
-            <div class="d-flex justify-content-between border-bottom pb-2 pt-2">
-                <span>${darabSzam}x ${termek.nev}</span>
-                <strong>${egysegAr * darabSzam} Ft</strong>
-            </div>
-        `;
+        kosarTetelek.push({
+            termekId: kosar[i].id,
+            mennyiseg: kosar[i].db,
+            egysegAr: kosar[i].ar
+        });
     }
 
-    vegosszegKiiras.textContent = teljesOsszeg + ' Ft';
+    try {
+        const valasz = await PostMethodFetch('/api/rendeles_leadasa', {
+            teljesOsszeg: teljesOsszeg,
+            szallitasiCim: szallitasiCim,
+            megjegyzes: megjegyzes,
+            kosarTetelek: kosarTetelek
+        });
 
-    // 3. Rendelés leadása
-    const rendelesGomb = document.getElementById('rendelesLeadasGomb');
-    if (rendelesGomb) {
-        rendelesGomb.addEventListener('click', async function () {
-            // Ellenőrizzük, hogy ki lettek-e töltve a kötelező mezők
-            const nev = document.getElementById('nev').value;
-            const tel = document.getElementById('telefonszam').value;
-            const cim = document.getElementById('cim').value;
+        if (valasz.success) {
+            localStorage.removeItem(taroloKulcs);
+            alert('A rendelés sikeresen leadva!');
+            window.location.href = '/profil';
+        } else {
+            alert('Hiba: ' + valasz.message);
+        }
+    } catch (error) {
+        alert('A rendelés leadása sikertelen.');
+    }
+}
 
-            if (nev === '' || tel === '' || cim === '') {
-                alert('Minden kötelező mezőt ki kell tölteni! (Név, Telefonszám, Cím)');
-                return;
-            }
+function visszaKosarhoz() {
+    window.location.href = '/kosar';
+}
 
-            let fizetesiMod = 'Készpénz';
-            if (document.getElementById('kártya').checked) {
-                fizetesiMod = 'Bankkártya';
-            }
+document.addEventListener('DOMContentLoaded', async function () {
+    await adminFeluletGombFrissitese();
+    rendelesOsszesitoMegjelenites();
 
-            const megjegyzes = `Név: ${nev}, Tel: ${tel} | Fizetés: ${fizetesiMod} | ${document.getElementById('megjegyzes').value}`;
+    const visszaGomb = document.getElementById('visszaKosarhozGomb');
+    if (visszaGomb) {
+        visszaGomb.addEventListener('click', visszaKosarhoz);
+    }
 
-            // Átalakítjuk a kosarat a backend számára (for ciklussal map helyett)
-            const atalakitottKosar = [];
-            for (let i = 0; i < termekLista.length; i++) {
-                atalakitottKosar.push({
-                    termekId: parseInt(termekLista[i].id),
-                    mennyiseg: parseInt(termekLista[i].db),
-                    egysegAr: parseInt(termekLista[i].ar)
-                });
-            }
+    const rendelesLeadGomb = document.getElementById('rendelesLeadGomb');
+    if (rendelesLeadGomb) {
+        rendelesLeadGomb.addEventListener('click', rendelesLeadasa);
+    }
 
+    if (kijelentkezesGomb) {
+        kijelentkezesGomb.addEventListener('click', async () => {
             try {
-                const response = await fetch('/api/rendeles_leadasa', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        kosarTetelek: atalakitottKosar,
-                        szallitasiCim: cim,
-                        megjegyzes: megjegyzes,
-                        teljesOsszeg: teljesOsszeg
-                    })
-                });
-
-                if (response.ok) {
-                    alert('Sikeres rendelés!');
-                    localStorage.removeItem(kosarKulcs);
-                    window.location.href = '/profil';
-                } else {
-                    const data = await response.json();
-                    alert(`Hiba a rendelés során: ${data.message || 'Ismeretlen hiba'}`);
-                }
+                await PostMethodFetch('/api/kijelentkezes', {});
+                window.location.href = '/';
             } catch (error) {
-                console.error('Hiba a hálózati kérés során:', error);
-                alert('Sikertelen rendelés hálózati hiba miatt.');
+                window.location.href = '/';
             }
         });
     }

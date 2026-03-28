@@ -71,3 +71,8 @@ body {
 #felhasznaloMuveletek {
     min-width: 320px;
 }
+
+#rendelesTabla td,
+#rendelesTabla th {
+    vertical-align: middle;
+}

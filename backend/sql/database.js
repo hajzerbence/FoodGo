@@ -135,18 +135,18 @@ async function sajatRendelesekLekerdezese(felhasznaloId) {
 
 //* Az összes rendelés lekérése az adatbázisból (Adminnak)
 async function osszesRendelesAdminnak() {
-    // A JOIN összeköti a rendeléseket a felhasználó táblával, hogy a nevet is ki tudjuk írni
     const sql = `
-        SELECT 
-            rendelesek.id, 
-            rendelesek.datum, 
-            rendelesek.teljes_osszeg, 
-            rendelesek.statusz, 
-            rendelesek.szallitasi_cim, 
-            rendelesek.megjegyzes,
-            felhasznalo.nev AS megrendelo_neve
+        SELECT
+            rendelesek.id,
+            rendelesek.datum,
+            rendelesek.teljes_osszeg,
+            rendelesek.statusz,
+            rendelesek.szallitasi_cim,
+            felhasznalo.nev,
+            felhasznalo.email,
+            felhasznalo.telefonszam
         FROM rendelesek
-        JOIN felhasznalo ON rendelesek.felhasznalo_id = felhasznalo.id
+        INNER JOIN felhasznalo ON rendelesek.felhasznalo_id = felhasznalo.id
         ORDER BY rendelesek.datum DESC
     `;
     const [rows] = await pool.execute(sql);
@@ -178,6 +178,24 @@ async function rendelesTetelekLekerdezese(rendelesId) {
     return rows;
 }
 
+async function rendelesTulajdonosLekerdezese(rendelesId) {
+    const sql = 'SELECT felhasznalo_id FROM rendelesek WHERE id = ? LIMIT 1';
+    const [rows] = await pool.execute(sql, [rendelesId]);
+    return rows[0] ?? null;
+}
+
+async function rendelesTetelekTorlese(rendelesId) {
+    const sql = 'DELETE FROM rendeles_tetelek WHERE rendeles_id = ?';
+    const [result] = await pool.execute(sql, [rendelesId]);
+    return result.affectedRows;
+}
+
+async function rendelesTorlese(rendelesId) {
+    const sql = 'DELETE FROM rendelesek WHERE id = ?';
+    const [result] = await pool.execute(sql, [rendelesId]);
+    return result.affectedRows;
+}
+
 //!Export
 module.exports = {
     selectall,
@@ -199,5 +217,8 @@ module.exports = {
     sajatRendelesekLekerdezese,
     osszesRendelesAdminnak,
     rendelesStatuszModositas,
-    rendelesTetelekLekerdezese
+    rendelesTetelekLekerdezese,
+    rendelesTulajdonosLekerdezese,
+    rendelesTetelekTorlese,
+    rendelesTorlese
 };

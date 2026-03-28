@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="/Bootstrap/bootstrap.min.css" />
         <link rel="stylesheet" href="/Pénztár/style.css" />
-        <title>Pénztár - Rendelés leadása</title>
+        <title>Pénztár</title>
         <link rel="icon" type="image/png" href="/Média/FoodGo favicon.png" />
     </head>
     <body>
@@ -34,6 +34,7 @@
                             <li class="nav-item"><a class="nav-link" href="/rolunk">Rólunk</a></li>
                             <li class="nav-item"><a class="nav-link" href="/kapcsolat">Kapcsolat</a></li>
                             <li class="nav-item"><a class="nav-link" href="/kosar">Kosár</a></li>
+                            <li class="nav-item"><a class="nav-link active" href="/penztar">Pénztár</a></li>
                             <li class="nav-item"><a class="nav-link" href="/profil">Profilom</a></li>
                             <li class="nav-item"><input type="button" class="nav-link fw-bold" value="Kijelentkezés" id="kijelentkezesGomb" /></li>
                         </ul>
@@ -43,84 +44,66 @@
         </nav>
         <!-- Navbar vége -->
 
-        <!-- Pénztár Tartalom -->
-        <main class="container my-5" id="penztarSzekcio">
-            <h1 class="text-center mb-4">Pénztár</h1>
+        <!-- Pénztár -->
+        <div class="container mt-4" id="penztarSzekcio">
+            <h2>Pénztár</h2>
 
-            <div class="row">
-                <!-- Bal oldal: Adatok bekérése -->
+            <div class="row mt-4">
                 <div class="col-lg-7 mb-4">
-                    <div class="urlap-doboz">
-                        <h3 class="mb-3">Szállítási Adatok</h3>
-                        <div id="rendelesUrlap">
-                            <div class="mb-3">
-                                <label for="nev" class="form-label">Teljes Név</label>
-                                <input type="text" class="form-control" id="nev" placeholder="pl. Kovács János" />
-                            </div>
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h4 class="mb-3">Szállítási adatok</h4>
 
                             <div class="mb-3">
-                                <label for="telefonszam" class="form-label">Telefonszám</label>
-                                <input type="text" class="form-control" id="telefonszam" placeholder="pl. 06201234567" />
+                                <label for="szallitasiCim" class="form-label">Szállítási cím</label>
+                                <input type="text" class="form-control" id="szallitasiCim" placeholder="Pl.: 1111 Budapest, Minta utca 12." />
                             </div>
 
                             <div class="mb-3">
-                                <label for="cim" class="form-label">Pontos Szállítási Cím</label>
-                                <input type="text" class="form-control" id="cim" placeholder="pl. 1055 Budapest, Minta utca 12. 3/4" />
+                                <label for="megjegyzes" class="form-label">Megjegyzés</label>
+                                <textarea class="form-control" id="megjegyzes" rows="4" placeholder="Pl.: Kapucsengő neve, emelet, ajtó..."></textarea>
                             </div>
-
-                            <div class="mb-3">
-                                <label for="megjegyzes" class="form-label">Megjegyzés a futárnak (opcionális)</label>
-                                <textarea class="form-control" id="megjegyzes" rows="2" placeholder="pl. Rossz a csengő, hívj ha itt vagy!"></textarea>
-                            </div>
-
-                            <h4 class="mt-4 mb-3">Fizetési Mód</h4>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="fizetes" id="készpénz" value="Készpénz" checked />
-                                <label class="form-check-label" for="készpénz">Készpénz (Futárnál fizetve)</label>
-                            </div>
-                            <div class="form-check mb-4">
-                                <input class="form-check-input" type="radio" name="fizetes" id="kártya" value="Bankkártya" />
-                                <label class="form-check-label" for="kártya">Bankkártya (Futárnál fizetve)</label>
-                            </div>
-
-                            <button type="button" id="rendelesLeadasGomb" class="btn btn-success w-100 fs-5 fw-bold">Rendelés Véglegesítése</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Jobb oldal: Kosár Összesítő -->
-                <div class="col-lg-5">
-                    <div class="osszefoglalo-doboz">
-                        <h3 class="mb-3">Rendelés Áttekintése</h3>
+                <div class="col-lg-5 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h4 class="mb-3">Rendelés összesítő</h4>
 
-                        <div id="kosarTetelekLista" class="mb-3">
-                            <!-- JS fogja generálni -->
-                        </div>
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Termék</th>
+                                            <th>Mennyiség</th>
+                                            <th>Ár</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="rendelesOsszesito"></tbody>
+                                </table>
+                            </div>
 
-                        <hr />
-                        <div class="d-flex justify-content-between">
-                            <h5>Kiszállítási díj:</h5>
-                            <h5>Ingyenes</h5>
-                        </div>
-                        <div class="d-flex justify-content-between mt-2 text-success">
-                            <h2>Végösszeg:</h2>
-                            <h2 id="vegosszegKiiras">0 Ft</h2>
+                            <div class="d-flex justify-content-end">
+                                <h5>Végösszeg: <span id="vegosszeg">0 Ft</span></h5>
+                            </div>
+
+                            <div class="d-grid gap-2 mt-3">
+                                <button class="btn btn-secondary" id="visszaKosarhozGomb">Vissza a kosárhoz</button>
+                                <button class="btn btn-success" id="rendelesLeadGomb">Rendelés leadása</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
 
-        <!-- Üres kosár hiba -->
-        <main class="container my-5 text-center" id="uresKosarHiba" style="display: none">
-            <h2 class="text-danger">A kosarad üres!</h2>
-            <p>Nem tudsz rendelést leadni üres kosárral. Kérlek menj vissza a kínálathoz!</p>
-            <a href="/kinalat" class="btn btn-primary mt-3">Vissza a Kínálathoz</a>
-        </main>
+        <!-- Pénztár vége -->
 
-        <!-- Lábjegyzék szekció -->
+        <!-- Lábjegyzék -->
         <footer>
-            <div class="container-fluid mt-auto">
+            <div class="container-fluid">
                 <div class="row bg-success p-4 text-center">
                     <div class="col-md-4 p-3 text-white">
                         <h3>FoodGo</h3>
@@ -148,7 +131,7 @@
                 </div>
             </div>
         </footer>
-        <!-- Lábjegyzék szekció vége -->
+        <!-- Lábjegyzék vége -->
 
         <script src="/Pénztár/script.js"></script>
         <script src="/Bootstrap/bootstrap.min.js"></script>

@@ -1,25 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const database = require('../sql/database.js');
-const fs = require('fs/promises');
 
 //!Bcrypt a jelszavak titkosításához
 const bcrypt = require('bcrypt'); //? npm install bcrypt a backend mappában!
-
-//!Multer
-const multer = require('multer'); //?npm install multer
-const path = require('path');
-
-const storage = multer.diskStorage({
-    destination: (request, file, callback) => {
-        callback(null, path.join(__dirname, '../uploads'));
-    },
-    filename: (request, file, callback) => {
-        callback(null, Date.now() + '-' + file.originalname); //?egyedi név: dátum - file eredeti neve
-    }
-});
-
-const upload = multer({ storage });
 
 //!Middleware-k (API védelemhez):
 function bejelentkezesKotelezo(request, response, next) {
@@ -212,15 +196,36 @@ router.post('/admin', adminKotelezo, async (request, response) => {
             const erintett = await database.rendelesStatuszModositas(Number(id), ujStatusz);
 
             if (!erintett) {
-                return response.status(404).json({ success: false, message: 'Nincs ilyen rendelés.' });
+                return response.status(404).json({
+                    success: false,
+                    message: 'Nincs ilyen rendelés.'
+                });
             }
-            return response.status(200).json({ success: true, message: 'Rendelés státusza sikeresen módosítva.' });
+
+            return response.status(200).json({
+                success: true,
+                message: 'Rendelés státusza sikeresen módosítva.'
+            });
         }
 
-        return response.status(400).json({
-            success: false,
-            message: 'Ismeretlen művelet.'
-        });
+        if (muvelet === 'rendelesTorles') {
+            const { id } = request.body;
+
+            await database.rendelesTetelekTorlese(Number(id));
+            const erintett = await database.rendelesTorlese(Number(id));
+
+            if (!erintett) {
+                return response.status(404).json({
+                    success: false,
+                    message: 'Nincs ilyen rendelés.'
+                });
+            }
+
+            return response.status(200).json({
+                success: true,
+                message: 'Rendelés törölve.'
+            });
+        }
     } catch (error) {
         console.log(`POST hiba /admin ${error.message}`);
         return response.status(500).json({
@@ -419,14 +424,21 @@ router.get('/sajat_rendelesek', bejelentkezesKotelezo, async (request, response)
 });
 
 // --- Rendelés Részletek (Admin + Profil) --- //
-router.get('/rendeles_tetelek/:id', bejelentkezesKotelezo, async (req, res) => {
+router.get('/rendeles_tetelek/:id', bejelentkezesKotelezo, async (request, response) => {
     try {
-        const id = req.params.id;
-        const tetelek = await database.rendelesTetelekLekerdezese(id);
-        res.json({ tetelek });
+        const rendelesId = request.params.id;
+        const tetelek = await database.rendelesTetelekLekerdezese(rendelesId);
+
+        return response.status(200).json({
+            success: true,
+            tetelek: tetelek
+        });
     } catch (error) {
-        console.error('Hiba rendeles_tetelek:', error);
-        res.status(500).json({ message: 'Szerverhiba' });
+        console.log(`GET hiba /rendeles_tetelek/:id ${error.message}`);
+        return response.status(500).json({
+            success: false,
+            message: 'Nem sikerült betölteni a rendelés tételeit.'
+        });
     }
 });
 
