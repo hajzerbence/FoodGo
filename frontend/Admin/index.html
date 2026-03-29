@@ -94,8 +94,61 @@
             </div>
 
             <div class="kartyasResz mt-4">
-                <h3 class="mb-2">Éttermek</h3>
-                <div class="text-muted">Még nincs adatbázisban. Később ide jön a lista és a kezelés.</div>
+                <h3 class="mb-3">Éttermek</h3>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label for="etteremAzonosito" class="form-label">Azonosító</label>
+                        <input type="text" class="form-control" id="etteremAzonosito" placeholder="pl. ujetterem" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="etteremNev" class="form-label">Név</label>
+                        <input type="text" class="form-control" id="etteremNev" placeholder="pl. Új Étterem" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="etteremKategoria" class="form-label">Kategória</label>
+                        <input type="text" class="form-control" id="etteremKategoria" placeholder="pl. amerikai" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="etteremLogoUtvonal" class="form-label">Logó útvonal</label>
+                        <input type="text" class="form-control" id="etteremLogoUtvonal" placeholder="/Média/Étterem logók/ujetterem.png" />
+                    </div>
+
+                    <div class="col-md-12">
+                        <label for="etteremBoritoUtvonal" class="form-label">Borítókép útvonal</label>
+                        <input type="text" class="form-control" id="etteremBoritoUtvonal" placeholder="/Média/Amerikai/ujetterem.png" />
+                    </div>
+
+                    <div class="col-md-12">
+                        <label for="etteremLeiras" class="form-label">Leírás</label>
+                        <textarea class="form-control" id="etteremLeiras" rows="3" placeholder="Étterem rövid leírása"></textarea>
+                    </div>
+
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-success" id="etteremHozzaadGomb">Étterem hozzáadása</button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped align-middle">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Azonosító</th>
+                                <th>Név</th>
+                                <th>Kategória</th>
+                                <th>Leírás</th>
+                                <th>Logó útvonal</th>
+                                <th>Borítókép útvonal</th>
+                                <th>Műveletek</th>
+                            </tr>
+                        </thead>
+                        <tbody id="etteremTabla"></tbody>
+                    </table>
+                </div>
             </div>
 
             <div class="kartyasResz mt-4">

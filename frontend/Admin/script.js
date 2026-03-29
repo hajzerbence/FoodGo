@@ -1,6 +1,8 @@
 // Kijelentkezés gomb megragadása
 const kijelentkezesGomb = document.getElementById('kijelentkezesGomb');
 const adminFeluletGomb = document.getElementById('adminFeluletGomb');
+const etteremHozzaadGomb = document.getElementById('etteremHozzaadGomb');
+
 let aktualisFelhasznaloId = null; //globális változó a bejelentkezett felhasználó ID-jának tárolására
 
 //!PostMethodFetch
@@ -269,15 +271,14 @@ const felhasznalokKirajzolasa = async function () {
                 reszletSor.appendChild(reszletTartalomTd);
                 rendelesTabla.appendChild(reszletSor);
 
-                mentesGomb.onclick = function () {
+                mentesGomb.addEventListener('click', function () {
                     statuszModositasa(rendel.id, statuszSelect.value);
-                };
-
-                torlesGomb.onclick = function () {
+                });
+                torlesGomb.addEventListener('click', function () {
                     rendelesTorlese(rendel.id);
-                };
+                });
 
-                mutatGomb.onclick = async function () {
+                mutatGomb.addEventListener('click', async function () {
                     if (reszletSor.style.display === 'table-row') {
                         reszletSor.style.display = 'none';
                         mutatGomb.innerHTML = 'Mutat';
@@ -311,7 +312,7 @@ const felhasznalokKirajzolasa = async function () {
                         reszletTartalomTd.innerHTML = 'Hiba történt a betöltéskor.';
                         mutatGomb.innerHTML = 'Mutat';
                     }
-                };
+                });
             }
         } else {
             const uresSor = document.createElement('tr');
@@ -321,6 +322,121 @@ const felhasznalokKirajzolasa = async function () {
             uresTd.innerHTML = 'Nincs még egy rendelés sem a rendszerben.';
             uresSor.appendChild(uresTd);
             rendelesTabla.appendChild(uresSor);
+        }
+        const etteremTabla = document.getElementById('etteremTabla');
+        etteremTabla.innerHTML = '';
+        const ettermek = valasz.ettermek;
+
+        if (ettermek && ettermek.length > 0) {
+            for (let i = 0; i < ettermek.length; i++) {
+                const etterem = ettermek[i];
+
+                const sor = document.createElement('tr');
+
+                const idTd = document.createElement('td');
+                idTd.innerHTML = etterem.id;
+
+                const azonositoTd = document.createElement('td');
+                const azonositoInput = document.createElement('input');
+                azonositoInput.className = 'form-control form-control-sm';
+                azonositoInput.value = etterem.azonosito;
+                azonositoTd.appendChild(azonositoInput);
+
+                const nevTd = document.createElement('td');
+                const nevInput = document.createElement('input');
+                nevInput.className = 'form-control form-control-sm';
+                nevInput.value = etterem.nev;
+                nevTd.appendChild(nevInput);
+
+                const kategoriaTd = document.createElement('td');
+                const kategoriaInput = document.createElement('input');
+                kategoriaInput.className = 'form-control form-control-sm';
+                kategoriaInput.value = etterem.kategoria;
+                kategoriaTd.appendChild(kategoriaInput);
+
+                const leirasTd = document.createElement('td');
+                const leirasInput = document.createElement('textarea');
+                leirasInput.className = 'form-control form-control-sm';
+                leirasInput.rows = 3;
+                leirasInput.value = etterem.leiras ?? '';
+                leirasTd.appendChild(leirasInput);
+
+                const logoTd = document.createElement('td');
+                const logoInput = document.createElement('input');
+                logoInput.className = 'form-control form-control-sm';
+                logoInput.value = etterem.logo_utvonal;
+                logoTd.appendChild(logoInput);
+
+                const boritoTd = document.createElement('td');
+                const boritoInput = document.createElement('input');
+                boritoInput.className = 'form-control form-control-sm';
+                boritoInput.value = etterem.boritokep_utvonal;
+                boritoTd.appendChild(boritoInput);
+
+                const muveletTd = document.createElement('td');
+                const gombDiv = document.createElement('div');
+                gombDiv.className = 'muveletGombok';
+
+                const mentesGomb = document.createElement('button');
+                mentesGomb.type = 'button';
+                mentesGomb.className = 'btn btn-sm btn-success';
+                mentesGomb.innerHTML = 'Mentés';
+
+                mentesGomb.addEventListener('click', async function () {
+                    try {
+                        const valasz = await PostMethodFetch('/api/admin', {
+                            muvelet: 'etteremModositas',
+                            id: etterem.id,
+                            azonosito: azonositoInput.value,
+                            nev: nevInput.value,
+                            leiras: leirasInput.value,
+                            kategoria: kategoriaInput.value,
+                            logoUtvonal: logoInput.value,
+                            boritokepUtvonal: boritoInput.value
+                        });
+
+                        if (valasz.success) {
+                            await felhasznalokKirajzolasa();
+                        } else {
+                            alert('Hiba: ' + valasz.message);
+                        }
+                    } catch (error) {
+                        alert(error.message);
+                    }
+                });
+
+                const torlesGomb = document.createElement('button');
+                torlesGomb.type = 'button';
+                torlesGomb.className = 'btn btn-sm btn-danger';
+                torlesGomb.innerHTML = 'Törlés';
+
+                torlesGomb.addEventListener('click', function () {
+                    etteremTorleseAdmin(etterem.id, etterem.azonosito);
+                });
+
+                gombDiv.appendChild(mentesGomb);
+                gombDiv.appendChild(torlesGomb);
+                muveletTd.appendChild(gombDiv);
+
+                sor.appendChild(idTd);
+                sor.appendChild(azonositoTd);
+                sor.appendChild(nevTd);
+                sor.appendChild(kategoriaTd);
+                sor.appendChild(leirasTd);
+                sor.appendChild(logoTd);
+                sor.appendChild(boritoTd);
+                sor.appendChild(muveletTd);
+
+                etteremTabla.appendChild(sor);
+            }
+        } else {
+            const uresSor = document.createElement('tr');
+            const uresTd = document.createElement('td');
+            uresTd.colSpan = 8; // Az oszlopok számának megfelelően állítjuk be a colspan értékét, hogy a "Nincs még egy étterem sem." üzenet középre legyen helyezve a táblázatban.
+            uresTd.className = 'text-center';
+            uresTd.innerHTML = 'Nincs még egy étterem sem.';
+            uresSor.appendChild(uresTd);
+            etteremTabla.appendChild(uresSor);
         }
     } catch (error) {
         console.error('Hiba történt: ', error);
@@ -371,6 +487,76 @@ async function rendelesTorlese(rendelesId) {
     }
 }
 
+async function etteremHozzaadasa() {
+    const azonositoInput = document.getElementById('etteremAzonosito');
+    const nevInput = document.getElementById('etteremNev');
+    const kategoriaInput = document.getElementById('etteremKategoria');
+    const logoInput = document.getElementById('etteremLogoUtvonal');
+    const boritoInput = document.getElementById('etteremBoritoUtvonal');
+    const leirasInput = document.getElementById('etteremLeiras');
+
+    const azonosito = azonositoInput.value.trim();
+    const nev = nevInput.value.trim();
+    const kategoria = kategoriaInput.value.trim();
+    const logoUtvonal = logoInput.value.trim();
+    const boritokepUtvonal = boritoInput.value.trim();
+    const leiras = leirasInput.value.trim();
+
+    if (!azonosito || !nev || !kategoria || !logoUtvonal || !boritokepUtvonal) {
+        alert('Kérlek tölts ki minden kötelező mezőt!');
+        return;
+    }
+
+    try {
+        const valasz = await PostMethodFetch('/api/admin', {
+            muvelet: 'etteremHozzaadas',
+            azonosito: azonosito,
+            nev: nev,
+            leiras: leiras,
+            kategoria: kategoria,
+            logoUtvonal: logoUtvonal,
+            boritokepUtvonal: boritokepUtvonal
+        });
+
+        if (valasz.success) {
+            azonositoInput.value = '';
+            nevInput.value = '';
+            kategoriaInput.value = '';
+            logoInput.value = '';
+            boritoInput.value = '';
+            leirasInput.value = '';
+
+            await felhasznalokKirajzolasa();
+        } else {
+            alert('Hiba: ' + valasz.message);
+        }
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+async function etteremTorleseAdmin(id, azonosito) {
+    if (!confirm('Biztosan törölni szeretnéd ezt az éttermet? A hozzá tartozó termékek is törlődni fognak.')) {
+        return;
+    }
+
+    try {
+        const valasz = await PostMethodFetch('/api/admin', {
+            muvelet: 'etteremTorles',
+            id: id,
+            azonosito: azonosito
+        });
+
+        if (valasz.success) {
+            await felhasznalokKirajzolasa();
+        } else {
+            alert('Hiba: ' + valasz.message);
+        }
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
 const adminOldalInditasa = async function () {
     try {
         const data = await getMethodFetch('/api/bejelentkezettFelhasznalo');
@@ -402,6 +588,10 @@ const adminOldalInditasa = async function () {
 // Függvények meghívása a megfelelő gombok kattintására
 document.addEventListener('DOMContentLoaded', function () {
     adminFeluletGombFrissitese();
+
+    if (etteremHozzaadGomb) {
+        etteremHozzaadGomb.addEventListener('click', etteremHozzaadasa);
+    }
 
     if (kijelentkezesGomb) {
         kijelentkezesGomb.addEventListener('click', async () => {

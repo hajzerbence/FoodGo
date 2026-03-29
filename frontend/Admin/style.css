@@ -76,3 +76,13 @@ body {
 #rendelesTabla th {
     vertical-align: middle;
 }
+
+#etteremTabla td,
+#etteremTabla th {
+    vertical-align: middle;
+}
+
+#etteremTabla textarea {
+    min-width: 220px;
+    resize: vertical;
+}

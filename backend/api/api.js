@@ -122,11 +122,13 @@ router.get('/admin', adminKotelezo, async (request, response) => {
     try {
         const felhasznalok = await database.felhasznalokListaja(); // jelszó nélkül listáz
         const rendelesek = await database.osszesRendelesAdminnak(); // Az új függvényünk: lehívja az összes rendelést
+        const ettermek = await database.ettermekLekerdezese();
 
         return response.status(200).json({
             success: true,
             felhasznalok: felhasznalok,
-            rendelesek: rendelesek // Ezt is visszaküldjük a frontendnek
+            rendelesek: rendelesek, // Ezt is visszaküldjük a frontendnek
+            ettermek: ettermek
         });
     } catch (error) {
         console.log(`GET hiba /admin ${error.message}`);
@@ -226,6 +228,73 @@ router.post('/admin', adminKotelezo, async (request, response) => {
                 message: 'Rendelés törölve.'
             });
         }
+
+        if (muvelet === 'etteremHozzaadas') {
+            const { azonosito, nev, leiras, kategoria, logoUtvonal, boritokepUtvonal } = request.body;
+
+            if (!azonosito || !nev || !kategoria || !logoUtvonal || !boritokepUtvonal) {
+                return response.status(400).json({
+                    success: false,
+                    message: 'Minden kötelező mezőt ki kell tölteni.'
+                });
+            }
+
+            await database.ujEtterem(azonosito, nev, leiras, kategoria, logoUtvonal, boritokepUtvonal);
+
+            return response.status(200).json({
+                success: true,
+                message: 'Étterem sikeresen hozzáadva.'
+            });
+        }
+
+        if (muvelet === 'etteremTorles') {
+            const { id, azonosito } = request.body;
+
+            await database.etteremhezTartozoTermekekTorlese(azonosito);
+            const erintett = await database.etteremTorlese(Number(id));
+
+            if (!erintett) {
+                return response.status(404).json({
+                    success: false,
+                    message: 'Nincs ilyen étterem.'
+                });
+            }
+
+            return response.status(200).json({
+                success: true,
+                message: 'Étterem törölve.'
+            });
+        }
+
+        if (muvelet === 'etteremModositas') {
+            const { id, azonosito, nev, leiras, kategoria, logoUtvonal, boritokepUtvonal } = request.body;
+
+            if (!id || !azonosito || !nev || !kategoria || !logoUtvonal || !boritokepUtvonal) {
+                return response.status(400).json({
+                    success: false,
+                    message: 'Minden kötelező mezőt ki kell tölteni.'
+                });
+            }
+
+            const erintett = await database.etteremModositasa(Number(id), azonosito, nev, leiras, kategoria, logoUtvonal, boritokepUtvonal);
+
+            if (!erintett) {
+                return response.status(404).json({
+                    success: false,
+                    message: 'Nincs ilyen étterem.'
+                });
+            }
+
+            return response.status(200).json({
+                success: true,
+                message: 'Étterem sikeresen módosítva.'
+            });
+        }
+
+        return response.status(400).json({
+            success: false,
+            message: 'Ismeretlen művelet.'
+        });
     } catch (error) {
         console.log(`POST hiba /admin ${error.message}`);
         return response.status(500).json({

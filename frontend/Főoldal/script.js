@@ -1,13 +1,7 @@
 //Megfogjuk a szűrő gombjait Id alapján
-const gombAmerikai = document.getElementById('gombAmerikai');
-const gombAzsiai = document.getElementById('gombAzsiai');
-const gombTorok = document.getElementById('gombTorok');
-const gombOsszes = document.getElementById('gombOsszes');
-
-// Megfogjuk a kártyákat class alapján
-const amerikaiKartya = document.getElementsByClassName('amerikaiKartya');
-const azsiaiKartya = document.getElementsByClassName('azsiaiKartya');
-const torokKartya = document.getElementsByClassName('torokKartya');
+const kategoriakGombok = document.getElementById('kategoriakGombok');
+const etteremLista = document.getElementById('etteremLista');
+let ettermek = [];
 
 // Kijelentkezés gomb megragadása
 const kijelentkezesGomb = document.getElementById('kijelentkezesGomb');
@@ -48,34 +42,126 @@ const getMethodFetch = async function (url) {
     }
 };
 
-// Ez a függvény megmutat minden kártyát. Leveszi róluk a 'display: none' stílust, ha van rajtuk, így újra láthatóvá teszi őket.
-function mindentMutat() {
-    for (var i = 0; i < amerikaiKartya.length; i++) {
-        amerikaiKartya[i].style.display = '';
+function ettermekKirajzolasa(lista) {
+    etteremLista.innerHTML = '';
+
+    if (!lista || lista.length === 0) {
+        const uresDiv = document.createElement('div');
+        uresDiv.className = 'col-12 text-center';
+        uresDiv.innerHTML = 'Nincs megjeleníthető étterem.';
+        etteremLista.appendChild(uresDiv);
+        return;
     }
-    for (var i = 0; i < azsiaiKartya.length; i++) {
-        azsiaiKartya[i].style.display = '';
-    }
-    for (var i = 0; i < torokKartya.length; i++) {
-        torokKartya[i].style.display = '';
+
+    for (let i = 0; i < lista.length; i++) {
+        const etterem = lista[i];
+
+        const oszlop = document.createElement('div');
+        oszlop.className = 'col-md-4 p-3';
+
+        const link = document.createElement('a');
+        link.href = '/etterem/' + etterem.azonosito;
+        link.className = 'kartyaLink';
+
+        const kartya = document.createElement('div');
+        kartya.className = 'card';
+
+        const kep = document.createElement('img');
+        kep.src = etterem.boritokep_utvonal;
+        kep.className = 'card-img-top';
+        kep.alt = etterem.nev;
+
+        const kartyaBody = document.createElement('div');
+        kartyaBody.className = 'card-body';
+
+        const cim = document.createElement('h5');
+        cim.className = 'card-title';
+        cim.innerHTML = etterem.nev;
+
+        const leiras = document.createElement('p');
+        leiras.className = 'card-text';
+        leiras.innerHTML = etterem.leiras;
+
+        kartyaBody.appendChild(cim);
+        kartyaBody.appendChild(leiras);
+
+        kartya.appendChild(kep);
+        kartya.appendChild(kartyaBody);
+
+        link.appendChild(kartya);
+        oszlop.appendChild(link);
+        etteremLista.appendChild(oszlop);
     }
 }
 
-// Ez a függvény csak a megadott kategóriájú kártyákat mutatja meg. Az összes kártyára 'display: none' stílust állít be, majd a megadott kategóriájú kártyákból leveszi ezt a stílust, így csak azok lesznek láthatóak.
-function csakEztMutat(kartya) {
-    for (var i = 0; i < amerikaiKartya.length; i++) {
-        amerikaiKartya[i].style.display = 'none';
+function mindentMutat() {
+    ettermekKirajzolasa(ettermek);
+}
+
+function csakKategoriaMutat(kategoria) {
+    const szurtEttermek = [];
+
+    for (let i = 0; i < ettermek.length; i++) {
+        if (ettermek[i].kategoria === kategoria) {
+            szurtEttermek.push(ettermek[i]);
+        }
     }
-    for (var i = 0; i < azsiaiKartya.length; i++) {
-        azsiaiKartya[i].style.display = 'none';
+
+    ettermekKirajzolasa(szurtEttermek);
+}
+
+function kategoriakKirajzolasa() {
+    kategoriakGombok.innerHTML = '';
+
+    const osszesGomb = document.createElement('button');
+    osszesGomb.type = 'button';
+    osszesGomb.className = 'btn btn-success';
+    osszesGomb.innerHTML = 'Összes';
+
+    osszesGomb.addEventListener('click', function () {
+        mindentMutat();
+    });
+
+    kategoriakGombok.appendChild(osszesGomb);
+
+    const kategoriak = [];
+
+    for (let i = 0; i < ettermek.length; i++) {
+        const kategoria = ettermek[i].kategoria;
+
+        if (kategoria && !kategoriak.includes(kategoria)) {
+            kategoriak.push(kategoria);
+        }
     }
-    for (var i = 0; i < torokKartya.length; i++) {
-        torokKartya[i].style.display = 'none';
-    }
-    for (var i = 0; i < kartya.length; i++) {
-        kartya[i].style.display = '';
+
+    for (let i = 0; i < kategoriak.length; i++) {
+        const gomb = document.createElement('button');
+        gomb.type = 'button';
+        gomb.className = 'btn btn-outline-success';
+        gomb.innerHTML = kategoriak[i];
+
+        gomb.addEventListener('click', function () {
+            csakKategoriaMutat(kategoriak[i]);
+        });
+
+        kategoriakGombok.appendChild(gomb);
     }
 }
+
+async function ettermekBetoltese() {
+    try {
+        const valasz = await getMethodFetch('/api/ettermek');
+
+        if (valasz.success) {
+            ettermek = valasz.ettermek;
+            kategoriakKirajzolasa();
+            mindentMutat();
+        }
+    } catch (error) {
+        etteremLista.innerHTML = '<div class="col-12 text-center text-danger">Hiba történt az éttermek betöltésekor.</div>';
+    }
+}
+
 // Navbar átlátszóság kezelése görgetésre
 
 // NAVBAR ÉS OFFCANVAS ELEMEK ELÉRÉSE ID ALAPJÁN
@@ -113,31 +199,16 @@ const adminFeluletGombFrissitese = async function () {
 };
 
 // Függvények meghívása a megfelelő gombok kattintására
-document.addEventListener('DOMContentLoaded', function () {
-    mindentMutat();
-
-    gombAmerikai.addEventListener('click', function () {
-        csakEztMutat(amerikaiKartya);
-    });
-    gombAzsiai.addEventListener('click', function () {
-        csakEztMutat(azsiaiKartya);
-    });
-    gombTorok.addEventListener('click', function () {
-        csakEztMutat(torokKartya);
-    });
-
-    gombOsszes.addEventListener('click', function () {
-        mindentMutat();
-    });
+document.addEventListener('DOMContentLoaded', async function () {
+    await ettermekBetoltese();
 
     adminFeluletGombFrissitese();
 
     kijelentkezesGomb.addEventListener('click', async () => {
         try {
-            await PostMethodFetch('/api/kijelentkezes', {}); // session törlés
-            window.location.href = '/'; // vissza a bejelentkezésre
+            await PostMethodFetch('/api/kijelentkezes', {});
+            window.location.href = '/';
         } catch (error) {
-            // ha valamiért hiba van, akkor is dobjuk vissza loginra
             window.location.href = '/';
         }
     });

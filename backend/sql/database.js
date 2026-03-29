@@ -103,6 +103,34 @@ async function ettermekLekerdezese() {
     return rows;
 }
 
+async function ujEtterem(azonosito, nev, leiras, kategoria, logoUtvonal, boritokepUtvonal) {
+    const sql = 'INSERT INTO ettermek (azonosito, nev, leiras, kategoria, logo_utvonal, boritokep_utvonal) VALUES (?, ?, ?, ?, ?, ?)';
+    const [result] = await pool.execute(sql, [azonosito, nev, leiras, kategoria, logoUtvonal, boritokepUtvonal]);
+    return result.insertId;
+}
+
+async function etteremhezTartozoTermekekTorlese(etteremAzonosito) {
+    const sql = 'DELETE FROM termekek WHERE etterem_azonosito = ?';
+    const [result] = await pool.execute(sql, [etteremAzonosito]);
+    return result.affectedRows;
+}
+
+async function etteremTorlese(id) {
+    const sql = 'DELETE FROM ettermek WHERE id = ?';
+    const [result] = await pool.execute(sql, [id]);
+    return result.affectedRows;
+}
+
+async function etteremModositasa(id, azonosito, nev, leiras, kategoria, logoUtvonal, boritokepUtvonal) {
+    const sql = `
+        UPDATE ettermek
+        SET azonosito = ?, nev = ?, leiras = ?, kategoria = ?, logo_utvonal = ?, boritokep_utvonal = ?
+        WHERE id = ?
+    `;
+    const [result] = await pool.execute(sql, [azonosito, nev, leiras, kategoria, logoUtvonal, boritokepUtvonal, id]);
+    return result.affectedRows;
+}
+
 //* Egy étterem lekérése azonosító alapján
 async function etteremAzonositoAlapjan(azonosito) {
     const sql = 'SELECT * FROM ettermek WHERE azonosito = ? LIMIT 1';
@@ -211,6 +239,10 @@ module.exports = {
     jelszoModositas,
     termekekLekerdezese,
     ettermekLekerdezese,
+    ujEtterem,
+    etteremhezTartozoTermekekTorlese,
+    etteremTorlese,
+    etteremModositasa,
     etteremAzonositoAlapjan,
     ujRendeles,
     ujRendelesTetel,
