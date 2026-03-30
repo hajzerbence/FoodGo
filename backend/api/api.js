@@ -123,12 +123,14 @@ router.get('/admin', adminKotelezo, async (request, response) => {
         const felhasznalok = await database.felhasznalokListaja(); // jelszó nélkül listáz
         const rendelesek = await database.osszesRendelesAdminnak(); // Az új függvényünk: lehívja az összes rendelést
         const ettermek = await database.ettermekLekerdezese();
+        const termekek = await database.osszesTermekLekerdezese();
 
         return response.status(200).json({
             success: true,
             felhasznalok: felhasznalok,
             rendelesek: rendelesek, // Ezt is visszaküldjük a frontendnek
-            ettermek: ettermek
+            ettermek: ettermek,
+            termekek: termekek
         });
     } catch (error) {
         console.log(`GET hiba /admin ${error.message}`);
@@ -288,6 +290,67 @@ router.post('/admin', adminKotelezo, async (request, response) => {
             return response.status(200).json({
                 success: true,
                 message: 'Étterem sikeresen módosítva.'
+            });
+        }
+
+        if (muvelet === 'termekHozzaadas') {
+            const { nev, leiras, ar, kepUtvonal, etteremAzonosito, kategoria } = request.body;
+
+            if (!nev || !ar || !kepUtvonal || !etteremAzonosito || !kategoria) {
+                return response.status(400).json({
+                    success: false,
+                    message: 'Minden kötelező mezőt ki kell tölteni.'
+                });
+            }
+
+            await database.ujTermek(nev, leiras, Number(ar), kepUtvonal, etteremAzonosito, kategoria);
+
+            return response.status(200).json({
+                success: true,
+                message: 'Termék sikeresen hozzáadva.'
+            });
+        }
+
+        if (muvelet === 'termekModositas') {
+            const { id, nev, leiras, ar, kepUtvonal, etteremAzonosito, kategoria } = request.body;
+
+            if (!id || !nev || !ar || !kepUtvonal || !etteremAzonosito || !kategoria) {
+                return response.status(400).json({
+                    success: false,
+                    message: 'Minden kötelező mezőt ki kell tölteni.'
+                });
+            }
+
+            const erintett = await database.termekModositasa(Number(id), nev, leiras, Number(ar), kepUtvonal, etteremAzonosito, kategoria);
+
+            if (!erintett) {
+                return response.status(404).json({
+                    success: false,
+                    message: 'Nincs ilyen termék.'
+                });
+            }
+
+            return response.status(200).json({
+                success: true,
+                message: 'Termék sikeresen módosítva.'
+            });
+        }
+
+        if (muvelet === 'termekTorles') {
+            const { id } = request.body;
+
+            const erintett = await database.termekTorlese(Number(id));
+
+            if (!erintett) {
+                return response.status(404).json({
+                    success: false,
+                    message: 'Nincs ilyen termék.'
+                });
+            }
+
+            return response.status(200).json({
+                success: true,
+                message: 'Termék törölve.'
             });
         }
 

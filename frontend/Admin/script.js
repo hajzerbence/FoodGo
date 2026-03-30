@@ -2,6 +2,8 @@
 const kijelentkezesGomb = document.getElementById('kijelentkezesGomb');
 const adminFeluletGomb = document.getElementById('adminFeluletGomb');
 const etteremHozzaadGomb = document.getElementById('etteremHozzaadGomb');
+const termekHozzaadGomb = document.getElementById('termekHozzaadGomb');
+const termekSzuroEtterem = document.getElementById('termekSzuroEtterem');
 
 let aktualisFelhasznaloId = null; //globális változó a bejelentkezett felhasználó ID-jának tárolására
 
@@ -438,6 +440,138 @@ const felhasznalokKirajzolasa = async function () {
             uresSor.appendChild(uresTd);
             etteremTabla.appendChild(uresSor);
         }
+        termekEtteremSelectFrissitese(valasz.ettermek);
+
+        const termekTabla = document.getElementById('termekTabla');
+        termekTabla.innerHTML = '';
+
+        const termekek = szurtTermekLista(valasz.termekek);
+
+        if (termekek && termekek.length > 0) {
+            for (let i = 0; i < termekek.length; i++) {
+                const termek = termekek[i];
+
+                const sor = document.createElement('tr');
+
+                const idTd = document.createElement('td');
+                idTd.innerHTML = termek.id;
+
+                const etteremTd = document.createElement('td');
+                const etteremSelect = document.createElement('select');
+                etteremSelect.className = 'form-select form-select-sm';
+
+                for (let j = 0; j < valasz.ettermek.length; j++) {
+                    const etterem = valasz.ettermek[j];
+                    const option = document.createElement('option');
+                    option.value = etterem.azonosito;
+                    option.innerHTML = etterem.nev;
+
+                    if (etterem.azonosito === termek.etterem_azonosito) {
+                        option.selected = true;
+                    }
+
+                    etteremSelect.appendChild(option);
+                }
+
+                etteremTd.appendChild(etteremSelect);
+
+                const nevTd = document.createElement('td');
+                const nevInput = document.createElement('input');
+                nevInput.className = 'form-control form-control-sm';
+                nevInput.value = termek.nev;
+                nevTd.appendChild(nevInput);
+
+                const kategoriaTd = document.createElement('td');
+                const kategoriaInput = document.createElement('input');
+                kategoriaInput.className = 'form-control form-control-sm';
+                kategoriaInput.value = termek.kategoria ?? '';
+                kategoriaTd.appendChild(kategoriaInput);
+
+                const leirasTd = document.createElement('td');
+                const leirasInput = document.createElement('textarea');
+                leirasInput.className = 'form-control form-control-sm';
+                leirasInput.rows = 3;
+                leirasInput.value = termek.leiras ?? '';
+                leirasTd.appendChild(leirasInput);
+
+                const arTd = document.createElement('td');
+                const arInput = document.createElement('input');
+                arInput.type = 'number';
+                arInput.className = 'form-control form-control-sm';
+                arInput.value = termek.ar;
+                arTd.appendChild(arInput);
+
+                const kepTd = document.createElement('td');
+                const kepInput = document.createElement('input');
+                kepInput.className = 'form-control form-control-sm';
+                kepInput.value = termek.kep_utvonal;
+                kepTd.appendChild(kepInput);
+
+                const muveletTd = document.createElement('td');
+                const gombDiv = document.createElement('div');
+                gombDiv.className = 'muveletGombok';
+
+                const mentesGomb = document.createElement('button');
+                mentesGomb.type = 'button';
+                mentesGomb.className = 'btn btn-sm btn-success';
+                mentesGomb.innerHTML = 'Mentés';
+
+                mentesGomb.addEventListener('click', async function () {
+                    try {
+                        const valasz = await PostMethodFetch('/api/admin', {
+                            muvelet: 'termekModositas',
+                            id: termek.id,
+                            nev: nevInput.value,
+                            leiras: leirasInput.value,
+                            ar: arInput.value,
+                            kepUtvonal: kepInput.value,
+                            etteremAzonosito: etteremSelect.value,
+                            kategoria: kategoriaInput.value
+                        });
+
+                        if (valasz.success) {
+                            await felhasznalokKirajzolasa();
+                        } else {
+                            alert('Hiba: ' + valasz.message);
+                        }
+                    } catch (error) {
+                        alert(error.message);
+                    }
+                });
+
+                const torlesGomb = document.createElement('button');
+                torlesGomb.type = 'button';
+                torlesGomb.className = 'btn btn-sm btn-danger';
+                torlesGomb.innerHTML = 'Törlés';
+
+                torlesGomb.addEventListener('click', function () {
+                    termekTorleseAdmin(termek.id);
+                });
+
+                gombDiv.appendChild(mentesGomb);
+                gombDiv.appendChild(torlesGomb);
+                muveletTd.appendChild(gombDiv);
+
+                sor.appendChild(idTd);
+                sor.appendChild(etteremTd);
+                sor.appendChild(nevTd);
+                sor.appendChild(kategoriaTd);
+                sor.appendChild(leirasTd);
+                sor.appendChild(arTd);
+                sor.appendChild(kepTd);
+                sor.appendChild(muveletTd);
+
+                termekTabla.appendChild(sor);
+            }
+        } else {
+            const uresSor = document.createElement('tr');
+            const uresTd = document.createElement('td');
+            uresTd.colSpan = 8;
+            uresTd.className = 'text-center';
+            uresTd.innerHTML = 'Nincs még egy termék sem.';
+            uresSor.appendChild(uresTd);
+            termekTabla.appendChild(uresSor);
+        }
     } catch (error) {
         console.error('Hiba történt: ', error);
         alert('Nem sikerült betölteni az adatokat.');
@@ -557,6 +691,138 @@ async function etteremTorleseAdmin(id, azonosito) {
     }
 }
 
+function termekEtteremSelectFrissitese(ettermek) {
+    const termekEtterem = document.getElementById('termekEtterem');
+    const termekSzuroEtterem = document.getElementById('termekSzuroEtterem');
+
+    const aktualisHozzaadoErtek = termekEtterem.value;
+    const aktualisSzuroErtek = termekSzuroEtterem.value;
+
+    termekEtterem.innerHTML = '';
+    termekSzuroEtterem.innerHTML = '';
+
+    const uresOpcio = document.createElement('option');
+    uresOpcio.value = '';
+    uresOpcio.innerHTML = 'Válassz éttermet';
+    termekEtterem.appendChild(uresOpcio);
+
+    const osszesOpcio = document.createElement('option');
+    osszesOpcio.value = '';
+    osszesOpcio.innerHTML = 'Összes étterem';
+    termekSzuroEtterem.appendChild(osszesOpcio);
+
+    for (let i = 0; i < ettermek.length; i++) {
+        const etterem = ettermek[i];
+
+        const ujOpcio = document.createElement('option');
+        ujOpcio.value = etterem.azonosito;
+        ujOpcio.innerHTML = etterem.nev;
+
+        if (etterem.azonosito === aktualisHozzaadoErtek) {
+            ujOpcio.selected = true;
+        }
+
+        termekEtterem.appendChild(ujOpcio);
+
+        const ujSzuroOpcio = document.createElement('option');
+        ujSzuroOpcio.value = etterem.azonosito;
+        ujSzuroOpcio.innerHTML = etterem.nev;
+
+        if (etterem.azonosito === aktualisSzuroErtek) {
+            ujSzuroOpcio.selected = true;
+        }
+
+        termekSzuroEtterem.appendChild(ujSzuroOpcio);
+    }
+}
+
+async function termekHozzaadasa() {
+    const termekEtterem = document.getElementById('termekEtterem');
+    const termekNev = document.getElementById('termekNev');
+    const termekKategoria = document.getElementById('termekKategoria');
+    const termekAr = document.getElementById('termekAr');
+    const termekKepUtvonal = document.getElementById('termekKepUtvonal');
+    const termekLeiras = document.getElementById('termekLeiras');
+
+    const etteremAzonosito = termekEtterem.value;
+    const nev = termekNev.value.trim();
+    const kategoria = termekKategoria.value.trim();
+    const ar = termekAr.value.trim();
+    const kepUtvonal = termekKepUtvonal.value.trim();
+    const leiras = termekLeiras.value.trim();
+
+    if (!etteremAzonosito || !nev || !kategoria || !ar || !kepUtvonal) {
+        alert('Kérlek tölts ki minden kötelező mezőt!');
+        return;
+    }
+
+    try {
+        const valasz = await PostMethodFetch('/api/admin', {
+            muvelet: 'termekHozzaadas',
+            nev: nev,
+            leiras: leiras,
+            ar: ar,
+            kepUtvonal: kepUtvonal,
+            etteremAzonosito: etteremAzonosito,
+            kategoria: kategoria
+        });
+
+        if (valasz.success) {
+            termekEtterem.value = '';
+            termekNev.value = '';
+            termekKategoria.value = '';
+            termekAr.value = '';
+            termekKepUtvonal.value = '';
+            termekLeiras.value = '';
+
+            await felhasznalokKirajzolasa();
+        } else {
+            alert('Hiba: ' + valasz.message);
+        }
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+async function termekTorleseAdmin(id) {
+    if (!confirm('Biztosan törölni szeretnéd ezt a terméket?')) {
+        return;
+    }
+
+    try {
+        const valasz = await PostMethodFetch('/api/admin', {
+            muvelet: 'termekTorles',
+            id: id
+        });
+
+        if (valasz.success) {
+            await felhasznalokKirajzolasa();
+        } else {
+            alert('Hiba: ' + valasz.message);
+        }
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+function szurtTermekLista(termekek) {
+    const kivalasztottEtterem = document.getElementById('termekSzuroEtterem').value;
+
+    if (!kivalasztottEtterem) {
+        return termekek;
+    }
+
+    const szurt = [];
+
+    for (let i = 0; i < termekek.length; i++) {
+        if (termekek[i].etterem_azonosito === kivalasztottEtterem) {
+            szurt.push(termekek[i]);
+        }
+    }
+
+    return szurt;
+}
+
 const adminOldalInditasa = async function () {
     try {
         const data = await getMethodFetch('/api/bejelentkezettFelhasznalo');
@@ -591,6 +857,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (etteremHozzaadGomb) {
         etteremHozzaadGomb.addEventListener('click', etteremHozzaadasa);
+    }
+
+    if (termekHozzaadGomb) {
+        termekHozzaadGomb.addEventListener('click', termekHozzaadasa);
+    }
+
+    if (termekSzuroEtterem) {
+        termekSzuroEtterem.addEventListener('change', felhasznalokKirajzolasa);
     }
 
     if (kijelentkezesGomb) {

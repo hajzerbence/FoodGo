@@ -96,6 +96,34 @@ async function termekekLekerdezese(etteremAzonosito) {
     return rows;
 }
 
+async function osszesTermekLekerdezese() {
+    const sql = 'SELECT * FROM termekek ORDER BY id';
+    const [rows] = await pool.execute(sql);
+    return rows;
+}
+
+async function ujTermek(nev, leiras, ar, kepUtvonal, etteremAzonosito, kategoria) {
+    const sql = 'INSERT INTO termekek (nev, leiras, ar, kep_utvonal, etterem_azonosito, kategoria) VALUES (?, ?, ?, ?, ?, ?)';
+    const [result] = await pool.execute(sql, [nev, leiras, ar, kepUtvonal, etteremAzonosito, kategoria]);
+    return result.insertId;
+}
+
+async function termekModositasa(id, nev, leiras, ar, kepUtvonal, etteremAzonosito, kategoria) {
+    const sql = `
+        UPDATE termekek
+        SET nev = ?, leiras = ?, ar = ?, kep_utvonal = ?, etterem_azonosito = ?, kategoria = ?
+        WHERE id = ?
+    `;
+    const [result] = await pool.execute(sql, [nev, leiras, ar, kepUtvonal, etteremAzonosito, kategoria, id]);
+    return result.affectedRows;
+}
+
+async function termekTorlese(id) {
+    const sql = 'DELETE FROM termekek WHERE id = ?';
+    const [result] = await pool.execute(sql, [id]);
+    return result.affectedRows;
+}
+
 //* Összes étterem lekérése
 async function ettermekLekerdezese() {
     const sql = 'SELECT * FROM ettermek ORDER BY id';
@@ -238,6 +266,10 @@ module.exports = {
     JelszoEllenorzes,
     jelszoModositas,
     termekekLekerdezese,
+    osszesTermekLekerdezese,
+    ujTermek,
+    termekModositasa,
+    termekTorlese,
     ettermekLekerdezese,
     ujEtterem,
     etteremhezTartozoTermekekTorlese,

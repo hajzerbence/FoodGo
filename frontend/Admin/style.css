@@ -22,11 +22,11 @@
 /* Sticky footer megoldás: oldal teljes magassága és flexbox layout */
 html,
 body {
-    height: 100%;
     margin: 0;
 }
 
 body {
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
@@ -85,4 +85,21 @@ body {
 #etteremTabla textarea {
     min-width: 220px;
     resize: vertical;
+}
+
+#termekTabla td,
+#termekTabla th {
+    vertical-align: middle;
+}
+
+#termekTabla textarea {
+    min-width: 220px;
+    resize: vertical;
+}
+
+#felhasznalokSzekcio,
+#rendelesekSzekcio,
+#ettermekSzekcio,
+#termekekSzekcio {
+    scroll-margin-top: 90px; /* Ha ez 0 lenne vagy ki lenne véve, és rányomnánk mondjuk a termékekre, a képernyő tetején lenne pixel pontosan a termékek szekció címe, amihez a gomb görget. Így most 90px marad a cím felett. amikor odagörget. Így szebb lesz. A "Felhasználók" és "Rendelések" gombok nem is működnének enélkül jól, mert fent vannak a képernyő tetején, és a sticky navbar nagyrészt eltakarná őket. */
 }

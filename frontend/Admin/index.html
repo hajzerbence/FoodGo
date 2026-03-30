@@ -45,10 +45,19 @@
         <main class="container my-4">
             <div>
                 <h1 class="mb-1">Admin felület</h1>
-                <div class="text-muted">Felhasználók kezelése</div>
+                <div class="kartyasResz mb-4" id="adminNavigacio">
+                    <h5 class="mb-3">Gyors navigáció</h5>
+
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="#felhasznalokSzekcio" class="btn btn-outline-success">Felhasználók</a>
+                        <a href="#rendelesekSzekcio" class="btn btn-outline-success">Rendelések</a>
+                        <a href="#ettermekSzekcio" class="btn btn-outline-success">Éttermek</a>
+                        <a href="#termekekSzekcio" class="btn btn-outline-success">Termékek</a>
+                    </div>
+                </div>
             </div>
 
-            <div class="kartyasResz mt-3">
+            <div class="kartyasResz mt-3" id="felhasznalokSzekcio">
                 <h3 class="mb-3">Felhasználók</h3>
 
                 <div class="table-responsive">
@@ -68,8 +77,8 @@
                 </div>
             </div>
 
-            <div class="kartyasResz mt-4">
-                <h3 class="mb-3">Kezelés alatt álló Rendelések</h3>
+            <div class="kartyasResz mt-4" id="rendelesekSzekcio">
+                <h3 class="mb-3">Rendelések</h3>
                 <div class="table-responsive">
                     <table class="table table-striped align-middle">
                         <thead>
@@ -93,7 +102,7 @@
                 </div>
             </div>
 
-            <div class="kartyasResz mt-4">
+            <div class="kartyasResz mt-4" id="ettermekSzekcio">
                 <h3 class="mb-3">Éttermek</h3>
 
                 <div class="row g-3 mb-4">
@@ -151,9 +160,69 @@
                 </div>
             </div>
 
-            <div class="kartyasResz mt-4">
-                <h3 class="mb-2">Termékek</h3>
-                <div class="text-muted">Még nincs adatbázisban. Később ide jön a lista és a kezelés.</div>
+            <div class="kartyasResz mt-4" id="termekekSzekcio">
+                <h3 class="mb-3">Termékek</h3>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label for="termekEtterem" class="form-label">Étterem</label>
+                        <select class="form-select" id="termekEtterem"></select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="termekNev" class="form-label">Név</label>
+                        <input type="text" class="form-control" id="termekNev" placeholder="pl. Sajtburger" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="termekKategoria" class="form-label">Kategória</label>
+                        <input type="text" class="form-control" id="termekKategoria" placeholder="pl. hamburger" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="termekAr" class="form-label">Ár</label>
+                        <input type="number" class="form-control" id="termekAr" placeholder="pl. 1990" />
+                    </div>
+
+                    <div class="col-md-12">
+                        <label for="termekKepUtvonal" class="form-label">Kép útvonal</label>
+                        <input type="text" class="form-control" id="termekKepUtvonal" placeholder="/Média/Termékek/ujtermek.png" />
+                    </div>
+
+                    <div class="col-md-12">
+                        <label for="termekLeiras" class="form-label">Leírás</label>
+                        <textarea class="form-control" id="termekLeiras" rows="3" placeholder="Termék rövid leírása"></textarea>
+                    </div>
+
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-success" id="termekHozzaadGomb">Termék hozzáadása</button>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="termekSzuroEtterem" class="form-label">Szűrés étterem szerint</label>
+                        <select class="form-select" id="termekSzuroEtterem"></select>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped align-middle">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Étterem</th>
+                                <th>Név</th>
+                                <th>Kategória</th>
+                                <th>Leírás</th>
+                                <th>Ár</th>
+                                <th>Kép útvonal</th>
+                                <th>Műveletek</th>
+                            </tr>
+                        </thead>
+                        <tbody id="termekTabla"></tbody>
+                    </table>
+                </div>
             </div>
         </main>
         <!-- Lábjegyzék szekció -->
