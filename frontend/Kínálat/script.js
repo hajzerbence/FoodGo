@@ -1,6 +1,7 @@
 const kategoriakGombok = document.getElementById('kategoriakGombok');
 const etteremLista = document.getElementById('etteremLista');
 let ettermek = [];
+let aktualisKategoria = 'Összes';
 
 // Kijelentkezés gomb megragadása
 const kijelentkezesGomb = document.getElementById('kijelentkezesGomb');
@@ -94,10 +95,14 @@ function ettermekKirajzolasa(lista) {
 }
 
 function mindentMutat() {
+    aktualisKategoria = 'Összes';
     ettermekKirajzolasa(ettermek);
+    kategoriakKirajzolasa();
 }
 
 function csakKategoriaMutat(kategoria) {
+    aktualisKategoria = kategoria;
+
     const szurtEttermek = [];
 
     for (let i = 0; i < ettermek.length; i++) {
@@ -107,6 +112,7 @@ function csakKategoriaMutat(kategoria) {
     }
 
     ettermekKirajzolasa(szurtEttermek);
+    kategoriakKirajzolasa();
 }
 
 function kategoriakKirajzolasa() {
@@ -114,7 +120,13 @@ function kategoriakKirajzolasa() {
 
     const osszesGomb = document.createElement('button');
     osszesGomb.type = 'button';
-    osszesGomb.className = 'btn btn-success';
+
+    if (aktualisKategoria === 'Összes') {
+        osszesGomb.className = 'btn btn-success';
+    } else {
+        osszesGomb.className = 'btn btn-outline-success';
+    }
+
     osszesGomb.innerHTML = 'Összes';
 
     osszesGomb.addEventListener('click', function () {
@@ -136,7 +148,13 @@ function kategoriakKirajzolasa() {
     for (let i = 0; i < kategoriak.length; i++) {
         const gomb = document.createElement('button');
         gomb.type = 'button';
-        gomb.className = 'btn btn-outline-success';
+
+        if (aktualisKategoria === kategoriak[i]) {
+            gomb.className = 'btn btn-success';
+        } else {
+            gomb.className = 'btn btn-outline-success';
+        }
+
         gomb.innerHTML = kategoriak[i];
 
         gomb.addEventListener('click', function () {
@@ -153,7 +171,6 @@ async function ettermekBetoltese() {
 
         if (valasz.success) {
             ettermek = valasz.ettermek;
-            kategoriakKirajzolasa();
             mindentMutat();
         }
     } catch (error) {

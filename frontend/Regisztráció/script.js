@@ -36,14 +36,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (jelszo === jelszomegerosites) {
                         if (feltetelek.checked === true) {
                             try {
-                                const adatok = await PostMethodFetch('/api/ujFelhasznalo', {
+                                await PostMethodFetch('/api/ujFelhasznalo', {
                                     nev: nev,
                                     email: email,
                                     telefonszam: telefonszam,
                                     jelszo: jelszo
                                 });
                                 alert('Sikeres regisztráció! Köszönjük, hogy csatlakoztál a FoodGo-hoz.');
-                                window.location.href = '/';
+                                await PostMethodFetch('/api/bejelentkezes', {
+                                    email: email,
+                                    jelszo: jelszo
+                                });
+                                window.location.href = '/fooldal';
                             } catch (error) {
                                 alert('Ez a email cím már használatban van. Kérem, válasszon másikat vagy jelentkezzen be!');
                             }
