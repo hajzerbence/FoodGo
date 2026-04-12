@@ -128,7 +128,7 @@ const felhasznalokKirajzolasa = async function () {
                 const adminGomb = document.createElement('button');
                 adminGomb.type = 'button';
                 adminGomb.className = 'btn btn-sm btn-primary';
-                adminGomb.innerHTML = felhasznalo.admine ? 'Admin elvétel' : 'Admin adás'; //ez a sor dinamikusan állítja be a gomb szövegét a felhasználó admin státuszától függően. Ha a felhasználó jelenleg admin (felhasznalo.admine értéke true), akkor a gomb szövege "Admin elvétel" lesz, jelezve, hogy a gomb megnyomásával el lehet venni az admin jogot. Ha a felhasználó nem admin (felhasznalo.admine értéke false), akkor a gomb szövege "Admin adás" lesz, jelezve, hogy a gomb megnyomásával admin jogot lehet adni a felhasználónak.
+                adminGomb.innerHTML = felhasznalo.admine ? 'Ne legyen admin' : 'Legyen admin'; //ez a sor dinamikusan állítja be a gomb szövegét a felhasználó admin státuszától függően. Ha a felhasználó jelenleg admin (felhasznalo.admine értéke true), akkor a gomb szövege "Ne legyen admin" lesz, jelezve, hogy a gomb megnyomásával el lehet venni az admin jogot. Ha a felhasználó nem admin (felhasznalo.admine értéke false), akkor a gomb szövege "Legyen admin" lesz, jelezve, hogy a gomb megnyomásával admin jogot lehet adni a felhasználónak.
 
                 adminGomb.addEventListener('click', async function () {
                     try {
