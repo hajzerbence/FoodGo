@@ -212,25 +212,6 @@ router.post('/admin', adminKotelezo, async (request, response) => {
             });
         }
 
-        if (muvelet === 'rendelesTorles') {
-            const { id } = request.body;
-
-            await database.rendelesTetelekTorlese(Number(id));
-            const erintett = await database.rendelesTorlese(Number(id));
-
-            if (!erintett) {
-                return response.status(404).json({
-                    success: false,
-                    message: 'Nincs ilyen rendelés.'
-                });
-            }
-
-            return response.status(200).json({
-                success: true,
-                message: 'Rendelés törölve.'
-            });
-        }
-
         if (muvelet === 'etteremHozzaadas') {
             const { azonosito, nev, leiras, kategoria, logoUtvonal, boritokepUtvonal } = request.body;
 

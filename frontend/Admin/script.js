@@ -230,17 +230,10 @@ const felhasznalokKirajzolasa = async function () {
 
                 const mentesGomb = document.createElement('button');
                 mentesGomb.type = 'button';
-                mentesGomb.className = 'btn btn-sm btn-warning mb-1';
+                mentesGomb.className = 'btn btn-sm btn-warning';
                 mentesGomb.innerHTML = 'Mentés';
 
-                const torlesGomb = document.createElement('button');
-                torlesGomb.type = 'button';
-                torlesGomb.className = 'btn btn-sm btn-danger';
-                torlesGomb.innerHTML = 'Törlés';
-
                 muveletTd.appendChild(mentesGomb);
-                muveletTd.appendChild(document.createElement('br'));
-                muveletTd.appendChild(torlesGomb);
 
                 const reszletTd = document.createElement('td');
                 const mutatGomb = document.createElement('button');
@@ -275,9 +268,6 @@ const felhasznalokKirajzolasa = async function () {
 
                 mentesGomb.addEventListener('click', function () {
                     statuszModositasa(rendel.id, statuszSelect.value);
-                });
-                torlesGomb.addEventListener('click', function () {
-                    rendelesTorlese(rendel.id);
                 });
 
                 mutatGomb.addEventListener('click', async function () {
@@ -588,27 +578,6 @@ async function statuszModositasa(rendelesId, ujStatusz) {
             muvelet: 'rendelesStatuszValtas',
             id: rendelesId,
             ujStatusz: ujStatusz
-        });
-
-        if (valasz.success) {
-            await felhasznalokKirajzolasa();
-        } else {
-            alert('Hiba: ' + valasz.message);
-        }
-    } catch (error) {
-        alert(error.message);
-    }
-}
-
-async function rendelesTorlese(rendelesId) {
-    if (!confirm('Biztosan törölni szeretnéd ezt a rendelést?')) {
-        return;
-    }
-
-    try {
-        const valasz = await PostMethodFetch('/api/admin', {
-            muvelet: 'rendelesTorles',
-            id: rendelesId
         });
 
         if (valasz.success) {

@@ -240,18 +240,6 @@ async function rendelesTulajdonosLekerdezese(rendelesId) {
     return rows[0] ?? null;
 }
 
-async function rendelesTetelekTorlese(rendelesId) {
-    const sql = 'DELETE FROM rendeles_tetelek WHERE rendeles_id = ?';
-    const [result] = await pool.execute(sql, [rendelesId]);
-    return result.affectedRows;
-}
-
-async function rendelesTorlese(rendelesId) {
-    const sql = 'DELETE FROM rendelesek WHERE id = ?';
-    const [result] = await pool.execute(sql, [rendelesId]);
-    return result.affectedRows;
-}
-
 //!Export
 module.exports = {
     selectall,
@@ -282,7 +270,5 @@ module.exports = {
     osszesRendelesAdminnak,
     rendelesStatuszModositas,
     rendelesTetelekLekerdezese,
-    rendelesTulajdonosLekerdezese,
-    rendelesTetelekTorlese,
-    rendelesTorlese
+    rendelesTulajdonosLekerdezese
 };
