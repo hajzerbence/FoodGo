@@ -124,11 +124,13 @@ router.get('/admin', adminKotelezo, async (request, response) => {
         const rendelesek = await database.osszesRendelesAdminnak(); // Az új függvényünk: lehívja az összes rendelést
         const ettermek = await database.ettermekLekerdezese();
         const termekek = await database.osszesTermekLekerdezese();
+        const kategoriak = await database.kategoriakLekerdezese();
 
         return response.status(200).json({
             success: true,
             felhasznalok: felhasznalok,
-            rendelesek: rendelesek, // Ezt is visszaküldjük a frontendnek
+            rendelesek: rendelesek,
+            kategoriak: kategoriak,
             ettermek: ettermek,
             termekek: termekek
         });
@@ -212,17 +214,87 @@ router.post('/admin', adminKotelezo, async (request, response) => {
             });
         }
 
-        if (muvelet === 'etteremHozzaadas') {
-            const { azonosito, nev, leiras, kategoria, logoUtvonal, boritokepUtvonal } = request.body;
+        if (muvelet === 'kategoriaHozzaadas') {
+            const { nev } = request.body;
 
-            if (!azonosito || !nev || !kategoria || !logoUtvonal || !boritokepUtvonal) {
+            if (!nev) {
+                return response.status(400).json({
+                    success: false,
+                    message: 'A kategória nevét meg kell adni.'
+                });
+            }
+
+            await database.ujKategoria(nev);
+
+            return response.status(200).json({
+                success: true,
+                message: 'Kategória sikeresen hozzáadva.'
+            });
+        }
+
+        if (muvelet === 'kategoriaModositas') {
+            const { id, nev } = request.body;
+
+            if (!id || !nev) {
                 return response.status(400).json({
                     success: false,
                     message: 'Minden kötelező mezőt ki kell tölteni.'
                 });
             }
 
-            await database.ujEtterem(azonosito, nev, leiras, kategoria, logoUtvonal, boritokepUtvonal);
+            const erintett = await database.kategoriaModositasa(Number(id), nev);
+
+            if (!erintett) {
+                return response.status(404).json({
+                    success: false,
+                    message: 'Nincs ilyen kategória.'
+                });
+            }
+
+            return response.status(200).json({
+                success: true,
+                message: 'Kategória sikeresen módosítva.'
+            });
+        }
+
+        if (muvelet === 'kategoriaTorles') {
+            const { id } = request.body;
+
+            const darab = await database.ettermekSzamaKategoriaban(Number(id));
+
+            if (darab > 0) {
+                return response.status(200).json({
+                    success: false,
+                    message: 'A kategória nem törölhető, mert egy vagy több étterem ebbe a kategóriába tartozik.'
+                });
+            }
+
+            const erintett = await database.kategoriaTorlese(Number(id));
+
+            if (!erintett) {
+                return response.status(200).json({
+                    success: false,
+                    message: 'Nincs ilyen kategória.'
+                });
+            }
+
+            return response.status(200).json({
+                success: true,
+                message: 'Kategória törölve.'
+            });
+        }
+
+        if (muvelet === 'etteremHozzaadas') {
+            const { azonosito, nev, leiras, kategoriaId, logoUtvonal, boritokepUtvonal } = request.body;
+
+            if (!azonosito || !nev || !kategoriaId || !logoUtvonal || !boritokepUtvonal) {
+                return response.status(400).json({
+                    success: false,
+                    message: 'Minden kötelező mezőt ki kell tölteni.'
+                });
+            }
+
+            await database.ujEtterem(azonosito, nev, leiras, Number(kategoriaId), logoUtvonal, boritokepUtvonal);
 
             return response.status(200).json({
                 success: true,
@@ -250,16 +322,16 @@ router.post('/admin', adminKotelezo, async (request, response) => {
         }
 
         if (muvelet === 'etteremModositas') {
-            const { id, azonosito, nev, leiras, kategoria, logoUtvonal, boritokepUtvonal } = request.body;
+            const { id, azonosito, nev, leiras, kategoriaId, logoUtvonal, boritokepUtvonal } = request.body;
 
-            if (!id || !azonosito || !nev || !kategoria || !logoUtvonal || !boritokepUtvonal) {
+            if (!id || !azonosito || !nev || !kategoriaId || !logoUtvonal || !boritokepUtvonal) {
                 return response.status(400).json({
                     success: false,
                     message: 'Minden kötelező mezőt ki kell tölteni.'
                 });
             }
 
-            const erintett = await database.etteremModositasa(Number(id), azonosito, nev, leiras, kategoria, logoUtvonal, boritokepUtvonal);
+            const erintett = await database.etteremModositasa(Number(id), azonosito, nev, leiras, Number(kategoriaId), logoUtvonal, boritokepUtvonal);
 
             if (!erintett) {
                 return response.status(404).json({

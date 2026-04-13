@@ -126,14 +126,27 @@ async function termekTorlese(id) {
 
 //* Összes étterem lekérése
 async function ettermekLekerdezese() {
-    const sql = 'SELECT * FROM ettermek ORDER BY id';
+    const sql = `
+        SELECT
+            ettermek.id,
+            ettermek.azonosito,
+            ettermek.nev,
+            ettermek.leiras,
+            ettermek.kategoria_id,
+            kategoriak.nev AS kategoria,
+            ettermek.logo_utvonal,
+            ettermek.boritokep_utvonal
+        FROM ettermek
+        INNER JOIN kategoriak ON ettermek.kategoria_id = kategoriak.id
+        ORDER BY ettermek.id
+    `;
     const [rows] = await pool.execute(sql);
     return rows;
 }
 
-async function ujEtterem(azonosito, nev, leiras, kategoria, logoUtvonal, boritokepUtvonal) {
-    const sql = 'INSERT INTO ettermek (azonosito, nev, leiras, kategoria, logo_utvonal, boritokep_utvonal) VALUES (?, ?, ?, ?, ?, ?)';
-    const [result] = await pool.execute(sql, [azonosito, nev, leiras, kategoria, logoUtvonal, boritokepUtvonal]);
+async function ujEtterem(azonosito, nev, leiras, kategoriaId, logoUtvonal, boritokepUtvonal) {
+    const sql = 'INSERT INTO ettermek (azonosito, nev, leiras, kategoria_id, logo_utvonal, boritokep_utvonal) VALUES (?, ?, ?, ?, ?, ?)';
+    const [result] = await pool.execute(sql, [azonosito, nev, leiras, kategoriaId, logoUtvonal, boritokepUtvonal]);
     return result.insertId;
 }
 
@@ -149,19 +162,32 @@ async function etteremTorlese(id) {
     return result.affectedRows;
 }
 
-async function etteremModositasa(id, azonosito, nev, leiras, kategoria, logoUtvonal, boritokepUtvonal) {
+async function etteremModositasa(id, azonosito, nev, leiras, kategoriaId, logoUtvonal, boritokepUtvonal) {
     const sql = `
         UPDATE ettermek
-        SET azonosito = ?, nev = ?, leiras = ?, kategoria = ?, logo_utvonal = ?, boritokep_utvonal = ?
+        SET azonosito = ?, nev = ?, leiras = ?, kategoria_id = ?, logo_utvonal = ?, boritokep_utvonal = ?
         WHERE id = ?
     `;
-    const [result] = await pool.execute(sql, [azonosito, nev, leiras, kategoria, logoUtvonal, boritokepUtvonal, id]);
+    const [result] = await pool.execute(sql, [azonosito, nev, leiras, kategoriaId, logoUtvonal, boritokepUtvonal, id]);
     return result.affectedRows;
 }
 
-//* Egy étterem lekérése azonosító alapján
 async function etteremAzonositoAlapjan(azonosito) {
-    const sql = 'SELECT * FROM ettermek WHERE azonosito = ? LIMIT 1';
+    const sql = `
+        SELECT
+            ettermek.id,
+            ettermek.azonosito,
+            ettermek.nev,
+            ettermek.leiras,
+            ettermek.kategoria_id,
+            kategoriak.nev AS kategoria,
+            ettermek.logo_utvonal,
+            ettermek.boritokep_utvonal
+        FROM ettermek
+        INNER JOIN kategoriak ON ettermek.kategoria_id = kategoriak.id
+        WHERE ettermek.azonosito = ?
+        LIMIT 1
+    `;
     const [rows] = await pool.execute(sql, [azonosito]);
     return rows[0] ?? null;
 }
@@ -240,6 +266,36 @@ async function rendelesTulajdonosLekerdezese(rendelesId) {
     return rows[0] ?? null;
 }
 
+async function kategoriakLekerdezese() {
+    const sql = 'SELECT * FROM kategoriak ORDER BY nev';
+    const [rows] = await pool.execute(sql);
+    return rows;
+}
+
+async function ujKategoria(nev) {
+    const sql = 'INSERT INTO kategoriak (nev) VALUES (?)';
+    const [result] = await pool.execute(sql, [nev]);
+    return result.insertId;
+}
+
+async function kategoriaModositasa(id, nev) {
+    const sql = 'UPDATE kategoriak SET nev = ? WHERE id = ?';
+    const [result] = await pool.execute(sql, [nev, id]);
+    return result.affectedRows;
+}
+
+async function ettermekSzamaKategoriaban(kategoriaId) {
+    const sql = 'SELECT COUNT(*) AS darab FROM ettermek WHERE kategoria_id = ?';
+    const [rows] = await pool.execute(sql, [kategoriaId]);
+    return rows[0].darab;
+}
+
+async function kategoriaTorlese(id) {
+    const sql = 'DELETE FROM kategoriak WHERE id = ?';
+    const [result] = await pool.execute(sql, [id]);
+    return result.affectedRows;
+}
+
 //!Export
 module.exports = {
     selectall,
@@ -270,5 +326,10 @@ module.exports = {
     osszesRendelesAdminnak,
     rendelesStatuszModositas,
     rendelesTetelekLekerdezese,
-    rendelesTulajdonosLekerdezese
+    rendelesTulajdonosLekerdezese,
+    kategoriakLekerdezese,
+    ujKategoria,
+    kategoriaModositasa,
+    ettermekSzamaKategoriaban,
+    kategoriaTorlese
 };

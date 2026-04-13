@@ -51,6 +51,7 @@
                     <div class="d-flex flex-wrap gap-2">
                         <a href="#felhasznalokSzekcio" class="btn btn-outline-success">Felhasználók</a>
                         <a href="#rendelesekSzekcio" class="btn btn-outline-success">Rendelések</a>
+                        <a href="#kategoriakSzekcio" class="btn btn-outline-success">Kategóriák</a>
                         <a href="#ettermekSzekcio" class="btn btn-outline-success">Éttermek</a>
                         <a href="#termekekSzekcio" class="btn btn-outline-success">Termékek</a>
                     </div>
@@ -102,6 +103,34 @@
                 </div>
             </div>
 
+            <div class="kartyasResz mt-4" id="kategoriakSzekcio">
+                <h3 class="mb-3">Kategóriák</h3>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-8">
+                        <label for="kategoriaNev" class="form-label">Kategória neve</label>
+                        <input type="text" class="form-control" id="kategoriaNev" placeholder="pl. amerikai" />
+                    </div>
+
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button type="button" class="btn btn-success w-100" id="kategoriaHozzaadGomb">Kategória hozzáadása</button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped align-middle">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Név</th>
+                                <th>Műveletek</th>
+                            </tr>
+                        </thead>
+                        <tbody id="kategoriaTabla"></tbody>
+                    </table>
+                </div>
+            </div>
+
             <div class="kartyasResz mt-4" id="ettermekSzekcio">
                 <h3 class="mb-3">Éttermek</h3>
 
@@ -118,7 +147,7 @@
 
                     <div class="col-md-6">
                         <label for="etteremKategoria" class="form-label">Kategória</label>
-                        <input type="text" class="form-control" id="etteremKategoria" placeholder="pl. amerikai" />
+                        <select class="form-select" id="etteremKategoria"></select>
                     </div>
 
                     <div class="col-md-6">
