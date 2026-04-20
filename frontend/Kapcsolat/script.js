@@ -1,6 +1,9 @@
-// Kijelentkezés gomb megragadása
 const kijelentkezesGomb = document.getElementById('kijelentkezesGomb');
 const adminFeluletGomb = document.getElementById('adminFeluletGomb');
+const nevKapcsolat = document.getElementById('nevKapcsolat');
+const emailKapcsolat = document.getElementById('emailKapcsolat');
+const uzenetKapcsolat = document.getElementById('uzenetKapcsolat');
+const kuldesGombKapcsolat = document.getElementById('kuldesGombKapcsolat');
 
 //!PostMethodFetch
 const PostMethodFetch = async function (url, value) {
@@ -10,9 +13,11 @@ const PostMethodFetch = async function (url, value) {
             headers: { 'Content-type': 'application/json' },
             body: JSON.stringify(value)
         });
+
         if (!data.ok) {
             throw new Error(`POST hiba: ${data.status} ${data.statusText}`);
         }
+
         return await data.json();
     } catch (error) {
         throw new Error(error.message);
@@ -37,11 +42,11 @@ const getMethodFetch = async function (url) {
     }
 };
 
-//Admin felület gomb megjelenítése/eltűntetése
+// Admin felület gomb megjelenítése/eltűntetése
 const adminFeluletGombFrissitese = async function () {
     try {
         const data = await getMethodFetch('/api/bejelentkezettFelhasznalo');
-        console.log('Fetch eredménye: ', data);
+
         if (data && data.admine === true) {
             adminFeluletGomb.style.display = 'block';
         } else {
@@ -53,17 +58,62 @@ const adminFeluletGombFrissitese = async function () {
     }
 };
 
-// Függvények meghívása a megfelelő gombok kattintására
+// Kapcsolat adatok betöltése profilból
+const kapcsolatAdataiBetoltese = async function () {
+    try {
+        const adatok = await getMethodFetch('/api/profil');
+
+        if (adatok) {
+            nevKapcsolat.value = adatok.nev || '';
+            emailKapcsolat.value = adatok.email || '';
+        }
+    } catch (error) {
+        console.error('Nem sikerült betölteni a profil adatokat: ', error);
+    }
+};
+
+// Kapcsolat üzenet küldése
+const kapcsolatUzenetKuldes = async function () {
+    const nev = nevKapcsolat.value;
+    const email = emailKapcsolat.value;
+    const uzenet = uzenetKapcsolat.value;
+
+    if (!nev || !email || !uzenet) {
+        alert('Tölts ki minden mezőt!');
+        return;
+    }
+
+    try {
+        const valasz = await PostMethodFetch('/api/kapcsolat', {
+            nev: nev,
+            email: email,
+            uzenet: uzenet
+        });
+
+        if (valasz.success) {
+            alert(valasz.message);
+            uzenetKapcsolat.value = '';
+        } else {
+            alert('Hiba: ' + valasz.message);
+        }
+    } catch (error) {
+        alert('Nem sikerült elküldeni az üzenetet.');
+    }
+};
+
+// Eseménykezelők
 document.addEventListener('DOMContentLoaded', function () {
     adminFeluletGombFrissitese();
+    kapcsolatAdataiBetoltese();
 
-    kijelentkezesGomb.addEventListener('click', async () => {
+    kijelentkezesGomb.addEventListener('click', async function () {
         try {
-            await PostMethodFetch('/api/kijelentkezes', {}); // session törlés
-            window.location.href = '/'; // vissza a bejelentkezésre
+            await PostMethodFetch('/api/kijelentkezes', {});
+            window.location.href = '/';
         } catch (error) {
-            // ha valamiért hiba van, akkor is dobjuk vissza loginra
             window.location.href = '/';
         }
     });
+
+    kuldesGombKapcsolat.addEventListener('click', kapcsolatUzenetKuldes);
 });

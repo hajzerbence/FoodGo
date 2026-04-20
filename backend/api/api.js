@@ -5,6 +5,18 @@ const database = require('../sql/database.js');
 //!Bcrypt a jelszavak titkosításához
 const bcrypt = require('bcrypt'); //? npm install bcrypt a backend mappában!
 
+//! Nodemailer a kapcsolatfelvételi űrlaphoz
+const nodemailer = require('nodemailer'); //? A Nodemailer csomag betöltése, ezzel tudunk majd emailt küldeni
+const adminEmail = 'foodgo.help@gmail.com'; // Ez az email cím, amire a felhasználók írhatnak, ha segítségre van szükségük. Ezt használjuk majd a kapcsolatfelvételi űrlapnál.
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail', // Gmail szolgáltatást használunk
+    auth: {
+        user: 'foodgo.help@gmail.com', // Ez a Gmail cím, amiről az emailek el lesznek küldve
+        pass: 'dmysdemppefoybdz' // Ez egy alkalmazás-specifikus jelszó, amit a Gmail fiók beállításaiban lehet létrehozni (2FA szükséges hozzá)
+    }
+});
+
 //!Middleware-k (API védelemhez):
 function bejelentkezesKotelezo(request, response, next) {
     // API védelem: bejelentkezve kell lenni
@@ -623,6 +635,49 @@ router.get('/rendeles_tetelek/:id', bejelentkezesKotelezo, async (request, respo
         return response.status(500).json({
             success: false,
             message: 'Nem sikerült betölteni a rendelés tételeit.'
+        });
+    }
+});
+
+//? POST /kapcsolat - Kapcsolat oldal üzenet küldése emailben
+router.post('/kapcsolat', bejelentkezesKotelezo, async (request, response) => {
+    try {
+        const { nev, email, uzenet } = request.body;
+
+        if (!nev || !email || !uzenet) {
+            // Ellenőrizzük, hogy minden mező ki van-e töltve
+            return response.status(400).json({
+                success: false,
+                message: 'Minden mező kitöltése kötelező.'
+            });
+        }
+
+        await transporter.sendMail({
+            from: adminEmail, // Ez az email cím fog megjelenni a feladóként, így az admin tudja, hogy a kapcsolat üzenet jött
+            to: adminEmail, // A címzett email cím; ide kapja meg az admin a kapcsolat üzenetet
+            replyTo: email, // Ha az admin válaszol a levélre, a válasz erre a felhasználói email címre megy
+            subject: 'Új üzenet érkezett', // Az email tárgya
+            text:
+                'Új üzenet\n\n' + // A levél szöveges törzsének eleje
+                'Név: ' +
+                nev +
+                '\n' + // A felhasználó neve külön sorban
+                'Email: ' +
+                email +
+                '\n\n' + // A felhasználó email címe külön sorban
+                'Üzenet:\n' +
+                uzenet // Maga a felhasználó által írt üzenet
+        });
+
+        return response.status(200).json({
+            success: true,
+            message: 'Az üzenet sikeresen elküldve.'
+        });
+    } catch (error) {
+        console.log(`POST hiba /kapcsolat ${error.message}`);
+        return response.status(500).json({
+            success: false,
+            message: 'Nem sikerült elküldeni az üzenetet.'
         });
     }
 });
