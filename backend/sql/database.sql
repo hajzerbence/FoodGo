@@ -10,7 +10,9 @@ CREATE TABLE felhasznalo(
     email VARCHAR(120) NOT NULL UNIQUE,
     telefonszam VARCHAR(20) NOT NULL,
     jelszo VARCHAR(255) NOT NULL,
-    admine BOOLEAN NOT NULL DEFAULT FALSE
+    admine BOOLEAN NOT NULL DEFAULT FALSE,
+    jelszoVisszaallitoToken VARCHAR(255) NULL,
+    jelszoVisszaallitoTokenLejarat DATETIME NULL
 );
 
 INSERT INTO felhasznalo (nev, email, telefonszam, jelszo, admine) VALUES
@@ -18,7 +20,12 @@ INSERT INTO felhasznalo (nev, email, telefonszam, jelszo, admine) VALUES
 'czegledimate06@gmail.com',
 '06203735053',
 '$2b$10$JiTIQWDKi/BpFzAeAQbP9uWBGMYsaMGhdmJ/Qb5bf/bfHprYIsbPa', /* A titkosított 'Admin1234' */
-TRUE);
+TRUE),
+('asd',
+'asd@asd.hu',
+'06203735051',
+'$2b$10$ih1PKKtyiR0QLQkthHDNt.sOsaass7dV9x5nNbNHPCDm1FnLf1OO2', /* A titkosított 'asd' */
+FALSE);
 
 CREATE TABLE termekek (
     id INT AUTO_INCREMENT PRIMARY KEY,

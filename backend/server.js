@@ -66,6 +66,16 @@ router.get('/regisztracio', (request, response) => {
     response.sendFile(path.join(__dirname, '../frontend/Regisztráció/index.html'));
 });
 
+//? Elfelejtett jelszó:
+router.get('/elfelejtett-jelszo', (request, response) => {
+    response.sendFile(path.join(__dirname, '../frontend/Elfelejtett jelszó/index.html'));
+});
+
+//? Új jelszó:
+router.get('/uj-jelszo', (request, response) => {
+    response.sendFile(path.join(__dirname, '../frontend/Új Jelszó/index.html'));
+});
+
 //?Főoldal:
 router.get('/fooldal', bejelentkezesKotelezoOldalhoz, (request, response) => {
     response.sendFile(path.join(__dirname, '../frontend/Főoldal/index.html'));
@@ -128,7 +138,7 @@ app.use(async (request, response, next) => {
     if (!kertUtvonal.toLowerCase().endsWith('.html')) {
         return next(); // nem html (css/js/kép), nem védjük itt
     }
-    if (kertUtvonal === '/Bejelentkezés/index.html' || kertUtvonal === '/Regisztráció/index.html' || kertUtvonal === '/Általános Szerződési Feltételek/index.html' || kertUtvonal === '/Adatvédelmi tájékoztató/index.html') {
+    if (kertUtvonal === '/Bejelentkezés/index.html' || kertUtvonal === '/Regisztráció/index.html' || kertUtvonal === '/Elfelejtett jelszó/index.html' || kertUtvonal === '/Új Jelszó/index.html' || kertUtvonal === '/Általános Szerződési Feltételek/index.html' || kertUtvonal === '/Adatvédelmi tájékoztató/index.html') {
         return next(); // nyilvános html-ek
     }
     if (kertUtvonal.startsWith('/Admin/')) {

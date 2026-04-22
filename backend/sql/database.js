@@ -89,6 +89,27 @@ async function jelszoModositas(id, ujJelszo) {
     return result.affectedRows; // 0 vagy 1
 }
 
+//* Elfelejtett jelszó - token mentése email alapján
+async function jelszoVisszaallitoTokenMentese(email, jelszoVisszaallitoToken, jelszoVisszaallitoTokenLejarat) {
+    const sql = 'UPDATE felhasznalo SET jelszoVisszaallitoToken = ?, jelszoVisszaallitoTokenLejarat = ? WHERE email = ?';
+    const [result] = await pool.execute(sql, [jelszoVisszaallitoToken, jelszoVisszaallitoTokenLejarat, email]);
+    return result.affectedRows;
+}
+
+//* Elfelejtett jelszó - felhasználó keresése token alapján
+async function felhasznaloJelszoVisszaallitoTokenAlapjan(jelszoVisszaallitoToken) {
+    const sql = 'SELECT id, email, jelszoVisszaallitoToken, jelszoVisszaallitoTokenLejarat FROM felhasznalo WHERE jelszoVisszaallitoToken = ? AND jelszoVisszaallitoTokenLejarat > NOW() LIMIT 1';
+    const [rows] = await pool.execute(sql, [jelszoVisszaallitoToken]);
+    return rows[0] ?? null;
+}
+
+//* Elfelejtett jelszó - token törlése
+async function jelszoVisszaallitoTokenTorlese(id) {
+    const sql = 'UPDATE felhasznalo SET jelszoVisszaallitoToken = NULL, jelszoVisszaallitoTokenLejarat = NULL WHERE id = ?';
+    const [result] = await pool.execute(sql, [id]);
+    return result.affectedRows;
+}
+
 //* Termékek lekérése étterem szerint
 async function termekekLekerdezese(etteremAzonosito) {
     const sql = 'SELECT * FROM termekek WHERE etterem_azonosito = ?';
@@ -309,6 +330,9 @@ module.exports = {
     sajatAdatok,
     JelszoEllenorzes,
     jelszoModositas,
+    jelszoVisszaallitoTokenMentese,
+    felhasznaloJelszoVisszaallitoTokenAlapjan,
+    jelszoVisszaallitoTokenTorlese,
     termekekLekerdezese,
     osszesTermekLekerdezese,
     ujTermek,

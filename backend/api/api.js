@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt'); //? npm install bcrypt a backend mappában!
 
 //! Nodemailer a kapcsolatfelvételi űrlaphoz
 const nodemailer = require('nodemailer'); //? A Nodemailer csomag betöltése, ezzel tudunk majd emailt küldeni
+const crypto = require('crypto'); //? A Node beépített crypto modulja, ezzel fogunk egyedi tokent generálni
 const adminEmail = 'foodgo.help@gmail.com'; // Ez az email cím, amire a felhasználók írhatnak, ha segítségre van szükségük. Ezt használjuk majd a kapcsolatfelvételi űrlapnál.
 
 const transporter = nodemailer.createTransport({
@@ -678,6 +679,95 @@ router.post('/kapcsolat', bejelentkezesKotelezo, async (request, response) => {
         return response.status(500).json({
             success: false,
             message: 'Nem sikerült elküldeni az üzenetet.'
+        });
+    }
+});
+
+//? POST /elfelejtettJelszo - Jelszó-visszaállító email küldése
+router.post('/elfelejtettJelszo', async (request, response) => {
+    try {
+        const { email } = request.body; // A frontendről kapott email cím kiolvasása
+
+        if (!email) {
+            return response.status(400).json({
+                success: false,
+                message: 'Az email cím megadása kötelező.'
+            });
+        }
+
+        const felhasznalo = await database.felhasznaloEmailAlapjan(email); // Megnézzük, van-e ilyen emailhez tartozó felhasználó
+
+        if (!felhasznalo) {
+            return response.status(404).json({
+                success: false,
+                message: 'Nincs ilyen email címmel regisztrált felhasználó.'
+            });
+        }
+
+        const jelszoVisszaallitoToken = crypto.randomBytes(32).toString('hex'); // Véletlen token generálása
+        const jelszoVisszaallitoTokenLejarat = new Date(Date.now() + 1000 * 60 * 30); // 30 perces lejárat
+
+        await database.jelszoVisszaallitoTokenMentese(email, jelszoVisszaallitoToken, jelszoVisszaallitoTokenLejarat); // Token és lejárat mentése az adatbázisba
+
+        const jelszoVisszaallitoLink = `http://127.0.0.1:3000/uj-jelszo?token=${jelszoVisszaallitoToken}`; // Ezt a linket küldjük ki emailben
+
+        const levelAdatok = {
+            from: adminEmail, // A levél feladója az admin email cím
+            to: email, // A levél címzettje a felhasználó email címe
+            subject: 'FoodGo - Jelszó visszaállítás', // Az email tárgya
+            text: 'Jelszó-visszaállítási kérés érkezett a FoodGo oldalon.\n\n' + 'Az új jelszó beállításához nyisd meg az alábbi linket:\n' + jelszoVisszaallitoLink + '\n\n' + 'A link 30 percig érvényes.'
+        };
+
+        await transporter.sendMail(levelAdatok); // Az email elküldése
+
+        return response.status(200).json({
+            success: true,
+            message: 'A jelszó-visszaállító email elküldve.'
+        });
+    } catch (error) {
+        console.log(`POST hiba /elfelejtettJelszo ${error.message}`);
+        return response.status(500).json({
+            success: false,
+            message: 'Nem sikerült elküldeni a jelszó-visszaállító emailt.'
+        });
+    }
+});
+
+//? POST /ujJelszoElfelejtve - Új jelszó mentése token alapján
+router.post('/ujJelszoElfelejtve', async (request, response) => {
+    try {
+        const { token, ujJelszo } = request.body;
+
+        if (!token || !ujJelszo) {
+            return response.status(400).json({
+                success: false,
+                message: 'Minden mező kitöltése kötelező.'
+            });
+        }
+
+        const felhasznalo = await database.felhasznaloJelszoVisszaallitoTokenAlapjan(token); // Megkeressük a tokenhez tartozó felhasználót
+
+        if (!felhasznalo) {
+            return response.status(400).json({
+                success: false,
+                message: 'A visszaállító link lejárt vagy érvénytelen.'
+            });
+        }
+
+        const titkositottUjJelszo = await bcrypt.hash(ujJelszo, 10); // Az új jelszó titkosítása
+
+        await database.jelszoModositas(felhasznalo.id, titkositottUjJelszo); // Új jelszó mentése
+        await database.jelszoVisszaallitoTokenTorlese(felhasznalo.id); // A token törlése, hogy ne lehessen még egyszer használni
+
+        return response.status(200).json({
+            success: true,
+            message: 'A jelszó sikeresen módosítva.'
+        });
+    } catch (error) {
+        console.log(`POST hiba /ujJelszoElfelejtve ${error.message}`);
+        return response.status(500).json({
+            success: false,
+            message: 'Nem sikerült módosítani a jelszót.'
         });
     }
 });
