@@ -298,10 +298,4 @@ Az alkalmazás az alábbi 9 éttermet és kínálatukat tartalmazza:
 
 ---
 
-## 📄 Licenc
-
-Ez a projekt az **ISC** licenc alatt áll. Részletek a [`LICENSE`](LICENSE) fájlban.
-
----
-
 <p align="center">© 2025 FoodGo Project - Czeglédi Máté & Hajzer Bence</p>
