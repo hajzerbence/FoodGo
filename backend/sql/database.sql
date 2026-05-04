@@ -17,15 +17,10 @@ CREATE TABLE felhasznalo(
 
 INSERT INTO felhasznalo (nev, email, telefonszam, jelszo, admine) VALUES
 ('Admin',
-'czegledimate06@gmail.com',
+'admin@foodgo.com',
 '06203735053',
 '$2b$10$JiTIQWDKi/BpFzAeAQbP9uWBGMYsaMGhdmJ/Qb5bf/bfHprYIsbPa', /* A titkosított 'Admin1234' */
-TRUE),
-('asd',
-'asd@asd.hu',
-'06203735051',
-'$2b$10$ih1PKKtyiR0QLQkthHDNt.sOsaass7dV9x5nNbNHPCDm1FnLf1OO2', /* A titkosított 'asd' */
-FALSE);
+TRUE);
 
 CREATE TABLE termekek (
     id INT AUTO_INCREMENT PRIMARY KEY,
